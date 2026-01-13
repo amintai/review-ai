@@ -1,0 +1,27 @@
+"use client";
+import Link from 'next/link';
+import { Button } from "@/components/ui/button";
+import Logo from "@/components/ui/Logo";
+
+export default function Navbar() {
+    return (
+        <nav className="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
+            <div className="flex items-center justify-between px-6 py-4 max-w-7xl mx-auto">
+                <Link href="/" className="transition-transform hover:scale-105">
+                    <Logo size="md" />
+                </Link>
+                <div className="flex items-center space-x-4">
+                    <Link
+                        href="/login"
+                        className="text-gray-600 hover:text-gray-900 font-medium text-sm transition-colors"
+                    >
+                        Sign in
+                    </Link>
+                    <Link href="/login">
+                        <Button>Get Started</Button>
+                    </Link>
+                </div>
+            </div>
+        </nav>
+    );
+}
