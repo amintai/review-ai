@@ -63,7 +63,7 @@ export default function DashboardLayout({
                     <div className="flex items-center md:items-start space-x-2 md:space-x-0 md:space-y-8 flex-row md:flex-col">
                         <Link href="/" className="flex items-center space-x-2 pl-2 hover:opacity-80 transition-opacity">
                             <Logo size="sm" />
-                            <span className="text-xl font-bold text-gray-900 hidden md:block">ReviewAI</span>
+                            {/* <span className="text-xl font-bold text-gray-900 hidden md:block">ReviewAI</span> */}
                         </Link>
 
                         <nav className="flex md:flex-col space-x-2 md:space-x-0 md:space-y-1 w-full pl-0 md:pl-2 overflow-x-auto md:overflow-visible">

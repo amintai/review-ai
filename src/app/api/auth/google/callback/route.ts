@@ -22,8 +22,8 @@ export async function GET(request: Request) {
 
     try {
         const oauth2Client = new google.auth.OAuth2(
-            process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
-            process.env.NEXT_PUBLIC_GOOGLE_CLIENT_SECRET,
+            process.env.GOOGLE_CLIENT_SECRET,
+            process.env.GOOGLE_CLIENT_SECRET,
             `${appUrl}/api/auth/google/callback`
         );
 

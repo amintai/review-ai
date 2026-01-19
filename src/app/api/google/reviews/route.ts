@@ -25,6 +25,8 @@ export async function GET(req: Request) {
         // If no location is selected, return available locations instead of reviews
         if (!profile.google_location_id) {
             const locations = await listLocations(profile.google_refresh_token);
+
+            console.log("locations", locations)
             return NextResponse.json({
                 connected: true,
                 needsLocation: true,

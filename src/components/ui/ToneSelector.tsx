@@ -54,7 +54,7 @@ interface ToneSelectorProps {
 export default function ToneSelector({ value, onChange, variant = 'full', className }: ToneSelectorProps) {
     if (variant === 'compact') {
         return (
-            <div className={cn("flex bg-gray-100/80 p-1 rounded-xl space-x-1", className)}>
+            <div className={cn(" flex bg-gray-100/80 p-1 rounded-xl space-x-1", className)}>
                 {TONES.map((tone) => (
                     <button
                         key={tone.id}
@@ -72,7 +72,7 @@ export default function ToneSelector({ value, onChange, variant = 'full', classN
                                 transition={{ type: "spring", bounce: 0.2, duration: 0.5 }}
                             />
                         )}
-                        <span className="hidden sm:inline">{tone.label}</span>
+                        <span className="cursor-pointer hidden sm:inline">{tone.label}</span>
                         <span className="sm:hidden">{tone.emoji}</span>
                     </button>
                 ))}

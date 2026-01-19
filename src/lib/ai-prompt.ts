@@ -8,6 +8,7 @@ export interface GenerateReviewParams {
     location?: string;
     productService?: string;
     instructions?: string;
+    starRating?: number;
 }
 
 export const SYSTEM_PROMPT = `

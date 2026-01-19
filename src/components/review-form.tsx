@@ -113,7 +113,7 @@ export default function ReviewForm() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <label className="block text-sm font-bold text-gray-700 mb-2 uppercase tracking-wide">Location</label>
+                        <label className=" block text-sm font-bold text-gray-700 mb-2 uppercase tracking-wide">Location</label>
                         <input
                             type="text"
                             className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all placeholder:text-gray-400"
@@ -146,7 +146,7 @@ export default function ReviewForm() {
                     />
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols gap-6">
                     <div>
                         <label className="block text-sm font-bold text-gray-700 mb-2 uppercase tracking-wide">Brand Tone</label>
                         <ToneSelector

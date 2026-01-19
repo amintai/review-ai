@@ -3,64 +3,66 @@ import { google } from 'googleapis';
 // Initialize OAuth Client for refreshing tokens
 const getOAuthClient = () => {
     return new google.auth.OAuth2(
-        process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
-        process.env.NEXT_PUBLIC_GOOGLE_CLIENT_SECRET
+        process.env.GOOGLE_CLIENT_SECRET,
+        process.env.GOOGLE_CLIENT_SECRET
     );
 };
 
 export const listLocations = async (refreshToken: string) => {
     const auth = getOAuthClient();
+
     auth.setCredentials({ refresh_token: refreshToken });
 
-    const mybusinessaccountmanagement = google.mybusinessaccountmanagement({ version: 'v1', auth });
+    const mbBusinessInfo = google.mybusinessbusinessinformation({ version: 'v1', auth });
 
-    // 1. Get Accounts
-    const accountsRes = await mybusinessaccountmanagement.accounts.list();
-    const accounts = accountsRes.data.accounts;
+    const accountsRes = await google.mybusinessaccountmanagement({ version: 'v1', auth }).accounts.list();
+    const accounts = accountsRes.data.accounts ?? [];
 
-    if (!accounts || accounts.length === 0) return [];
+    if (accounts.length === 0) return [];
 
-    // 2. Get Locations for the first account (MVP simplification)
-    // Note: New API 'mybusinessbusinessinformation' handles locations
-    const mybusinessbusinessinformation = google.mybusinessbusinessinformation({ version: 'v1', auth });
+    const accountName = accounts[0].name!; // MVP: first account
 
-    const accountName = accounts[0].name!; // e.g. "accounts/12345"
-
-    const locationsRes = await mybusinessbusinessinformation.accounts.locations.list({
+    const locationsRes = await mbBusinessInfo.accounts.locations.list({
         parent: accountName,
-        readMask: 'name,title,storeCode,latlng,phoneNumbers,categories'
+        readMask: 'name,title,storeCode,latlng,phoneNumbers,categories',
+        pageSize: 100, // can go higher
     });
 
-    return locationsRes.data.locations || [];
+    return locationsRes.data.locations ?? [];
 };
-
 
 export const listReviews = async (refreshToken: string, locationName: string) => {
     const auth = getOAuthClient();
     auth.setCredentials({ refresh_token: refreshToken });
 
-    // Reviews are in 'mybusinessqanda' or similar? No, 'mybusinessreviews' API?
-    // Actually, standard is 'mybusinessreviews' v4 was deprecated. 
-    // It is now 'mybusinessreviews.googleapis.com' v1? Or part of specific API?
-    // Correction: It is `google.mybusinessreviews` (v1)
+    const mybusiness = (google as any).mybusiness({ version: 'v4', auth });
 
-    const mybusinessreviews = (google as any).mybusinessreviews({ version: 'v1', auth });
+    const reviews: any[] = [];
+    let pageToken: string | undefined;
 
-    const res = await mybusinessreviews.accounts.locations.reviews.list({
-        parent: locationName // e.g., "accounts/{accountId}/locations/{locationId}"
-    });
+    do {
+        const res = await mybusiness.accounts.locations.reviews.list({
+            parent: locationName,
+            pageSize: 100,
+            pageToken,
+        });
 
-    return res.data.reviews || [];
+        reviews.push(...(res.data.reviews ?? []));
+        pageToken = res.data.nextPageToken;
+    } while (pageToken);
+
+    return reviews;
 };
 
 export const replyToReview = async (refreshToken: string, reviewName: string, replyText: string) => {
     const auth = getOAuthClient();
     auth.setCredentials({ refresh_token: refreshToken });
 
-    const mybusinessreviews = (google as any).mybusinessreviews({ version: 'v1', auth });
+    const mybusinessreviews = (google as any).mybusiness({ version: 'v4', auth });
+    const fullName = reviewName.includes('/reply') ? reviewName : `${reviewName}/reply`;
 
     await mybusinessreviews.accounts.locations.reviews.updateReply({
-        name: `${reviewName}/reply`,
+        name: fullName,
         requestBody: {
             comment: replyText
         }

@@ -1,8 +1,9 @@
 import { NextResponse } from 'next/server';
-import OpenAI from 'openai';
+// import OpenAI from 'openai';
 import { createClient } from '@supabase/supabase-js';
 import { SYSTEM_PROMPT, constructUserPrompt, GenerateReviewParams } from '@/lib/ai-prompt';
 import { z } from 'zod';
+import Bytez from "bytez.js";
 
 // Schema for input validation
 const GenerationSchema = z.object({
@@ -15,9 +16,12 @@ const GenerationSchema = z.object({
     productService: z.string().max(200).optional()
 });
 
-const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
-});
+// const openai = new OpenAI({
+//     apiKey: process.env.OPENAI_API_KEY,
+// });
+
+const bytez = new Bytez(process.env.BYTEZ_API_KEY!);
+const model = bytez.model("openai/gpt-4.1");
 
 export async function POST(req: Request) {
     try {
@@ -84,19 +88,27 @@ export async function POST(req: Request) {
             instructions
         };
 
-        const completion = await openai.chat.completions.create({
-            model: "gpt-4o-mini",
-            messages: [
-                { role: "system", content: SYSTEM_PROMPT },
-                { role: "user", content: constructUserPrompt(params) }
-            ],
-            response_format: { type: "json_object" },
-            temperature: 0.7,
-            max_tokens: 500,
-        });
+        // const completion = await openai.chat.completions.create({
+        //     model: "gpt-4o-mini",
+        //     messages: [
+        //         { role: "system", content: SYSTEM_PROMPT },
+        //         { role: "user", content: constructUserPrompt(params) }
+        //     ],
+        //     response_format: { type: "json_object" },
+        //     temperature: 0.7,
+        //     max_tokens: 500,
+        // });
 
-        const content = completion.choices[0].message.content;
-        if (!content) throw new Error('Generation failed');
+        const { error, output } = await model.run([
+            { role: "system", content: SYSTEM_PROMPT },
+            { role: "user", content: constructUserPrompt(params) }
+        ]);
+
+        if (error) throw new Error("AI generation failed");
+
+        const content = output?.content;
+
+        if (!content) throw new Error("Empty response");
 
         const jsonResponse = JSON.parse(content);
 
