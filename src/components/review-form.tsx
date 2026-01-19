@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { supabase } from '@/lib/supabaseClient';
-import { Loader2, Copy, RefreshCw, Wand2, Check, MessageSquareList, Terminal, ChevronRight } from 'lucide-react';
+import { Copy, RefreshCw, Wand2, Check } from 'lucide-react';
 import { ReviewTone } from '@/lib/ai-prompt';
 import ToneSelector from './ui/ToneSelector';
 
