@@ -5,6 +5,7 @@ import { supabase } from '@/lib/supabaseClient';
 import { Copy, RefreshCw, Wand2, Check } from 'lucide-react';
 import { ReviewTone } from '@/lib/ai-prompt';
 import ToneSelector from './ui/ToneSelector';
+import { toast } from 'sonner';
 
 export default function ReviewForm() {
     const [reviewText, setReviewText] = useState('');
@@ -63,8 +64,10 @@ export default function ReviewForm() {
 
             const data = await res.json();
             setResults(data);
+            toast.success("✨ Reviews generated successfully!");
         } catch (err: any) {
             setError(err.message || 'Something went wrong');
+            toast.error(err.message || "Failed to generate reviews");
         } finally {
             setLoading(false);
         }
@@ -225,7 +228,7 @@ export default function ReviewForm() {
                                         </div>
                                         <button
                                             onClick={() => copyToClipboard(content, num)}
-                                            className="text-gray-400 hover:text-blue-600 transition-all p-2 rounded-xl hover:bg-blue-50 active:scale-90"
+                                            className="text-gray-400 hover:text-blue-600 transition-all p-2 rounded-xl hover:bg-blue-50 active:scale-90 cursor-pointer"
                                             title="Copy response"
                                         >
                                             {copiedIndex === num ? <Check className="h-5 w-5 text-green-500" /> : <Copy className="h-5 w-5" />}

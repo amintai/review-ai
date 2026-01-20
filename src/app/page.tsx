@@ -84,9 +84,9 @@ export default function LandingPage() {
             <Navbar />
             <div className="relative overflow-hidden">
                 <BackgroundRippleEffect />
-                <div className="relative z-10">
+                <header className="relative z-10">
                     <HeroSection />
-                </div>
+                </header>
             </div>
             {/* <TrustSection /> */}
 

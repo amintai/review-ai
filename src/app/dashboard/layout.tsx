@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { supabase } from '@/lib/supabaseClient';
 import { User } from '@supabase/supabase-js';
 import { useRouter, usePathname } from 'next/navigation';
-import { LogOut, Layout, History, MessageCircle, Settings, CreditCard } from 'lucide-react';
+import { LogOut, Layout, History, MessageCircle, Settings, CreditCard, User as UserIcon } from 'lucide-react';
 import Logo from '@/components/ui/Logo';
 import clsx from 'clsx';
 
@@ -75,10 +75,30 @@ export default function DashboardLayout({
                     </div>
 
                     <div className="hidden md:block p-4 border-t border-gray-100">
-                        <div className="text-xs text-gray-400 mb-2 truncate">{user.email}</div>
+                        <div className="flex items-center gap-3 mb-4">
+                            {user.user_metadata?.avatar_url ? (
+                                <img
+                                    src={user.user_metadata.avatar_url}
+                                    alt="Profile"
+                                    className="h-10 w-10 rounded-full border border-gray-200 object-cover"
+                                />
+                            ) : (
+                                <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold border border-blue-200">
+                                    {(user.email?.[0] || 'U').toUpperCase()}
+                                </div>
+                            )}
+                            <div className="flex-1 min-w-0">
+                                <p className="text-sm font-semibold text-gray-900 truncate">
+                                    {user.user_metadata?.full_name || 'User'}
+                                </p>
+                                <p className="text-xs text-gray-500 truncate" title={user.email}>
+                                    {user.email}
+                                </p>
+                            </div>
+                        </div>
                         <button
                             onClick={handleSignOut}
-                            className="flex items-center space-x-2 text-gray-500 hover:text-red-600 transition-colors text-sm font-medium w-full"
+                            className="flex items-center space-x-2 text-gray-500 hover:text-red-600 transition-colors text-sm font-medium w-full px-1"
                         >
                             <LogOut className="h-4 w-4" />
                             <span>Sign Out</span>

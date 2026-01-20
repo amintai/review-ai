@@ -8,7 +8,7 @@ import Logo from "@/components/ui/Logo";
 export default function Footer() {
     return (
         <AuroraBackground>
-            <motion.div
+            <motion.footer
                 initial={{ opacity: 0.0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{
@@ -90,7 +90,7 @@ export default function Footer() {
                 <div className="text-center text-xs text-neutral-500 pb-4">
                     © {new Date().getFullYear()} ReviewAI. All rights reserved.
                 </div>
-            </motion.div>
+            </motion.footer>
         </AuroraBackground>
     );
 }

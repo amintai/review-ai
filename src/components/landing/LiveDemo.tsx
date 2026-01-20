@@ -3,11 +3,12 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Loader2, Wand2, Copy, Sparkles, Check, RefreshCw, Lock } from 'lucide-react';
+import { Loader2, Wand2, Copy, Sparkles, Check, RefreshCw, Lock, Share2, Award } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ToneSelector from '../ui/ToneSelector';
 import { ReviewTone } from '@/lib/ai-prompt';
 import Link from 'next/link';
+import { toast } from 'sonner';
 
 
 const USAGE_LIMIT = 3;
@@ -15,10 +16,13 @@ const USAGE_LIMIT = 3;
 
 export default function LiveDemo() {
     const [loading, setLoading] = useState(false);
-    const [result, setResult] = useState<string | null>(null);
+    const [results, setResults] = useState<{ [key: string]: string } | null>(null);
+    const [activeOption, setActiveOption] = useState<string>('response_1');
+    const [isEditing, setIsEditing] = useState(false);
     const [copied, setCopied] = useState(false);
     const [usageCount, setUsageCount] = useState(0);
     const [limitReached, setLimitReached] = useState(false);
+
 
     // Form State
     const [review, setReview] = useState("The food was amazing but the service was a bit slow. Deeply disappointed in the wait time.");
@@ -41,10 +45,30 @@ export default function LiveDemo() {
     }, []);
 
     const handleCopy = () => {
-        if (result) {
-            navigator.clipboard.writeText(result);
+        const textToCopy = results?.[activeOption] || '';
+        if (textToCopy) {
+            navigator.clipboard.writeText(textToCopy);
             setCopied(true);
             setTimeout(() => setCopied(false), 2000);
+        }
+    };
+
+    const handleEdit = (newText: string) => {
+        if (results) {
+            setResults({
+                ...results,
+                [activeOption]: newText
+            });
+        }
+    };
+
+    const handleShare = (platform: 'whatsapp' | 'facebook') => {
+        const shareText = `🚀 Free AI for Google reviews – Get 3 professional reply options instantly!\n\nTry ReviewAI: ${window.location.origin}?ref=share_${platform}`;
+
+        if (platform === 'whatsapp') {
+            window.open(`https://wa.me/?text=${encodeURIComponent(shareText)}`, '_blank');
+        } else {
+            window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.origin + '?ref=share_fb')}&quote=${encodeURIComponent(shareText)}`, '_blank');
         }
     };
 
@@ -73,17 +97,23 @@ export default function LiveDemo() {
 
             const data = await response.json();
 
-            if (data.response) {
-                setResult(data.response);
+            if (data.response_1) {
+                setResults(data);
+                setActiveOption('response_1');
+                setIsEditing(false);
                 const newCount = usageCount + 1;
                 setUsageCount(newCount);
+
+                toast.success("✨ Reviews generated successfully!");
                 localStorage.setItem('demo_usage_count', newCount.toString());
                 if (newCount >= USAGE_LIMIT) {
                     setLimitReached(true);
                 }
             }
-        } catch (error) {
+
+        } catch (error: any) {
             console.error("Failed to generate", error);
+            toast.error(error.message || "Failed to generate reviews");
         } finally {
             setLoading(false);
         }
@@ -96,7 +126,7 @@ export default function LiveDemo() {
             <div className="max-w-7xl mx-auto px-6">
                 <div className="text-center mb-16">
                     <span className="inline-block px-4 py-1.5 bg-blue-100 text-blue-700 text-sm font-medium rounded-full mb-4">
-                        ✨ Try It Free
+                        ✨ Try It Free – Used by 500+ Indian Businesses
                     </span>
                     <h2 className="text-4xl font-bold tracking-tight text-gray-900 mb-4">
                         Generate Your First Reply
@@ -250,7 +280,7 @@ export default function LiveDemo() {
                     {/* Output Panel */}
                     <div className="lg:sticky lg:top-8">
                         <AnimatePresence mode="wait">
-                            {!result ? (
+                            {!results ? (
                                 <motion.div
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 1 }}
@@ -269,45 +299,185 @@ export default function LiveDemo() {
                                     animate={{ opacity: 1, y: 0 }}
                                     className="bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden"
                                 >
-                                    <div className="p-6 border-b border-gray-100 flex items-center justify-between bg-gradient-to-r from-green-50 to-emerald-50">
-                                        <div className="flex items-center gap-3">
-                                            <div className="h-10 w-10 bg-green-100 rounded-full flex items-center justify-center">
-                                                <Check className="h-5 w-5 text-green-600" />
-                                            </div>
-                                            <div>
-                                                <h3 className="font-semibold text-gray-800">AI-Generated Response</h3>
-                                                <p className="text-xs text-gray-500">
-                                                    {selectedTone === 'professional' ? '👔' : selectedTone === 'friendly' ? '👋' : selectedTone === 'empathetic' ? '❤️' : '😄'} {selectedTone.charAt(0).toUpperCase() + selectedTone.slice(1)} Tone
+                                    <div className="p-6 border-b border-gray-100 bg-gradient-to-r from-green-50 to-emerald-50 relative">
+
+                                        {/* Conversion Nudges (Placed absolutely or overlay) */}
+                                        {limitReached && (
+                                            <motion.div
+                                                initial={{ opacity: 0, y: -10 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                className="mb-6 p-6 bg-gradient-to-r from-amber-50 to-orange-50 rounded-2xl border-2 border-amber-200 shadow-xl relative z-10"
+                                            >
+                                                <div className="flex items-start gap-4">
+                                                    <div className="h-12 w-12 bg-amber-500 rounded-full flex items-center justify-center shrink-0">
+                                                        <Lock className="h-6 w-6 text-white" />
+                                                    </div>
+                                                    <div className="flex-1">
+                                                        <h3 className="font-bold text-amber-900 mb-2 text-lg">Free Limit Reached! 🎉</h3>
+                                                        <p className="text-amber-800 mb-4">
+                                                            Love ReviewAI? <strong>Sign up for FREE</strong> to get <strong>15 more AI replies/month</strong> + save your favorites!
+                                                        </p>
+                                                        <div className="flex gap-3">
+                                                            <a
+                                                                href="/login"
+                                                                className="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 transition-all shadow-lg"
+                                                            >
+                                                                Get Started Free →
+                                                            </a>
+                                                            <button
+                                                                onClick={() => setLimitReached(false)}
+                                                                className="px-4 py-3 text-amber-700 hover:bg-amber-100 rounded-xl transition-all font-medium"
+                                                            >
+                                                                Maybe Later
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </motion.div>
+                                        )}
+
+                                        {/* Soft Nudges */}
+                                        {(usageCount === 3 || usageCount === 5) && !limitReached && (
+                                            <motion.div
+                                                initial={{ opacity: 0, scale: 0.95 }}
+                                                animate={{ opacity: 1, scale: 1 }}
+                                                className={`mb-6 p-4 rounded-xl border relative z-10 ${usageCount === 3
+                                                    ? 'bg-blue-50 border-blue-200 text-blue-900'
+                                                    : 'bg-green-50 border-green-200 text-green-900'
+                                                    }`}
+                                            >
+                                                <p className="text-sm font-medium text-center">
+                                                    {usageCount === 3
+                                                        ? <>🎉 <strong>2 more free tries today!</strong> Sign up for 15/month free</>
+                                                        : <>💚 <strong>Almost there!</strong> Save your favorites + get 10 more/month free</>
+                                                    }
                                                 </p>
+                                            </motion.div>
+                                        )}
+
+                                        {/* Premium Badge */}
+                                        <div className="flex items-center justify-center mb-4">
+                                            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-1.5 rounded-full text-xs font-bold shadow-lg">
+                                                <Award className="h-3 w-3" />
+                                                Premium AI (GPT-4.1)
                                             </div>
                                         </div>
-                                        <Button
-                                            variant="outline"
-                                            size="sm"
-                                            onClick={handleCopy}
-                                            className={`gap-2 transition-all ${copied ? 'bg-green-50 text-green-600 border-green-200' : ''}`}
-                                        >
-                                            {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-                                            {copied ? 'Copied!' : 'Copy'}
-                                        </Button>
+
+                                        <div className="flex items-center justify-between mb-6">
+                                            <div className="flex items-center gap-3">
+                                                <div className="h-10 w-10 bg-green-100 rounded-full flex items-center justify-center">
+                                                    <Check className="h-5 w-5 text-green-600" />
+                                                </div>
+                                                <div>
+                                                    <h3 className="font-semibold text-gray-800">AI-Generated Options</h3>
+                                                    <p className="text-xs text-gray-500">
+                                                        {selectedTone === 'professional' ? '👔' : selectedTone === 'friendly' ? '👋' : selectedTone === 'empathetic' ? '❤️' : '😄'} {selectedTone.charAt(0).toUpperCase() + selectedTone.slice(1)} Tone
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div className="flex gap-2">
+                                                <Button
+                                                    variant="ghost"
+                                                    size="sm"
+                                                    onClick={() => setIsEditing(!isEditing)}
+                                                    className={`gap-2 ${isEditing ? 'text-blue-600 bg-blue-50' : ''}`}
+                                                >
+                                                    {isEditing ? 'View' : 'Edit'}
+                                                </Button>
+                                                <Button
+                                                    variant="outline"
+                                                    size="sm"
+                                                    onClick={handleCopy}
+                                                    className={`gap-2 transition-all ${copied ? 'bg-green-50 text-green-600 border-green-200' : ''}`}
+                                                >
+                                                    {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                                                    {copied ? 'Copied!' : 'Copy'}
+                                                </Button>
+                                            </div>
+                                        </div>
+
+                                        {/* Option Selection Tabs */}
+                                        <div className="flex p-1 bg-gray-100 rounded-xl gap-1">
+                                            {['response_1', 'response_2', 'response_3'].map((opt, idx) => (
+                                                <button
+                                                    key={opt}
+                                                    onClick={() => { setActiveOption(opt); setIsEditing(false); }}
+                                                    className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all ${activeOption === opt
+                                                        ? 'bg-white text-blue-600 shadow-sm'
+                                                        : 'text-gray-500 hover:text-gray-700 hover:bg-gray-200/50'
+                                                        }`}
+                                                >
+                                                    Option {idx + 1}
+                                                </button>
+                                            ))}
+                                        </div>
                                     </div>
+
                                     <div className="p-8">
-                                        <p className="text-gray-700 leading-relaxed text-lg whitespace-pre-wrap">{result}</p>
+                                        {isEditing ? (
+                                            <textarea
+                                                className="w-full min-h-[300px] p-4 border border-blue-100 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-gray-700 leading-relaxed text-lg bg-blue-50/10 resize-none"
+                                                value={results[activeOption]}
+                                                onChange={(e) => handleEdit(e.target.value)}
+                                                autoFocus
+                                            />
+                                        ) : (
+                                            <p className="text-gray-700 leading-relaxed text-lg whitespace-pre-wrap min-h-[300px]">
+                                                {results[activeOption]}
+                                            </p>
+                                        )}
                                     </div>
-                                    <div className="px-8 pb-8">
-                                        <Button
-                                            variant="ghost"
-                                            onClick={() => { setResult(null); }}
-                                            className="text-gray-500 hover:text-gray-700"
-                                        >
-                                            <RefreshCw className="h-4 w-4 mr-2" />
-                                            Generate Another
-                                        </Button>
+
+                                    <div className="px-8 pb-8 space-y-4">
+                                        {/* Share Section */}
+                                        <div className="flex items-center justify-center gap-3 p-4 bg-blue-50 rounded-xl border border-blue-100">
+                                            <span className="text-sm font-medium text-blue-900">Love this? Share with other businesses!</span>
+                                            <div className="flex gap-2">
+                                                <Button
+                                                    size="sm"
+                                                    onClick={() => handleShare('whatsapp')}
+                                                    className="bg-green-500 hover:bg-green-600 text-white gap-2"
+                                                >
+                                                    <Share2 className="h-4 w-4" />
+                                                    WhatsApp
+                                                </Button>
+                                                <Button
+                                                    size="sm"
+                                                    onClick={() => handleShare('facebook')}
+                                                    className="bg-blue-600 hover:bg-blue-700 text-white gap-2"
+                                                >
+                                                    <Share2 className="h-4 w-4" />
+                                                    Facebook
+                                                </Button>
+                                            </div>
+                                        </div>
+
+                                        {/* Comparison Tooltip */}
+                                        <div className="text-center p-3 bg-gradient-to-r from-amber-50 to-orange-50 rounded-lg border border-amber-200">
+                                            <p className="text-xs text-amber-900 font-medium">
+                                                💡 <strong>Other tools:</strong> 1 generic reply. <strong>ReviewAI:</strong> 3 unique premium options!
+                                            </p>
+                                        </div>
+
+                                        <div className="flex items-center justify-between">
+                                            <Button
+                                                variant="ghost"
+                                                onClick={() => { setResults(null); }}
+                                                className="text-gray-500 hover:text-gray-700"
+                                            >
+                                                <RefreshCw className="h-4 w-4 mr-2" />
+                                                Reset
+                                            </Button>
+                                            <p className="text-[10px] text-gray-400 font-medium italic">
+                                                ✨ Tip: You can edit responses directly
+                                            </p>
+                                        </div>
                                     </div>
                                 </motion.div>
                             )}
                         </AnimatePresence>
                     </div>
+
                 </div>
             </div>
         </section>

@@ -13,14 +13,7 @@ export default function SettingsPage() {
             try {
                 const { data: { user } } = await supabase.auth.getUser();
                 if (!user) return;
-
-                const { data } = await supabase
-                    .from('profiles')
-                    .select('*')
-                    .eq('id', user.id)
-                    .single();
-
-                setProfile(data);
+                setProfile(user);
             } catch (e) {
                 console.error(e);
             } finally {
@@ -55,7 +48,7 @@ export default function SettingsPage() {
                                 <div>
                                     <label className="text-xs font-bold text-gray-400 uppercase tracking-wider block mb-2">Full Name</label>
                                     <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-xl border border-gray-100">
-                                        <div className="font-medium text-gray-900">{profile?.full_name || 'Not set'}</div>
+                                        <div className="font-medium text-gray-900">{profile?.user_metadata?.full_name || 'Not set'}</div>
                                     </div>
                                 </div>
                                 <div>

@@ -17,13 +17,13 @@ const GenerationSchema = z.object({
 const bytez = new Bytez(process.env.BYTEZ_API_KEY!);
 const model = bytez.model("openai/gpt-4.1");
 
-// Simplified prompt for single response generation
+// Improved prompt for 3 human-centric and SEO-friendly responses
 const constructDemoPrompt = (params: GenerateReviewParams) => `
 ### Business Context:
 - **Name**: ${params.businessName || 'Our Business'}
 - **Type**: ${params.businessType || 'General'}
 - **Location**: ${params.location || 'Not specified'}
-- **Focus**: ${params.productService || 'General experience'}
+- **Key Products/Services**: ${params.productService || 'General quality service'}
 
 ### Customer Review:
 "${params.reviewText}"
@@ -33,13 +33,19 @@ const constructDemoPrompt = (params: GenerateReviewParams) => `
 - **Additional Instructions**: ${params.instructions || 'None'}
 
 ### Task:
-Generate a single, high-quality response to this review in the ${params.tone} tone.
-Do not generate multiple options. Just one standard response.
+Generate **THREE (3)** distinct, high-quality response variations. 
+Each response should:
+1. **Sound Human-Centric**: Use a warm, authentic voice. Avoid robotic or overly formal "AI-speak". Speak like the owner or manager.
+2. **SEO-Friendly**: Naturally incorporate the business name ("${params.businessName}"), location ("${params.location}"), and service ("${params.productService}") where it makes sense to help with local search relevance.
+3. **Variations**:
+   - **Response 1 (Standard)**: Warm, professional, and addresses all points.
+   - **Response 2 (Concise)**: Short, punchy, yet deeply appreciative.
+   - **Response 3 (Detailed)**: Comprehensive, perhaps mentioning a value-add or a specific follow-up.
 
-Format the output as a valid JSON object with a single key: "response".
-Example: { "response": "Dear customer..." }
+Format the output as a valid JSON object with exactly three keys: "response_1", "response_2", and "response_3".
 Include NO markdown formatting, NO backticks, and NO extra text.
 `;
+
 
 export async function POST(req: Request) {
     try {
@@ -81,9 +87,14 @@ export async function POST(req: Request) {
             const jsonResponse = JSON.parse(content);
             return NextResponse.json(jsonResponse);
         } catch (e) {
-            // Fallback if model didn't return JSON
-            return NextResponse.json({ response: content });
+            // Fallback if model didn't return perfect JSON
+            return NextResponse.json({
+                response_1: content,
+                response_2: "Please try regenerating for more options.",
+                response_3: "Please try regenerating for more options."
+            });
         }
+
 
     } catch (error: any) {
         console.error('[Demo Generation Error]:', error.message);

@@ -4,6 +4,7 @@ import "./globals.css";
 import CookieConsentBanner from "@/components/ui/CookieConsentBanner";
 import { Analytics } from "@vercel/analytics/react"
 import { SpeedInsights } from "@vercel/speed-insights/next"
+import { Toaster } from 'sonner';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -109,14 +110,24 @@ const jsonLd = {
     '@type': 'SoftwareApplication',
     name: 'ReviewAI',
     applicationCategory: 'BusinessApplication',
-    operatingSystem: 'Web Browser',
+    operatingSystem: 'All',
     description: 'AI-powered review response generator for Google Business Profile, Yelp, Facebook, and TripAdvisor. Generate professional, human-sounding responses to customer reviews in seconds.',
     url: siteUrl,
     offers: {
         '@type': 'Offer',
         price: '0',
         priceCurrency: 'USD',
-        description: 'Free tier available with premium plans',
+        description: 'Free tier available (15 generations/month). Pro plan at $12/month (approx ₹999).',
+        availability: 'https://schema.org/OnlineOnly',
+    },
+    softwareRequirements: 'Modern Web Browser (Chrome, Safari, Firefox, Edge)',
+    audience: {
+        '@type': 'BusinessAudience',
+        audienceType: 'Small Business Owners',
+        geographicArea: {
+            '@type': 'GeoShape',
+            region: 'Global'
+        }
     },
     aggregateRating: {
         '@type': 'AggregateRating',
@@ -154,6 +165,7 @@ export default function RootLayout({
                 <CookieConsentBanner />
                 <Analytics />
                 <SpeedInsights />
+                <Toaster richColors position="top-center" />
             </body>
         </html>
     );
