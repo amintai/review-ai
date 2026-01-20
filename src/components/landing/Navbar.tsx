@@ -18,7 +18,7 @@ export default function Navbar() {
                         Sign in
                     </Link>
                     <Link href="/login">
-                        <Button>Get Started</Button>
+                        <Button className='cursor-pointer'>Get Started</Button>
                     </Link>
                 </div>
             </div>

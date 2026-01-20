@@ -47,12 +47,12 @@ export default function HeroSection() {
                     className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4"
                 >
                     <Link href="/login">
-                        <Button size="lg" className="h-12 px-8 text-lg rounded-xl shadow-lg hover:shadow-xl transition-all">
+                        <Button size="lg" className="h-12 px-8 text-lg rounded-xl shadow-lg hover:shadow-xl transition-all cursor-pointer">
                             Generate Your First Reply Free <ArrowRight className="ml-2 h-5 w-5" />
                         </Button>
                     </Link>
                     <Link href="#demo">
-                        <Button variant="outline" size="lg" className="h-12 px-8 text-lg rounded-xl bg-white/50 backdrop-blur-sm">
+                        <Button variant="outline" size="lg" className="h-12 px-8 text-lg rounded-xl bg-white/50 backdrop-blur-sm cursor-pointer">
                             See How It Works
                         </Button>
                     </Link>
