@@ -40,6 +40,8 @@ export default function LoginPage() {
             },
         });
 
+        console.log("error", error)
+
         if (error) {
             alert(error.message);
         } else {

@@ -2,31 +2,9 @@ import Navbar from '@/components/landing/Navbar';
 import HeroSection from '@/components/landing/HeroSection';
 import LiveDemo from '@/components/landing/LiveDemo';
 import Footer from '@/components/landing/Footer';
-import Link from 'next/link';
 import "@radix-ui/themes/styles.css";
-import { House, User, MessageCircle } from "lucide-react";
-
 import { BackgroundRippleEffect } from "@/components/ui/background-ripple-effect";
 import { StickyScroll } from "@/components/ui/sticky-scroll-reveal";
-import { FloatingNav } from "@/components/ui/floating-navbar";
-
-const navItems = [
-    {
-        name: "Home",
-        link: "/",
-        icon: <House className="h-4 w-4 text-neutral-500 dark:text-white" />,
-    },
-    {
-        name: "Features",
-        link: "#features",
-        icon: <User className="h-4 w-4 text-neutral-500 dark:text-white" />,
-    },
-    {
-        name: "Contact",
-        link: "#contact",
-        icon: <MessageCircle className="h-4 w-4 text-neutral-500 dark:text-white" />,
-    },
-];
 
 const content = [
     {
@@ -110,7 +88,6 @@ export default function LandingPage() {
                     <HeroSection />
                 </div>
             </div>
-
             {/* <TrustSection /> */}
 
             {/* Sticky Scroll Features */}

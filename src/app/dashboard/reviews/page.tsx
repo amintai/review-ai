@@ -45,6 +45,18 @@ export default function ReviewsPage() {
 
     useEffect(() => {
         fetchStatus();
+
+        // Auto-refresh logic when redirected from connection
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('connected') === 'true') {
+            // Success is already handled by fetchStatus checking DB
+        }
+        if (params.get('error')) {
+            const err = params.get('error');
+            if (err === 'NO_BUSINESS_ACCOUNT') {
+                alert("We couldn't find a Google Business account linked to this email. Please ensure you are managing a business profile.");
+            }
+        }
     }, []);
 
     const handleLocationSelect = async (loc: any) => {

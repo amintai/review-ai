@@ -4,6 +4,9 @@ import { createClient } from '@supabase/supabase-js';
 import { SYSTEM_PROMPT, constructUserPrompt, GenerateReviewParams } from '@/lib/ai-prompt';
 import { z } from 'zod';
 import Bytez from "bytez.js";
+import { sendEmail } from '@/lib/email';
+import GenerationSuccessEmail from '@/emails/GenerationSuccessEmail';
+
 
 // Schema for input validation
 const GenerationSchema = z.object({
@@ -120,12 +123,25 @@ export async function POST(req: Request) {
                 response_content: content,
                 tone_used: tone
             });
+
+            // Send transactional email (fire and forget for response time)
+            sendEmail({
+                to: user.email!,
+                subject: 'Your AI Response is ready!',
+                react: GenerationSuccessEmail({
+                    businessName: businessName,
+                    reviewText: reviewText,
+                    response: jsonResponse.response_1 || jsonResponse.response_2 || jsonResponse.response_3 || "Response generated"
+                })
+            }).catch(e => console.error('Transactional email failed:', e));
+
         } catch (dbError) {
             // Log the error but don't fail the request for the user
             console.error('[Audit Log Error]:', dbError);
         }
 
         return NextResponse.json(jsonResponse);
+
 
     } catch (error: any) {
         // Sanitize error reporting for production
