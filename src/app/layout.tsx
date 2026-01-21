@@ -8,7 +8,7 @@ import { Toaster } from 'sonner';
 
 const inter = Inter({ subsets: ["latin"] });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://reviewai.app';
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://reviewai.pro';
 
 export const metadata: Metadata = {
     // Basic SEO
