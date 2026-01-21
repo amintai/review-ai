@@ -6,6 +6,7 @@ import { z } from 'zod';
 import Bytez from "bytez.js";
 import { sendEmail } from '@/lib/email';
 import GenerationSuccessEmail from '@/emails/GenerationSuccessEmail';
+import { verifyNotBot } from '@/lib/botProtection';
 
 
 // Schema for input validation
@@ -28,6 +29,10 @@ const model = bytez.model("openai/gpt-4.1");
 
 export async function POST(req: Request) {
     try {
+        // 0. Bot Protection Check
+        const botCheck = await verifyNotBot();
+        if (botCheck) return botCheck;
+
         // 1. Parse and Validate Input
         const json = await req.json();
         const validation = GenerationSchema.safeParse(json);

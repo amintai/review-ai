@@ -1,10 +1,15 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { verifyNotBot } from '@/lib/botProtection';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET(req: Request) {
     try {
+        // 0. Bot Protection Check
+        const botCheck = await verifyNotBot();
+        if (botCheck) return botCheck;
+
         const { searchParams } = new URL(req.url);
         const page = parseInt(searchParams.get('page') || '1');
         const limit = parseInt(searchParams.get('limit') || '10');

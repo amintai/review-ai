@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import Bytez from "bytez.js";
 import { GenerateReviewParams, SYSTEM_PROMPT } from '@/lib/ai-prompt';
 import { z } from 'zod';
+import { verifyNotBot } from '@/lib/botProtection';
 
 // Schema for input validation
 const GenerationSchema = z.object({
@@ -49,6 +50,10 @@ Include NO markdown formatting, NO backticks, and NO extra text.
 
 export async function POST(req: Request) {
     try {
+        // 0. Bot Protection Check
+        const botCheck = await verifyNotBot();
+        if (botCheck) return botCheck;
+
         const json = await req.json();
         const validation = GenerationSchema.safeParse(json);
 

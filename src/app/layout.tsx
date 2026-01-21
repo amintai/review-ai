@@ -5,15 +5,17 @@ import CookieConsentBanner from "@/components/ui/CookieConsentBanner";
 import { Analytics } from "@vercel/analytics/react"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Toaster } from 'sonner';
+import Script from 'next/script';
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ["latin"], display: 'swap' });
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://reviewai.pro';
+const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_ID;
 
 export const metadata: Metadata = {
-    // Basic SEO
+    // Basic SEO - Optimized title length (58 chars)
     title: {
-        default: "ReviewAI - AI Review Response Generator | Manage Google & Yelp Reviews Instantly",
+        default: "ReviewAI - AI Review Response Generator for Businesses",
         template: "%s | ReviewAI"
     },
     description: "Generate professional, human-sounding responses to customer reviews in seconds. AI-powered review management for Google Business Profile, Yelp, Facebook & TripAdvisor. Save 10+ hours weekly with automated review responses.",
@@ -155,6 +157,13 @@ export default function RootLayout({
     return (
         <html lang="en">
             <head>
+                {/* Resource Hints for Performance */}
+                <link rel="preconnect" href="https://fonts.googleapis.com" />
+                <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+                <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+                <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+
+                {/* Structured Data */}
                 <script
                     type="application/ld+json"
                     dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -166,6 +175,24 @@ export default function RootLayout({
                 <Analytics />
                 <SpeedInsights />
                 <Toaster richColors position="top-center" />
+
+                {/* Google Analytics 4 - Loads after interactive */}
+                <Script
+                    src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+                    strategy="afterInteractive"
+                />
+                <Script id="google-analytics" strategy="afterInteractive">
+                    {`
+                        window.dataLayer = window.dataLayer || [];
+                        function gtag(){dataLayer.push(arguments);}
+                        gtag('js', new Date());
+                        gtag('config', '${GA_MEASUREMENT_ID}', {
+                            page_path: window.location.pathname,
+                            anonymize_ip: true,
+                            cookie_flags: 'SameSite=None;Secure'
+                        });
+                    `}
+                </Script>
             </body>
         </html>
     );

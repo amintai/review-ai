@@ -1,10 +1,20 @@
+import dynamic from 'next/dynamic';
 import Navbar from '@/components/landing/Navbar';
 import HeroSection from '@/components/landing/HeroSection';
-import LiveDemo from '@/components/landing/LiveDemo';
 import Footer from '@/components/landing/Footer';
 import "@radix-ui/themes/styles.css";
 import { BackgroundRippleEffect } from "@/components/ui/background-ripple-effect";
-import { StickyScroll } from "@/components/ui/sticky-scroll-reveal";
+
+// Dynamic imports for heavy or below-the-fold components
+const StickyScroll = dynamic(() => import("@/components/ui/sticky-scroll-reveal").then(mod => mod.StickyScroll), {
+    ssr: true,
+    loading: () => <div className="h-[500px] w-full bg-slate-50/50 animate-pulse rounded-3xl" />
+});
+
+const LiveDemo = dynamic(() => import('@/components/landing/LiveDemo'), {
+    ssr: true,
+    loading: () => <div className="h-[600px] w-full bg-white animate-pulse rounded-3xl border border-gray-100" />
+});
 
 const content = [
     {
@@ -75,12 +85,9 @@ const content = [
     },
 ];
 
-import TrustSection from '@/components/landing/TrustSection';
-
 export default function LandingPage() {
     return (
         <main className="min-h-screen bg-white font-sans selection:bg-blue-100">
-            {/* <FloatingNav navItems={navItems} /> */}
             <Navbar />
             <div className="relative overflow-hidden">
                 <BackgroundRippleEffect />
@@ -88,7 +95,6 @@ export default function LandingPage() {
                     <HeroSection />
                 </header>
             </div>
-            {/* <TrustSection /> */}
 
             {/* Sticky Scroll Features */}
             <section id="features" className="py-20 w-full bg-slate-50/50">

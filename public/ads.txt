@@ -1,0 +1,4 @@
+# Ads.txt - Authorized Digital Sellers
+# Add your entries below when you set up ad networks like Google AdSense
+# Format: <Field #1>, <Field #2>, <Field #3>, <Field #4>
+# Example: google.com, pub-XXXXXXXXXXXXXXXX, DIRECT, f08c47fec0942fa0
