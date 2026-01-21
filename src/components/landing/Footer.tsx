@@ -44,9 +44,9 @@ export default function Footer() {
                         </p>
                         <div className="mt-4">
                             <h4 className="font-semibold text-sm mb-2 dark:text-white">Built by</h4>
-                            <p className="text-sm text-neutral-600 dark:text-neutral-400">
+                            <Link href="https://x.com/aminnnn_09" target="_blank" className="text-sm text-neutral-600 dark:text-neutral-400 hover:text-black dark:hover:text-white transition-colors">
                                 Amin Tai
-                            </p>
+                            </Link>
                         </div>
                     </div>
 
@@ -56,6 +56,7 @@ export default function Footer() {
                         <div className="flex flex-col gap-2 text-sm text-neutral-600 dark:text-neutral-400">
                             <Link href="/#features" className="hover:text-black dark:hover:text-white transition-colors">Features</Link>
                             <Link href="/pricing" className="hover:text-black dark:hover:text-white transition-colors">Pricing</Link>
+                            <Link href="/blog" className="hover:text-black dark:hover:text-white transition-colors">Blog</Link>
                             <Link href="/login" className="hover:text-black dark:hover:text-white transition-colors">Login</Link>
                         </div>
                     </div>
