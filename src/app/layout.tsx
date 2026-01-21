@@ -18,7 +18,7 @@ export const metadata: Metadata = {
         default: "ReviewAI - AI Review Response Generator for Businesses",
         template: "%s | ReviewAI"
     },
-    description: "Generate professional, human-sounding responses to customer reviews in seconds. AI-powered review management for Google Business Profile, Yelp, Facebook & TripAdvisor. Save 10+ hours weekly with automated review responses.",
+    description: "Automate Google & Yelp review replies with AI. Save 10+ hours weekly and boost local SEO with professional, human-like responses. Try ReviewAI free.",
     keywords: [
         "AI review response generator",
         "Google Business Profile review management",

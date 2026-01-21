@@ -1,4 +1,5 @@
 import dynamic from 'next/dynamic';
+import Link from 'next/link';
 import Navbar from '@/components/landing/Navbar';
 import HeroSection from '@/components/landing/HeroSection';
 import Footer from '@/components/landing/Footer';
@@ -20,7 +21,11 @@ const content = [
     {
         title: "Instant AI Replies",
         description:
-            "Paste any review and get 3 polished, human-like responses in seconds. Managing reviews has never been this easy and fast.",
+            (
+                <span>
+                    Paste any review and get 3 polished, human-like responses in seconds. Managing reviews has never been this easy and fast. Learn more in our <Link href="/blog" className="text-blue-500 hover:text-blue-600 underline">blog</Link>.
+                </span>
+            ),
         content: (
             <div className="h-full w-full flex flex-col items-center justify-center text-white bg-blue-500/10 p-6">
                 <div className="w-full bg-white rounded-lg shadow-sm border border-gray-100 p-4 mb-4">
