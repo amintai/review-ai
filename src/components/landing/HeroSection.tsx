@@ -58,15 +58,21 @@ export default function HeroSection() {
                     </Link>
                 </motion.div>
 
-                {/* Launch Badge */}
+                {/* Featured On Badges */}
                 <motion.div
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: 0.4 }}
-                    className="mt-12 flex justify-center"
+                    className="mt-12 flex flex-wrap justify-center items-center gap-8"
                 >
                     <a href="https://launchigniter.com/product/reviewai?ref=badge-reviewai" target="_blank" rel="noopener noreferrer">
                         <img src="https://launchigniter.com/api/badge/reviewai?theme=light" alt="Featured on LaunchIgniter" width="212" height="55" className="hover:opacity-90 transition-opacity" />
+                    </a>
+                    <a href="https://open-launch.com/projects/reviewai" target="_blank" rel="noopener noreferrer">
+                        <img src="https://open-launch.com/api/badge/8734867b-adb4-4df6-bb71-065e0a05678c/featured-light.svg" alt="Featured on Open-Launch" width="200" height="50" className="hover:opacity-90 transition-opacity" />
+                    </a>
+                    <a href="https://turbo0.com/item/reviewai" target="_blank" rel="noopener noreferrer">
+                        <img src="https://img.turbo0.com/badge-listed-light.svg" alt="Listed on Turbo0" className="h-[54px] w-auto hover:opacity-90 transition-opacity" />
                     </a>
                 </motion.div>
 
