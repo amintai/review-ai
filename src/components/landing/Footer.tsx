@@ -75,9 +75,7 @@ export default function Footer() {
                     <div className="flex flex-col gap-4">
                         <h3 className="font-bold text-lg dark:text-white">Contact</h3>
                         <div className="flex flex-col gap-2 text-sm text-neutral-600 dark:text-neutral-400">
-                            <p>Vadodara, Gujarat 390001</p>
-                            <Link href="tel:+918141759119" className="hover:text-black dark:hover:text-white transition-colors">+91 8141759119</Link>
-                            <Link href="mailto:amin.tai.work@gmail.com" className="hover:text-black dark:hover:text-white transition-colors">amin.tai.work@gmail.com</Link>
+                            <Link href="/contact" className="hover:text-black dark:hover:text-white transition-colors">Contact Support</Link>
                         </div>
                     </div>
 

@@ -96,39 +96,6 @@ export default function LandingPage() {
                 </header>
             </div>
 
-            {/* Sticky Scroll Features */}
-            <section id="features" className="py-20 w-full bg-slate-50/50">
-                <div className="max-w-4xl mx-auto text-center mb-16 px-6">
-                    <h2 className="text-4xl font-black text-gray-900 mb-4">Precision Review Management</h2>
-                    <p className="text-gray-500 text-lg">Sophisticated tools designed to protect and grow your online reputation.</p>
-                </div>
-
-                {/* SEO Content Section */}
-                <div className="max-w-4xl mx-auto px-6 mb-20 text-left">
-                    <h3 className="text-2xl font-bold text-gray-900 mb-4">Why ReviewAI is the Best Review Management Software for Small Business</h3>
-                    <div className="prose prose-lg text-gray-600 max-w-none">
-                        <p className="mb-4">
-                            In today's digital landscape, your <strong>Google Business Profile</strong> is your new storefront. 85% of consumers trust online reviews as much as personal recommendations.
-                            However, managing reviews across multiple platforms like Google, Yelp, Facebook, and TripAdvisor can be overwhelming.
-                        </p>
-                        <p className="mb-4">
-                            ReviewAI solves this by being the ultimate <strong>AI review response generator</strong>. We don't just use generic templates; our advanced AI analyzes the sentiment of every customer review
-                            to craft personalized, professional, and human-sounding responses. This helps you:
-                        </p>
-                        <ul className="list-disc pl-6 mb-4 space-y-2">
-                            <li><strong>Boost Local SEO:</strong> Regular activity and keyword-rich replies signal to Google that your business is active, improving your ranking in the "Map Pack".</li>
-                            <li><strong>Save Time:</strong> What used to take hours now takes seconds. specific responses are generated instantly, allowing you to focus on running your business.</li>
-                            <li><strong>Improve Customer Loyalty:</strong> A timely, empathetic response to a negative review can turn a frustrated customer into a loyal advocate.</li>
-                        </ul>
-                        <p>
-                            Whether you are a restaurant owner, a dentist, or a real estate agent, ReviewAI provides the <strong>reputation management tools</strong> you need to scale your trust and credibility on autopilot.
-                        </p>
-                    </div>
-                </div>
-
-                <StickyScroll content={content} />
-            </section>
-
             <LiveDemo />
 
             <Footer />
