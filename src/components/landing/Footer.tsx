@@ -71,18 +71,31 @@ export default function Footer() {
                         </div>
                     </div>
 
+                    {/* Contact - New Column for Local SEO */}
+                    <div className="flex flex-col gap-4">
+                        <h3 className="font-bold text-lg dark:text-white">Contact</h3>
+                        <div className="flex flex-col gap-2 text-sm text-neutral-600 dark:text-neutral-400">
+                            <p>Arena Arcade<br />Mumbai, Maharashtra 400001</p>
+                            <Link href="tel:+918141759119" className="hover:text-black dark:hover:text-white transition-colors">+91 8141759119</Link>
+                            <Link href="mailto:support@reviewai.pro" className="hover:text-black dark:hover:text-white transition-colors">support@reviewai.pro</Link>
+                        </div>
+                    </div>
+
                     {/* Socials */}
                     <div className="flex flex-col gap-4">
                         <h3 className="font-bold text-lg dark:text-white">Socials</h3>
                         <div className="flex gap-4">
-                            <Link href="#" className="p-2 bg-neutral-100 dark:bg-neutral-800 rounded-full hover:scale-110 transition-transform">
+                            <Link href="https://x.com/aminnnn_09" target="_blank" className="p-2 bg-neutral-100 dark:bg-neutral-800 rounded-full hover:scale-110 transition-transform">
                                 <Twitter className="w-5 h-5 text-neutral-600 dark:text-white" />
                             </Link>
-                            <Link href="#" className="p-2 bg-neutral-100 dark:bg-neutral-800 rounded-full hover:scale-110 transition-transform">
+                            <Link href="https://www.linkedin.com/in/amintai" target="_blank" className="p-2 bg-neutral-100 dark:bg-neutral-800 rounded-full hover:scale-110 transition-transform">
                                 <Linkedin className="w-5 h-5 text-neutral-600 dark:text-white" />
                             </Link>
-                            <Link href="#" className="p-2 bg-neutral-100 dark:bg-neutral-800 rounded-full hover:scale-110 transition-transform">
+                            <Link href="https://instagram.com/aminnn_09" target="_blank" className="p-2 bg-neutral-100 dark:bg-neutral-800 rounded-full hover:scale-110 transition-transform">
                                 <Instagram className="w-5 h-5 text-neutral-600 dark:text-white" />
+                            </Link>
+                            <Link href="https://facebook.com/aminnnn_09" target="_blank" className="p-2 bg-neutral-100 dark:bg-neutral-800 rounded-full hover:scale-110 transition-transform">
+                                <Facebook className="w-5 h-5 text-neutral-600 dark:text-white" />
                             </Link>
                         </div>
                     </div>

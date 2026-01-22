@@ -18,7 +18,7 @@ export const metadata: Metadata = {
         default: "ReviewAI - AI Review Response Generator for Businesses",
         template: "%s | ReviewAI"
     },
-    description: "Automate Google & Yelp review replies with AI. Save 10+ hours weekly and boost local SEO with professional, human-like responses. Try ReviewAI free.",
+    description: "Generate professional, human-sounding responses to customer reviews in seconds. AI-powered review management for Google Business Profile, Yelp, Facebook & TripAdvisor. Save 10+ hours weekly with automated review responses.",
     keywords: [
         "AI review response generator",
         "Google Business Profile review management",
@@ -147,6 +147,68 @@ const jsonLd = {
         'Human-sounding AI responses',
     ],
     screenshot: `${siteUrl}/og-image.png`,
+    mainEntity: {
+        '@type': 'Organization',
+        name: 'ReviewAI',
+        url: siteUrl,
+        logo: `${siteUrl}/logo.png`,
+        sameAs: [
+            'https://twitter.com/reviewai',
+            'https://facebook.com/reviewai',
+            'https://instagram.com/reviewai',
+            'https://linkedin.com/company/reviewai',
+            'https://youtube.com/@reviewai'
+        ],
+        contactPoint: {
+            '@type': 'ContactPoint',
+            telephone: '+91 8141759119',
+            contactType: 'customer service',
+            areaServed: 'Global',
+            availableLanguage: 'English'
+        }
+    }
+};
+
+const localBusinessSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'LocalBusiness',
+    name: 'ReviewAI',
+    image: `${siteUrl}/og-image.png`,
+    '@id': siteUrl,
+    url: siteUrl,
+    telephone: '+91 8141759119',
+    address: {
+        '@type': 'PostalAddress',
+        streetAddress: 'Arena Arcade',
+        addressLocality: 'Mumbai, Maharashtra',
+        addressRegion: 'Maharashtra',
+        postalCode: '400001',
+        addressCountry: 'India'
+    },
+    geo: {
+        '@type': 'GeoCoordinates',
+        latitude: 19.076,
+        longitude: 72.8777
+    },
+    openingHoursSpecification: {
+        '@type': 'OpeningHoursSpecification',
+        dayOfWeek: [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday"
+        ],
+        opens: '09:00',
+        closes: '17:00'
+    },
+    sameAs: [
+        'https://twitter.com/reviewai',
+        'https://facebook.com/reviewai',
+        'https://instagram.com/reviewai',
+        'https://linkedin.com/company/reviewai',
+        'https://youtube.com/@reviewai'
+    ]
 };
 
 export default function RootLayout({
@@ -168,6 +230,26 @@ export default function RootLayout({
                     type="application/ld+json"
                     dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
                 />
+                <script
+                    type="application/ld+json"
+                    dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
+                />
+
+                {/* Facebook Pixel */}
+                <Script id="facebook-pixel" strategy="afterInteractive">
+                    {`
+                        !function(f,b,e,v,n,t,s)
+                        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+                        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+                        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+                        n.queue=[];t=b.createElement(e);t.async=!0;
+                        t.src=v;s=b.getElementsByTagName(e)[0];
+                        s.parentNode.insertBefore(t,s)}(window, document,'script',
+                        'https://connect.facebook.net/en_US/fbevents.js');
+                        fbq('init', 'YOUR-PIXEL-ID-HERE');
+                        fbq('track', 'PageView');
+                    `}
+                </Script>
             </head>
             <body className={inter.className}>
                 {children}
