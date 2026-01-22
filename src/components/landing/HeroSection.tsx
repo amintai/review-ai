@@ -58,6 +58,18 @@ export default function HeroSection() {
                     </Link>
                 </motion.div>
 
+                {/* Launch Badge */}
+                <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.4 }}
+                    className="mt-12 flex justify-center"
+                >
+                    <a href="https://launchigniter.com/product/reviewai?ref=badge-reviewai" target="_blank" rel="noopener noreferrer">
+                        <img src="https://launchigniter.com/api/badge/reviewai?theme=light" alt="Featured on LaunchIgniter" width="212" height="55" className="hover:opacity-90 transition-opacity" />
+                    </a>
+                </motion.div>
+
                 {/* Social Proof / Stats */}
                 <motion.div
                     initial={{ opacity: 0 }}
