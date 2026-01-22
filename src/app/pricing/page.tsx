@@ -86,8 +86,8 @@ export default function PricingPage() {
                         <div
                             key={idx}
                             className={`rounded-2xl p-8 border ${plan.highlighted
-                                    ? 'border-blue-500 ring-2 ring-blue-100 shadow-xl'
-                                    : 'border-gray-200'
+                                ? 'border-blue-500 ring-2 ring-blue-100 shadow-xl'
+                                : 'border-gray-200'
                                 }`}
                         >
                             {plan.highlighted && (
@@ -122,8 +122,8 @@ export default function PricingPage() {
                             <Link
                                 href={plan.name === "Enterprise" ? "mailto:sales@reviewai.com" : "/login"}
                                 className={`block w-full text-center py-3 px-6 rounded-xl font-medium transition-colors ${plan.highlighted
-                                        ? 'bg-blue-600 text-white hover:bg-blue-700'
-                                        : 'bg-gray-100 text-gray-900 hover:bg-gray-200'
+                                    ? 'bg-blue-600 text-white hover:bg-blue-700'
+                                    : 'bg-gray-100 text-gray-900 hover:bg-gray-200'
                                     }`}
                             >
                                 {plan.cta}
@@ -146,7 +146,7 @@ export default function PricingPage() {
                             View FAQ
                         </Link>
                         <a
-                            href="mailto:support@reviewai.com"
+                            href="mailto:amin.tai.work@gmail.com"
                             className="px-6 py-3 bg-blue-600 text-white font-medium rounded-xl hover:bg-blue-700 transition-colors"
                         >
                             Contact Sales

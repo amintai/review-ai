@@ -179,15 +179,15 @@ const localBusinessSchema = {
     telephone: '+91 8141759119',
     address: {
         '@type': 'PostalAddress',
-        streetAddress: 'Arena Arcade',
-        addressLocality: 'Mumbai, Maharashtra',
-        addressRegion: 'Maharashtra',
-        postalCode: '400001',
+        streetAddress: '',
+        addressLocality: 'Vadodara, Gujarat',
+        addressRegion: 'Gujarat',
+        postalCode: '390001',
         addressCountry: 'India'
     },
     geo: {
         '@type': 'GeoCoordinates',
-        latitude: 19.076,
+        latitude: 22.3039,
         longitude: 72.8777
     },
     openingHoursSpecification: {

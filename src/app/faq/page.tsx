@@ -123,7 +123,7 @@ export default function FAQPage() {
                     <h3 className="text-2xl font-semibold text-gray-900 mb-4">Still have questions?</h3>
                     <p className="text-gray-600 mb-6">Can&apos;t find what you&apos;re looking for? Our support team is here to help.</p>
                     <a
-                        href="mailto:support@reviewai.com"
+                        href="mailto:amin.tai.work@gmail.com"
                         className="inline-flex items-center justify-center px-6 py-3 bg-blue-600 text-white font-medium rounded-xl hover:bg-blue-700 transition-colors"
                     >
                         Contact Support

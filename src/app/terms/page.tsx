@@ -72,8 +72,8 @@ export default function TermsPage() {
                         <h2 className="text-2xl font-semibold text-gray-800 mb-4">8. Contact Information</h2>
                         <p className="text-gray-600 leading-relaxed">
                             If you have any questions about these Terms, please contact us at{' '}
-                            <a href="mailto:support@reviewai.com" className="text-blue-600 hover:underline">
-                                support@reviewai.com
+                            <a href="mailto:amin.tai.work@gmail.com" className="text-blue-600 hover:underline">
+                                amin.tai.work@gmail.com
                             </a>.
                         </p>
                     </section>
