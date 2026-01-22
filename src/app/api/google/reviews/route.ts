@@ -26,7 +26,6 @@ export async function GET(req: Request) {
         if (!profile.google_location_id) {
             const locations = await listLocations(profile.google_refresh_token);
 
-            console.log("locations", locations)
             return NextResponse.json({
                 connected: true,
                 needsLocation: true,

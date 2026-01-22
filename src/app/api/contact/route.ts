@@ -26,7 +26,6 @@ export async function POST(req: Request) {
             react: ContactEmail({ name, email, subject, message }),
         });
 
-        console.log("result-----result", result)
         if (!result.success) {
             return NextResponse.json(
                 { message: 'Failed to send message' },

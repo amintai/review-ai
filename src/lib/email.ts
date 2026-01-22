@@ -16,10 +16,10 @@ export const sendEmail = async ({
         const html = await render(react);
 
         const { data, error } = await resend.emails.send({
-            from: 'ReviewAI <onboarding@resend.dev>', // Update to verified domain in production
+            from: 'ReviewAI <onboarding@resend.dev>',
             to,
             subject,
-            html, // Use html string instead of react element
+            html,
         });
 
         if (error) {

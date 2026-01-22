@@ -12,7 +12,6 @@ export async function GET(request: Request) {
     if (code) {
         const supabase = await createClient();
         const { data: { session }, error } = await supabase.auth.exchangeCodeForSession(code);
-        console.log('Auth Callback:', { session, error });
         if (!error && session?.user) {
             const user = session.user;
 
