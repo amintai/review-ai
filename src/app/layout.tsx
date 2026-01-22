@@ -211,6 +211,53 @@ const localBusinessSchema = {
     ]
 };
 
+const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+        {
+            '@type': 'Question',
+            name: 'Will the responses sound robotic?',
+            acceptedAnswer: {
+                '@type': 'Answer',
+                text: 'Not at all. ReviewAI is specifically tuned to mimic natural human conversation, using empathy and context awareness. Most customers cannot distinguish our AI replies from human-written ones.'
+            }
+        },
+        {
+            '@type': 'Question',
+            name: 'Which platforms do you support?',
+            acceptedAnswer: {
+                '@type': 'Answer',
+                text: 'Our copy-paste generator works for ANY platform (Google, Yelp, Facebook, TripAdvisor, etc.). For direct integration (fetching & publishing), we currently support Google Business Profile, with Yelp coming soon.'
+            }
+        },
+        {
+            '@type': 'Question',
+            name: 'How secure is my Google Business account data?',
+            acceptedAnswer: {
+                '@type': 'Answer',
+                text: 'We take an expert-level approach to security. We use OAuth 2.0 with restricted scopes, meaning we only access what is strictly necessary. Your tokens are encrypted using AES-256 and stored in an isolated Supabase environment with Row Level Security (RLS) enabled.'
+            }
+        },
+        {
+            '@type': 'Question',
+            name: 'Is my customer data safe?',
+            acceptedAnswer: {
+                '@type': 'Answer',
+                text: 'Absolutely. We are GDPR compliant. Your review data is used in real-time to generate responses and is never stored permanently unless logged for your own history. We never sell or share your data with third parties.'
+            }
+        },
+        {
+            '@type': 'Question',
+            name: 'Is there a free plan?',
+            acceptedAnswer: {
+                '@type': 'Answer',
+                text: 'Yes! You can generate up to 10 high-quality responses per month for free, forever. No credit card required to get started.'
+            }
+        }
+    ]
+};
+
 export default function RootLayout({
     children,
 }: Readonly<{
@@ -233,6 +280,10 @@ export default function RootLayout({
                 <script
                     type="application/ld+json"
                     dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
+                />
+                <script
+                    type="application/ld+json"
+                    dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
                 />
 
                 {/* Facebook Pixel */}
