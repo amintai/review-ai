@@ -1,7 +1,7 @@
 import ContactForm from "@/components/ContactForm";
 import Navbar from "@/components/landing/Navbar";
 import Footer from "@/components/landing/Footer";
-import { BackgroundRippleEffect } from "@/components/ui/background-ripple-effect";
+import BackgroundRippleEffect from "@/components/ui/background-ripple-effect";
 
 export const metadata = {
     title: "Contact Us | ReviewAI",
