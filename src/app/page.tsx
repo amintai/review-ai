@@ -2,6 +2,8 @@ import dynamic from 'next/dynamic';
 import Navbar from '@/components/landing/Navbar';
 import Footer from '@/components/landing/Footer';
 import "@radix-ui/themes/styles.css";
+import "./styles/animate.css";
+import "./styles/dashboard-theme.css";
 // import { BackgroundRippleEffect } from "@/components/ui/background-ripple-effect";
 
 // Dynamic imports for heavy or below-the-fold components
