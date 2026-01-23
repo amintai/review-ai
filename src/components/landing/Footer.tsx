@@ -43,8 +43,14 @@ export default function Footer() {
                             Automate your reputation management with AI-powered review responses.
                         </p>
                         <div className="mt-4">
-                            <h4 className="font-semibold text-sm mb-2 dark:text-white">Built by</h4>
-                            <Link href="https://x.com/aminnnn_09" target="_blank" className="text-sm text-neutral-600 dark:text-neutral-400 hover:text-black dark:hover:text-white transition-colors">
+                            <p className="font-semibold text-sm mb-2 dark:text-white">
+                                Built by
+                            </p>
+                            <Link
+                                href="https://x.com/aminnnn_09"
+                                target="_blank"
+                                className="text-sm text-neutral-600 dark:text-neutral-400 hover:text-black dark:hover:text-white transition-colors"
+                            >
                                 Amin Tai
                             </Link>
                         </div>
@@ -83,17 +89,53 @@ export default function Footer() {
                     <div className="flex flex-col gap-4">
                         <h3 className="font-bold text-lg dark:text-white">Socials</h3>
                         <div className="flex gap-4">
-                            <Link href="https://x.com/aminnnn_09" target="_blank" className="p-2 bg-neutral-100 dark:bg-neutral-800 rounded-full hover:scale-110 transition-transform">
-                                <Twitter className="w-5 h-5 text-neutral-600 dark:text-white" />
+                            <Link
+                                href="https://x.com/aminnnn_09"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                aria-label="Visit Amin Tai on X"
+                                className="p-2 bg-neutral-100 dark:bg-neutral-800 rounded-full hover:scale-110 transition-transform"
+                            >
+                                <Twitter
+                                    className="w-5 h-5 text-neutral-600 dark:text-white"
+                                    aria-hidden="true"
+                                />
                             </Link>
-                            <Link href="https://www.linkedin.com/in/amintai" target="_blank" className="p-2 bg-neutral-100 dark:bg-neutral-800 rounded-full hover:scale-110 transition-transform">
-                                <Linkedin className="w-5 h-5 text-neutral-600 dark:text-white" />
+                            <Link
+                                href="https://www.linkedin.com/in/amintai"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                aria-label="Visit Amin Tai on LinkedIn"
+                                className="p-2 bg-neutral-100 dark:bg-neutral-800 rounded-full hover:scale-110 transition-transform"
+                            >
+                                <Linkedin
+                                    className="w-5 h-5 text-neutral-600 dark:text-white"
+                                    aria-hidden="true"
+                                />
                             </Link>
-                            <Link href="https://instagram.com/aminnn_09" target="_blank" className="p-2 bg-neutral-100 dark:bg-neutral-800 rounded-full hover:scale-110 transition-transform">
-                                <Instagram className="w-5 h-5 text-neutral-600 dark:text-white" />
+                            <Link
+                                href="https://instagram.com/aminnn_09"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                aria-label="Visit Amin Tai on Instagram"
+                                className="p-2 bg-neutral-100 dark:bg-neutral-800 rounded-full hover:scale-110 transition-transform"
+                            >
+                                <Instagram
+                                    className="w-5 h-5 text-neutral-600 dark:text-white"
+                                    aria-hidden="true"
+                                />
                             </Link>
-                            <Link href="https://facebook.com/aminnnn_09" target="_blank" className="p-2 bg-neutral-100 dark:bg-neutral-800 rounded-full hover:scale-110 transition-transform">
-                                <Facebook className="w-5 h-5 text-neutral-600 dark:text-white" />
+                            <Link
+                                href="https://facebook.com/aminnnn_09"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                aria-label="Visit Amin Tai on Facebook"
+                                className="p-2 bg-neutral-100 dark:bg-neutral-800 rounded-full hover:scale-110 transition-transform"
+                            >
+                                <Facebook
+                                    className="w-5 h-5 text-neutral-600 dark:text-white"
+                                    aria-hidden="true"
+                                />
                             </Link>
                         </div>
                     </div>

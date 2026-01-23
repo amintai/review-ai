@@ -144,8 +144,9 @@ export default function LiveDemo() {
 
                             {/* Business Type */}
                             <div>
-                                <label className="block text-sm font-semibold text-gray-700 mb-3">Business Type</label>
+                                <label htmlFor="businessType" className="block text-sm font-semibold text-gray-700 mb-3">Business Type</label>
                                 <select
+                                    id="businessType"
                                     className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all appearance-none cursor-pointer"
                                     value={businessType}
                                     onChange={(e) => setBusinessType(e.target.value)}
@@ -209,7 +210,7 @@ export default function LiveDemo() {
                             {/* Optional Fields */}
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label className="block text-sm font-semibold text-gray-700 mb-2">Business Name <span className="text-gray-400 font-normal">(optional)</span></label>
+                                    <label className="block text-sm font-semibold text-gray-700 mb-2">Business Name <span className="text-gray-600 font-normal">(optional)</span></label>
                                     <input
                                         type="text"
                                         className="w-full p-3 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 outline-none bg-gray-50/50"
@@ -219,7 +220,7 @@ export default function LiveDemo() {
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-semibold text-gray-700 mb-2">Instructions <span className="text-gray-400 font-normal">(optional)</span></label>
+                                    <label className="block text-sm font-semibold text-gray-700 mb-2">Instructions <span className="text-gray-600 font-normal">(optional)</span></label>
                                     <input
                                         type="text"
                                         className="w-full p-3 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 outline-none bg-gray-50/50"
@@ -271,7 +272,7 @@ export default function LiveDemo() {
                                             </>
                                         )}
                                     </Button>
-                                    <p className="text-xs text-center text-gray-400 mt-2">No signup required • 100% free demo</p>
+                                    <p className="text-xs text-center text-gray-600 mt-2">No signup required • 100% free demo</p>
                                 </div>
                             )}
                         </div>
@@ -290,8 +291,8 @@ export default function LiveDemo() {
                                         <div className="absolute inset-0 bg-blue-100 blur-3xl rounded-full opacity-30"></div>
                                         <Sparkles className="relative h-16 w-16 text-blue-400 mb-6" />
                                     </div>
-                                    <h3 className="text-xl font-semibold text-gray-700 mb-2">Your Response Will Appear Here</h3>
-                                    <p className="text-gray-400 text-center max-w-sm">Fill out the form and click generate to see the magic happen</p>
+                                    <h3 className="text-xl font-semibold text-gray-600 mb-2">Your Response Will Appear Here</h3>
+                                    <p className="text-gray-600 text-center max-w-sm">Fill out the form and click generate to see the magic happen</p>
                                 </motion.div>
                             ) : (
                                 <motion.div
@@ -468,7 +469,7 @@ export default function LiveDemo() {
                                                 <RefreshCw className="h-4 w-4 mr-2" />
                                                 Reset
                                             </Button>
-                                            <p className="text-[10px] text-gray-400 font-medium italic">
+                                            <p className="text-[10px] text-gray-600 font-medium italic">
                                                 ✨ Tip: You can edit responses directly
                                             </p>
                                         </div>

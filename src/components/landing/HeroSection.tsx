@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import Link from 'next/link';
 import { ArrowRight, Star } from 'lucide-react';
 import { Button } from "@/components/ui/button";
-import { HeroHighlight, Highlight } from "@/components/ui/hero-highlight";
+import { HeroHighlight } from "@/components/ui/hero-highlight";
 
 export default function HeroSection() {
     return (
@@ -66,15 +66,36 @@ export default function HeroSection() {
                     className="mt-12 flex flex-wrap justify-center items-center gap-8"
                 >
                     <a href="https://launchigniter.com/product/reviewai?ref=badge-reviewai" target="_blank" rel="noopener noreferrer">
-                        <img src="https://launchigniter.com/api/badge/reviewai?theme=light" alt="Featured on LaunchIgniter" width="212" height="55" className="hover:opacity-90 transition-opacity" />
+                        <img
+                            src="https://launchigniter.com/api/badge/reviewai?theme=light"
+                            alt="Featured on LaunchIgniter"
+                            width="212"
+                            height="55"
+                            className="hover:opacity-90 transition-opacity"
+                        />
                     </a>
+
                     <a href="https://open-launch.com/projects/reviewai" target="_blank" rel="noopener noreferrer">
-                        <img src="https://open-launch.com/api/badge/8734867b-adb4-4df6-bb71-065e0a05678c/featured-light.svg" alt="Featured on Open-Launch" width="200" height="50" className="hover:opacity-90 transition-opacity" />
+                        <img
+                            src="https://open-launch.com/api/badge/8734867b-adb4-4df6-bb71-065e0a05678c/featured-light.svg"
+                            alt="Featured on Open-Launch"
+                            width="200"
+                            height="50"
+                            className="hover:opacity-90 transition-opacity"
+                        />
                     </a>
+
                     <a href="https://turbo0.com/item/reviewai" target="_blank" rel="noopener noreferrer">
-                        <img src="https://img.turbo0.com/badge-listed-light.svg" alt="Listed on Turbo0" className="h-[54px] w-auto hover:opacity-90 transition-opacity" />
+                        <img
+                            src="https://img.turbo0.com/badge-listed-light.svg"
+                            alt="Listed on Turbo0"
+                            width="180"
+                            height="54"
+                            className="hover:opacity-90 transition-opacity"
+                        />
                     </a>
                 </motion.div>
+
 
                 {/* Social Proof / Stats */}
                 <motion.div

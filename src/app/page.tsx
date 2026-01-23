@@ -1,9 +1,8 @@
 import dynamic from 'next/dynamic';
 import Navbar from '@/components/landing/Navbar';
-import HeroSection from '@/components/landing/HeroSection';
 import Footer from '@/components/landing/Footer';
 import "@radix-ui/themes/styles.css";
-import { BackgroundRippleEffect } from "@/components/ui/background-ripple-effect";
+// import { BackgroundRippleEffect } from "@/components/ui/background-ripple-effect";
 
 // Dynamic imports for heavy or below-the-fold components
 const StickyScroll = dynamic(() => import("@/components/ui/sticky-scroll-reveal").then(mod => mod.StickyScroll), {
@@ -13,6 +12,16 @@ const StickyScroll = dynamic(() => import("@/components/ui/sticky-scroll-reveal"
 
 const LiveDemo = dynamic(() => import('@/components/landing/LiveDemo'), {
     ssr: true,
+    loading: () => <div className="h-[600px] w-full bg-white animate-pulse rounded-3xl border border-gray-100" />
+});
+
+
+const HeroSection = dynamic(() => import("@/components/landing/HeroSection"), {
+    ssr: true,
+    loading: () => <div className="h-[600px] w-full bg-white animate-pulse rounded-3xl border border-gray-100" />
+});
+
+const BackgroundRippleEffect = dynamic(() => import("@/components/ui/background-ripple-effect"), {
     loading: () => <div className="h-[600px] w-full bg-white animate-pulse rounded-3xl border border-gray-100" />
 });
 

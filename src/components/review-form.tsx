@@ -175,8 +175,9 @@ export default function ReviewForm() {
                                         />
                                     </div>
                                     <div>
-                                        <label className="block text-xs font-bold text-gray-500 mb-1.5 ml-1">Type</label>
+                                        <label htmlFor="businessType" className="block text-xs font-bold text-gray-500 mb-1.5 ml-1">Type</label>
                                         <select
+                                            id="businessType"
                                             className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all cursor-pointer text-sm font-medium"
                                             value={businessType}
                                             onChange={(e) => setBusinessType(e.target.value)}

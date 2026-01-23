@@ -6,6 +6,8 @@ import { Analytics } from "@vercel/analytics/react"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Toaster } from 'sonner';
 import Script from 'next/script';
+import GoogleAnalytics from "@/components/analytics/GoogleAnalytics";
+import FacebookPixel from "@/components/analytics/FacebookPixel";
 
 const inter = Inter({ subsets: ["latin"], display: 'swap' });
 
@@ -286,21 +288,7 @@ export default function RootLayout({
                     dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
                 />
 
-                {/* Facebook Pixel */}
-                <Script id="facebook-pixel" strategy="afterInteractive">
-                    {`
-                        !function(f,b,e,v,n,t,s)
-                        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-                        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-                        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-                        n.queue=[];t=b.createElement(e);t.async=!0;
-                        t.src=v;s=b.getElementsByTagName(e)[0];
-                        s.parentNode.insertBefore(t,s)}(window, document,'script',
-                        'https://connect.facebook.net/en_US/fbevents.js');
-                        fbq('init', 'YOUR-PIXEL-ID-HERE');
-                        fbq('track', 'PageView');
-                    `}
-                </Script>
+                <FacebookPixel />
             </head>
             <body className={inter.className}>
                 {children}
@@ -309,23 +297,7 @@ export default function RootLayout({
                 <SpeedInsights />
                 <Toaster richColors position="top-center" />
 
-                {/* Google Analytics 4 - Loads after interactive */}
-                <Script
-                    src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
-                    strategy="afterInteractive"
-                />
-                <Script id="google-analytics" strategy="afterInteractive">
-                    {`
-                        window.dataLayer = window.dataLayer || [];
-                        function gtag(){dataLayer.push(arguments);}
-                        gtag('js', new Date());
-                        gtag('config', '${GA_MEASUREMENT_ID}', {
-                            page_path: window.location.pathname,
-                            anonymize_ip: true,
-                            cookie_flags: 'SameSite=None;Secure'
-                        });
-                    `}
-                </Script>
+                <GoogleAnalytics />
             </body>
         </html>
     );
