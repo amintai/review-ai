@@ -295,6 +295,29 @@ export default function RootLayout({
                 </Script>
 
                 <FacebookPixel />
+
+                {/* Capture UTM Parameters */}
+                <Script id="capture-utm" strategy="afterInteractive">
+                    {`
+                        (function() {
+                            const urlParams = new URLSearchParams(window.location.search);
+                            const utms = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'ref'];
+                            const captured = {};
+                            
+                            utms.forEach(param => {
+                                const value = urlParams.get(param);
+                                if (value) {
+                                    captured[param] = value;
+                                    localStorage.setItem('reviewai_' + param, value);
+                                }
+                            });
+                            
+                            if (Object.keys(captured).length > 0) {
+                                console.log('Captured UTMs:', captured);
+                            }
+                        })();
+                    `}
+                </Script>
             </head>
             <body className={inter.className}>
                 {children}

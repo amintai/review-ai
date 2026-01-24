@@ -9,6 +9,7 @@ import ToneSelector from '../ui/ToneSelector';
 import { ReviewTone } from '@/lib/ai-prompt';
 import Link from 'next/link';
 import { toast } from 'sonner';
+import { trackEvent } from '@/lib/analytics';
 
 
 const USAGE_LIMIT = 3;
@@ -49,6 +50,7 @@ export default function LiveDemo() {
         if (textToCopy) {
             navigator.clipboard.writeText(textToCopy);
             setCopied(true);
+            trackEvent('live_demo_copy_clicked', { tone: selectedTone });
             setTimeout(() => setCopied(false), 2000);
         }
     };
@@ -65,6 +67,7 @@ export default function LiveDemo() {
     const handleShare = (platform: 'whatsapp' | 'facebook') => {
         const shareText = `🚀 Free AI for Google reviews – Get 3 professional reply options instantly!\n\nTry ReviewAI: ${window.location.origin}?ref=share_${platform}`;
 
+        trackEvent('live_demo_share_clicked', { platform });
         if (platform === 'whatsapp') {
             window.open(`https://wa.me/?text=${encodeURIComponent(shareText)}`, '_blank');
         } else {
@@ -99,6 +102,11 @@ export default function LiveDemo() {
 
             if (data.response_1) {
                 setResults(data);
+                trackEvent('live_demo_generated', {
+                    tone: selectedTone,
+                    businessType,
+                    hasLocation: !!location
+                });
                 setActiveOption('response_1');
                 setIsEditing(false);
                 const newCount = usageCount + 1;

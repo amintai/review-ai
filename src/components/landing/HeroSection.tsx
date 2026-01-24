@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { ArrowRight, Star } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { HeroHighlight } from "@/components/ui/hero-highlight";
+import { trackEvent } from "@/lib/analytics";
 
 export default function HeroSection() {
     return (
@@ -47,12 +48,21 @@ export default function HeroSection() {
                     className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4"
                 >
                     <Link href="/login">
-                        <Button size="lg" className="bg-black text-white hover:bg-black/80 hover:text-white h-12 px-8 text-lg rounded-xl shadow-lg hover:shadow-xl transition-all cursor-pointer">
+                        <Button
+                            size="lg"
+                            className="bg-black text-white hover:bg-black/80 hover:text-white h-12 px-8 text-lg rounded-xl shadow-lg hover:shadow-xl transition-all cursor-pointer"
+                            onClick={() => trackEvent('hero_cta_clicked', { type: 'get_started' })}
+                        >
                             Generate Your First Reply Free <ArrowRight className="ml-2 h-5 w-5" />
                         </Button>
                     </Link>
                     <Link href="#demo">
-                        <Button variant="outline" size="lg" className="h-12 px-8 text-lg rounded-xl bg-white/50 backdrop-blur-sm cursor-pointer">
+                        <Button
+                            variant="outline"
+                            size="lg"
+                            className="h-12 px-8 text-lg rounded-xl bg-white/50 backdrop-blur-sm cursor-pointer"
+                            onClick={() => trackEvent('hero_cta_clicked', { type: 'see_demo' })}
+                        >
                             See How It Works
                         </Button>
                     </Link>

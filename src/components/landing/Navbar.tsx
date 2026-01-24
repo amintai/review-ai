@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import { Button } from "@/components/ui/button";
 import Logo from "@/components/ui/Logo";
+import { trackEvent } from "@/lib/analytics";
 
 export default function Navbar() {
     return (
@@ -14,10 +15,11 @@ export default function Navbar() {
                     <Link
                         href="/login"
                         className="text-gray-600 hover:text-gray-900 font-medium text-sm transition-colors"
+                        onClick={() => trackEvent('navbar_clicked', { type: 'signin' })}
                     >
                         Sign in
                     </Link>
-                    <Link href="/login">
+                    <Link href="/login" onClick={() => trackEvent('navbar_clicked', { type: 'get_started' })}>
                         <Button className='cursor-pointer'>Get Started</Button>
                     </Link>
                 </div>
