@@ -134,7 +134,7 @@ export default function LiveDemo() {
             <div className="max-w-7xl mx-auto px-6">
                 <div className="text-center mb-16">
                     <span className="inline-block px-4 py-1.5 bg-blue-100 text-blue-700 text-sm font-medium rounded-full mb-4">
-                        ✨ Try It Free – Used by 500+ Indian Businesses
+                        ✨ Try It Free – Used by 500+ Businesses
                     </span>
                     <h2 className="text-4xl font-bold tracking-tight text-gray-900 mb-4">
                         Generate Your First Reply

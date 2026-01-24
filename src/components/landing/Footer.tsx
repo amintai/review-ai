@@ -102,10 +102,10 @@ export default function Footer() {
                                 />
                             </Link>
                             <Link
-                                href="https://www.linkedin.com/in/amintai"
+                                href="https://www.linkedin.com/in/reviewai-pro-1302153a8/"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                aria-label="Visit Amin Tai on LinkedIn"
+                                aria-label="Visit ReviewAI Pro on LinkedIn"
                                 className="p-2 bg-neutral-100 dark:bg-neutral-800 rounded-full hover:scale-110 transition-transform"
                             >
                                 <Linkedin

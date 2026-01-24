@@ -157,7 +157,7 @@ const jsonLd = {
             'https://x.com/reviewai_pro',
             'https://facebook.com/reviewai_pro',
             'https://instagram.com/reviewai_pro',
-            'https://linkedin.com/company/reviewai',
+            'https://www.linkedin.com/in/reviewai-pro-1302153a8/',
             'https://youtube.com/@reviewai_pro'
         ],
         contactPoint: {
