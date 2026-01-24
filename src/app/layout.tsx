@@ -7,6 +7,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Toaster } from 'sonner';
 import GoogleAnalytics from "@/components/analytics/GoogleAnalytics";
 import FacebookPixel from "@/components/analytics/FacebookPixel";
+import Script from "next/script";
 
 const inter = Inter({ subsets: ["latin"], display: 'swap' });
 
@@ -285,6 +286,13 @@ export default function RootLayout({
                     type="application/ld+json"
                     dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
                 />
+
+                <Script
+                    defer
+                    data-website-id="dfid_jl6tqx4c2gwgmNlrkI5a4"
+                    data-domain="reviewai.pro"
+                    src="https://datafa.st/js/script.js">
+                </Script>
 
                 <FacebookPixel />
             </head>
