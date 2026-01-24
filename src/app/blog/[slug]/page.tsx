@@ -119,6 +119,33 @@ export default async function BlogPostPage({ params }: Props) {
                     </div>
                 </div>
             </article>
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify({
+                        '@context': 'https://schema.org',
+                        '@type': 'Article',
+                        headline: post.title,
+                        description: post.excerpt,
+                        image: [
+                            `https://reviewai.pro/og-image.png` // Fallback or dynamic value
+                        ],
+                        datePublished: post.date, // Format like ISO 8601 if possible, but raw string might be accepted
+                        author: {
+                            '@type': 'Person',
+                            name: post.author,
+                        },
+                        publisher: {
+                            '@type': 'Organization',
+                            name: 'ReviewAI',
+                            logo: {
+                                '@type': 'ImageObject',
+                                url: 'https://reviewai.pro/logo.png'
+                            }
+                        }
+                    })
+                }}
+            />
             <Footer />
         </main>
     );

@@ -16,7 +16,7 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://reviewai.pro';
 export const metadata: Metadata = {
     // Basic SEO - Optimized title length (58 chars)
     title: {
-        default: "ReviewAI - AI Review Response Generator for Businesses",
+        default: "ReviewAI – AI Review Response Generator for Google & Yelp",
         template: "%s | ReviewAI"
     },
     description: "AI-Powered Review Response Generator: Automated replies for Google, Yelp, Facebook and TripAdvisor. Create human-sounding responses in seconds to boost ratings and save time.",
@@ -70,7 +70,7 @@ export const metadata: Metadata = {
         title: 'ReviewAI - AI Review Response Generator',
         description: 'Generate professional responses to customer reviews in seconds. Save 10+ hours weekly with AI-powered review management.',
         images: ['/og-image.png'],
-        creator: '@reviewai',
+        creator: '@reviewai_pro',
     },
 
     // App & Icons
@@ -154,11 +154,11 @@ const jsonLd = {
         url: siteUrl,
         logo: `${siteUrl}/logo.png`,
         sameAs: [
-            'https://twitter.com/reviewai',
-            'https://facebook.com/reviewai',
-            'https://instagram.com/reviewai',
+            'https://x.com/reviewai_pro',
+            'https://facebook.com/reviewai_pro',
+            'https://instagram.com/reviewai_pro',
             'https://linkedin.com/company/reviewai',
-            'https://youtube.com/@reviewai'
+            'https://youtube.com/@reviewai_pro'
         ],
         contactPoint: {
             '@type': 'ContactPoint',
@@ -204,11 +204,11 @@ const localBusinessSchema = {
         closes: '17:00'
     },
     sameAs: [
-        'https://twitter.com/reviewai',
-        'https://facebook.com/reviewai',
-        'https://instagram.com/reviewai',
+        'https://x.com/reviewai_pro',
+        'https://facebook.com/reviewai_pro',
+        'https://instagram.com/reviewai_pro',
         'https://linkedin.com/company/reviewai',
-        'https://youtube.com/@reviewai'
+        'https://youtube.com/@reviewai_pro'
     ]
 };
 
