@@ -31,11 +31,13 @@ The copy-paste generator works for any platform: Google, Yelp, Facebook, TripAdv
 
 ## Who Is It For?
 
-ReviewAI is built for:
-- **Restaurant Owners** – Manage diner feedback at scale.
-- **Dental Clinics** – Respond professionally to patient reviews.
-- **Café & Coffee Shop Owners** – Build a loyal community.
-- **Mobile & Tech Repair Shops** – Stand out in a competitive local market.
+ReviewAI is built for local, service-based businesses:
+- **Dentists & Clinics** – Respond professionally to patient reviews.
+- **Realtors** – Build trust with client testimonials.
+- **Restaurants & Cafés** – Manage diner feedback at scale.
+- **Gyms & Fitness Studios** – Keep members engaged and motivated.
+- **Salons & Spas** – Maintain a polished online presence.
+- **Local Service Pros** – Plumbers, HVAC, pest control, and more.
 
 ---
 
