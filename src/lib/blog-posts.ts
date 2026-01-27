@@ -14,6 +14,7 @@ export interface BlogPost {
     readTime: string;
     category: string;
     content: string;
+    keywords?: string[];
     [key: string]: any;
 }
 

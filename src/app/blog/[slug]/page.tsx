@@ -10,20 +10,46 @@ interface Props {
     params: Promise<{ slug: string }>;
 }
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://reviewai.pro';
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const slug = (await params).slug;
     try {
         const post = getPostBySlug(slug);
+        const postUrl = `${siteUrl}/blog/${slug}`;
+        const keywords = post.keywords || [];
 
         return {
             title: `${post.title} | ReviewAI Blog`,
             description: post.excerpt,
+            keywords: keywords.join(', '),
+            alternates: {
+                canonical: postUrl,
+            },
             openGraph: {
                 title: post.title,
                 description: post.excerpt,
                 type: 'article',
+                url: postUrl,
                 publishedTime: post.date,
                 authors: [post.author],
+                section: post.category,
+                tags: keywords,
+                siteName: 'ReviewAI',
+                images: [
+                    {
+                        url: `${siteUrl}/og-image.png`,
+                        width: 1200,
+                        height: 630,
+                        alt: post.title,
+                    }
+                ],
+            },
+            twitter: {
+                card: 'summary_large_image',
+                title: post.title,
+                description: post.excerpt,
+                images: [`${siteUrl}/og-image.png`],
             },
         };
     } catch (e) {
@@ -127,10 +153,9 @@ export default async function BlogPostPage({ params }: Props) {
                         '@type': 'Article',
                         headline: post.title,
                         description: post.excerpt,
-                        image: [
-                            `https://reviewai.pro/og-image.png` // Fallback or dynamic value
-                        ],
-                        datePublished: post.date, // Format like ISO 8601 if possible, but raw string might be accepted
+                        image: [`${siteUrl}/og-image.png`],
+                        datePublished: post.date,
+                        dateModified: post.date,
                         author: {
                             '@type': 'Person',
                             name: post.author,
@@ -140,9 +165,49 @@ export default async function BlogPostPage({ params }: Props) {
                             name: 'ReviewAI',
                             logo: {
                                 '@type': 'ImageObject',
-                                url: 'https://reviewai.pro/logo.png'
+                                url: `${siteUrl}/logo.png`
                             }
-                        }
+                        },
+                        mainEntityOfPage: {
+                            '@type': 'WebPage',
+                            '@id': `${siteUrl}/blog/${slug}`
+                        },
+                        keywords: post.keywords?.join(', ') || ''
+                    })
+                }}
+            />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify({
+                        '@context': 'https://schema.org',
+                        '@type': 'BreadcrumbList',
+                        itemListElement: [
+                            {
+                                '@type': 'ListItem',
+                                position: 1,
+                                name: 'Home',
+                                item: siteUrl
+                            },
+                            {
+                                '@type': 'ListItem',
+                                position: 2,
+                                name: 'Blog',
+                                item: `${siteUrl}/blog`
+                            },
+                            {
+                                '@type': 'ListItem',
+                                position: 3,
+                                name: post.category,
+                                item: `${siteUrl}/blog?category=${encodeURIComponent(post.category)}`
+                            },
+                            {
+                                '@type': 'ListItem',
+                                position: 4,
+                                name: post.title,
+                                item: `${siteUrl}/blog/${slug}`
+                            }
+                        ]
                     })
                 }}
             />
