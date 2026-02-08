@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabaseClient';
-import { ArrowRight, Loader2, CheckCircle, Mail } from 'lucide-react';
+import { ArrowRight, Loader2, CheckCircle, Mail, Lock, ShieldCheck } from 'lucide-react';
 import SecurityBadge from '@/components/ui/SecurityBadge';
 import Logo from '@/components/ui/Logo';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 
 export default function LoginPage() {
     const [email, setEmail] = useState('');
@@ -13,13 +14,17 @@ export default function LoginPage() {
     const [googleLoading, setGoogleLoading] = useState(false);
     const [sent, setSent] = useState(false);
     const [showEmailForm, setShowEmailForm] = useState(false);
+    const searchParams = useSearchParams();
+    const next = searchParams.get('next') || '/dashboard';
+    const isReportAccess = next.includes('/report/');
+    const redirectUrl = `${location.origin}/auth/callback?next=${encodeURIComponent(next)}`;
 
     const handleGoogleLogin = async () => {
         setGoogleLoading(true);
         const { error } = await supabase.auth.signInWithOAuth({
             provider: 'google',
             options: {
-                redirectTo: `${location.origin}/auth/callback`,
+                redirectTo: redirectUrl,
                 scopes: 'email profile',
             },
         });
@@ -36,7 +41,7 @@ export default function LoginPage() {
         const { error } = await supabase.auth.signInWithOtp({
             email,
             options: {
-                emailRedirectTo: `${location.origin}/auth/callback`,
+                emailRedirectTo: redirectUrl,
             },
         });
 
@@ -60,10 +65,33 @@ export default function LoginPage() {
                     </Link>
                 </div>
 
+                {/* Report Access Notice */}
+                {isReportAccess && (
+                    <div className="mb-6 p-4 bg-orange-50 border border-orange-200 rounded-xl">
+                        <div className="flex items-start gap-3">
+                            <div className="w-10 h-10 rounded-lg bg-orange-100 flex items-center justify-center flex-shrink-0">
+                                <Lock className="w-5 h-5 text-orange-600" />
+                            </div>
+                            <div>
+                                <h3 className="font-bold text-orange-900 mb-1">Report Access Required</h3>
+                                <p className="text-sm text-orange-800 leading-relaxed">
+                                    Sign in to view your full AI analysis report with detailed insights and recommendations.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
                 <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
                     <div className="text-center mb-8">
-                        <h2 className="text-2xl font-bold text-gray-900 mb-2">Welcome back</h2>
-                        <p className="text-gray-500">Sign in to manage your reviews securely</p>
+                        <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                            {isReportAccess ? 'Sign in to continue' : 'Welcome back'}
+                        </h2>
+                        <p className="text-gray-500">
+                            {isReportAccess 
+                                ? 'Access your report and save it to your dashboard' 
+                                : 'Sign in to manage your reviews securely'}
+                        </p>
                     </div>
 
                     {sent ? (

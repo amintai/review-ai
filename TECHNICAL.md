@@ -1,118 +1,180 @@
-# ReviewAI - Technical Documentation
+# ReviewAI - Technical Documentation (Amazon Intelligence Era)
 
-This document covers the technical architecture, technology stack, deployment strategy, and data management for ReviewAI.
+This document describes the **current technical direction** of ReviewAI as an **Amazon Product Review Intelligence System**.
+
+> Migration note: legacy Google Business review-response components still exist in parts of the codebase, but the product direction and active architecture are now Amazon-first.
+
+---
+
+## Product Direction (Canonical)
+
+ReviewAI now helps shoppers and evaluators make faster purchase decisions using structured AI verdicts:
+
+- **BUY / SKIP / CAUTION** verdict
+- Confidence + trust scoring
+- Review-theme clustering and deal-breaker detection
+- Shareable analysis reports
+- Browser extension-assisted data capture
+
+Primary PRD: `docs/amazon-prd.md`  
+Migration reference: `docs/migration-plan.md`
 
 ---
 
 ## Technology Stack
 
-| Layer         | Technology                                  |
-|---------------|---------------------------------------------|
-| **Framework** | Next.js 16 (App Router)                     |
-| **Language**  | TypeScript                                  |
-| **Styling**   | Tailwind CSS 4, Radix UI, Framer Motion     |
-| **Backend**   | Next.js API Routes (Serverless Functions)   |
-| **Database**  | Supabase (PostgreSQL)                       |
-| **Auth**      | Supabase Auth (OAuth 2.0 with Google)       |
-| **AI Engine** | OpenAI API (GPT-4o / GPT-4o-mini)             |
-| **Email**     | Resend (Transactional Emails)               |
-| **Rate Limit**| Upstash Redis                               |
-| **Analytics** | Vercel Analytics, Google Analytics 4        |
-| **Hosting**   | Vercel (Edge Network)                       |
+| Layer | Technology |
+|---|---|
+| Framework | Next.js 16 (App Router) |
+| Language | TypeScript |
+| Styling | Tailwind CSS 4, Radix UI, Framer Motion |
+| API Runtime | Next.js Route Handlers (Serverless) |
+| Database/Auth | Supabase (PostgreSQL + Auth) |
+| AI Inference | Bytez SDK + OpenAI model routing (`openai/gpt-4.1`) |
+| Scraping | First-party extension + server-side HTML extraction fallback |
+| Bot Protection | Internal bot/rate checks (`verifyNotBot`) |
+| Hosting | Vercel |
 
 ---
 
-## Project Structure
+## High-Level Architecture
 
-```
+### 1) Input Layer
+- **Web app** accepts Amazon URL.
+- **Extension path** can send pre-extracted `product_title`, `price`, and `reviews`.
+
+### 2) Validation + Enrichment
+- ASIN extraction via `src/lib/amazon.ts` (`extractAsin`).
+- If extension reviews are insufficient, backend falls back to scraping via `src/lib/amazon-scraper.ts`.
+
+### 3) Intelligence Generation
+- Prompt construction in `src/lib/amazon-ai.ts`.
+- AI call in `src/app/api/amazon/analyze/route.ts`.
+- Strict JSON analysis payload is parsed and returned.
+
+### 4) Persistence + Sharing
+- Analysis is stored in Supabase (currently using `generations` as migration bridge).
+- Public report routes consume saved analysis records.
+
+---
+
+## Relevant Project Structure
+
+```text
 src/
-├── app/                 # Next.js App Router pages
-│   ├── api/             # API routes (generate, contact, etc.)
-│   ├── dashboard/       # Protected user dashboard
-│   └── (public pages)   # Landing, Blog, Pricing, etc.
-├── components/          # Reusable UI components
-├── lib/                 # Utilities (Supabase client, email, etc.)
-└── _posts/              # MDX blog content
+├── app/
+│   ├── api/
+│   │   ├── amazon/analyze/route.ts    # Primary Amazon intelligence endpoint
+│   │   └── analyze/route.ts           # Alternate/legacy analysis route (still present)
+│   ├── report/[id]/page.tsx           # Public report rendering
+│   └── dashboard/                     # User-facing history/settings flows
+├── lib/
+│   ├── amazon.ts                      # ASIN + URL utilities
+│   ├── amazon-scraper.ts              # Amazon data extraction logic
+│   └── amazon-ai.ts                   # Prompt + output schema contract
+
+extension/
+└── src/
+    ├── content/                       # Amazon page overlay/injection
+    └── background/                    # Extension orchestration
 ```
 
 ---
 
-## Database Schema (Supabase)
+## Data Model Status
 
-### `profiles` Table
-Stores user profile data linked to `auth.users`.
+### Current Runtime Storage (Bridge State)
+Current Amazon analysis writes are inserted into `generations` with fields such as:
 
-| Column          | Type        | Description                       |
-|-----------------|-------------|-----------------------------------|
-| `id`            | UUID (PK)   | References `auth.users`           |
-| `business_name` | text        | User's business name              |
-| `business_type` | text        | Category (e.g., Restaurant)       |
-| `default_tone`  | text        | Preferred AI tone                 |
-| `google_refresh_token` | text (encrypted) | OAuth token for Google API |
-| `google_location_id`   | text        | Selected Google Business location |
+- `user_id` (nullable for anonymous analyses)
+- `asin`
+- `product_name`
+- `analysis_result` (JSON)
+- `is_public`
 
-### `generations` Table
-Logs every AI-generated response for usage tracking and history.
+### Planned Migration Target
+As defined in `docs/migration-plan.md`, data should transition toward dedicated product-intelligence entities:
 
-| Column             | Type        | Description                      |
-|--------------------|-------------|----------------------------------|
-| `id`               | bigint (PK) | Auto-incrementing ID             |
-| `user_id`          | UUID (FK)   | References `auth.users`          |
-| `review_content`   | text        | Original review text             |
-| `response_content` | text        | AI-generated response            |
-| `tone_used`        | text        | Tone selected for generation     |
-| `created_at`       | timestamptz | Timestamp of generation          |
-
-**Security:** Both tables have Row Level Security (RLS) enabled. Users can only access their own data.
+- `product_analyses`
+- `products`
+- `recommendations` (phase-aligned)
 
 ---
 
-## Deployment
+## API Flow (Primary Endpoint)
 
-ReviewAI is deployed on **Vercel** with the following configuration:
+### `POST /api/amazon/analyze`
+Request can include:
 
-- **Build Command:** `next build`
-- **Output Directory:** `.next`
-- **Environment Variables:**
-  - `NEXT_PUBLIC_SUPABASE_URL`
-  - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-  - `OPENAI_API_KEY`
-  - `RESEND_API_KEY`
-  - `CONTACT_EMAIL`
-  - `NEXT_PUBLIC_GA_ID`
+```json
+{
+  "url": "https://www.amazon...",
+  "product_title": "optional",
+  "price": "optional",
+  "reviews": ["optional review text from extension"]
+}
+```
 
-### Custom Domain
-- Production: `reviewai.pro`
-
----
-
-## Data Flow
-
-1. **User Auth:** User signs in via Google OAuth -> Supabase creates a session.
-2. **Review Input:** User pastes a review or fetches from Google Business API.
-3. **AI Generation:** Request sent to `/api/generate` -> OpenAI API called -> Response returned.
-4. **Logging:** The generation is saved to `generations` table.
-5. **Google Reply (Optional):** User posts reply via `/api/google/reply` -> Google My Business API.
+Pipeline:
+1. Bot check
+2. URL + ASIN validation
+3. Optional auth context from bearer token
+4. Extension data normalization
+5. Scraping fallback when < 3 review snippets
+6. AI analysis generation
+7. DB persistence
+8. JSON response with analysis + metadata
 
 ---
 
-## Security
+## AI Output Contract
 
-- **OAuth 2.0:** Google integration uses restricted OAuth scopes.
-- **Token Encryption:** Refresh tokens are encrypted (AES-256) before storage.
-- **RLS:** Supabase tables enforce user-level access control.
-- **Rate Limiting:** Upstash Redis protects API routes from abuse.
-- **GDPR Compliant:** User data is not sold or shared.
+Analysis JSON follows the schema defined in `src/lib/amazon-ai.ts`, including:
+
+- `verdict`: `BUY | SKIP | CAUTION`
+- `confidence_score`
+- `trust_score`
+- `summary`
+- `perfect_for[]`
+- `avoid_if[]`
+- `deal_breakers[]`
+- `buyer_psychology`
+- `persuasive_angles[]`
+- `honest_objections[]`
+- `theme_clustering[]`
+
+This schema is the core contract for report rendering and downstream recommendation logic.
 
 ---
 
-## Third-Party Integrations
+## Environment Variables
 
-| Service        | Purpose                               |
-|----------------|---------------------------------------|
-| OpenAI         | AI-powered response generation        |
-| Google APIs    | Fetch reviews, post replies           |
-| Supabase       | Database, Auth                        |
-| Resend         | Transactional email delivery          |
-| Vercel         | Hosting, Edge Functions, Analytics    |
-| Upstash        | Rate limiting via Redis               |
+Core variables used across current flows:
+
+- `BYTEZ_API_KEY`
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- `OPENAI_API_KEY` (used in legacy/alternate routes)
+- `RESEND_API_KEY` (email flows)
+- `CONTACT_EMAIL`
+
+---
+
+## Security & Reliability
+
+- Request-level bot/rate safeguards before expensive operations
+- ASIN/url validation to reject malformed input early
+- Review deduplication and minimum-signal checks before inference
+- Graceful failure with explicit error responses for invalid URL/insufficient data
+- Optional auth (supports anonymous and signed-in analysis flows)
+
+---
+
+## Migration Status Snapshot
+
+- ✅ Amazon analysis endpoint implemented (`/api/amazon/analyze`)
+- ✅ Extension scaffolding and Amazon overlay path present
+- ✅ Amazon prompt/schema contract established
+- ⚠️ Legacy docs/endpoints still present in repo
+- ⚠️ Database naming still includes bridge-era tables (`generations`)
+- ⏭ Next step: complete doc/code cleanup per `docs/migration-plan.md`

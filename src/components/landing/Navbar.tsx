@@ -20,7 +20,7 @@ export default function Navbar() {
                         Sign in
                     </Link>
                     <Link href="/login" onClick={() => trackEvent('navbar_clicked', { type: 'get_started' })}>
-                        <Button className='cursor-pointer'>Get Started</Button>
+                        <Button className='cursor-pointer bg-orange-600 hover:bg-orange-700 text-white'>Add to Chrome</Button>
                     </Link>
                 </div>
             </div>

@@ -1,0 +1,55 @@
+{
+    "manifest_version": 3,
+    "name": "ReviewAI - Purchase Intelligence",
+    "version": "1.1.0",
+    "description": "Get instant AI verdicts on Amazon product quality and trustworthiness.",
+    "icons": {
+        "16": "logo.svg",
+        "48": "logo.svg",
+        "128": "logo.svg"
+    },
+    "action": {
+        "default_popup": "index.html",
+        "default_icon": {
+            "16": "logo.svg",
+            "48": "logo.svg",
+            "128": "logo.svg"
+        },
+        "default_title": "ReviewAI - Amazon Intelligence"
+    },
+    "background": {
+        "service_worker": "src/background/index.ts",
+        "type": "module"
+    },
+    "permissions": [
+        "activeTab",
+        "scripting",
+        "cookies",
+        "storage"
+    ],
+    "host_permissions": [
+        "*://*.amazon.com/*",
+        "*://*.amazon.in/*",
+        "*://*.amazon.co.uk/*",
+        "*://*.amazon.de/*",
+        "*://*.amazon.ca/*",
+        "*://*.amazon.com.au/*",
+        "http://localhost:3000/*",
+        "https://reviewai.pro/*"
+    ],
+    "content_scripts": [
+        {
+            "matches": [
+                "*://*.amazon.com/*",
+                "*://*.amazon.in/*",
+                "*://*.amazon.co.uk/*",
+                "*://*.amazon.de/*",
+                "*://*.amazon.ca/*",
+                "*://*.amazon.com.au/*"
+            ],
+            "js": [
+                "src/content/index.tsx"
+            ]
+        }
+    ]
+}

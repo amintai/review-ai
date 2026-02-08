@@ -1,36 +1,125 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ReviewAI
 
-## Getting Started
+ReviewAI is an **Amazon Product Review Intelligence** platform that helps users make faster purchase decisions with structured AI outputs:
 
-First, run the development server:
+- **BUY / SKIP / CAUTION** verdict
+- Confidence and trust scoring
+- Pattern-level evidence from review text
+- Shareable public report pages
+
+---
+
+## Current Product Direction (Important)
+
+This repository has migrated from a legacy business review-response concept to an Amazon product intelligence workflow.
+
+Canonical references:
+- PRD: `docs/amazon-prd.md`
+- Migration roadmap: `docs/migration-plan.md`
+- Agent source-of-truth: `docs/AGENT_CONTEXT.md`
+- Technical architecture: `TECHNICAL.md`
+
+---
+
+## Core Flow
+
+1. User submits an Amazon product URL.
+2. System validates URL and extracts ASIN.
+3. Review signals are collected from extension payload and/or server-side scraping fallback.
+4. AI generates a structured analysis JSON.
+5. Analysis is persisted and rendered via public report pages.
+
+Primary endpoint: `POST /api/amazon/analyze`
+
+---
+
+## Tech Stack
+
+- Next.js 16 (App Router)
+- TypeScript
+- Tailwind CSS
+- Supabase (Postgres + Auth)
+- Bytez SDK + OpenAI model routing
+- Vercel deployment
+
+---
+
+## Project Structure (Key Paths)
+
+```text
+src/
+├── app/
+│   ├── api/
+│   │   ├── amazon/analyze/route.ts
+│   │   ├── analyze/route.ts
+│   │   └── history/route.ts
+│   ├── dashboard/
+│   └── report/[id]/
+├── lib/
+│   ├── amazon.ts
+│   ├── amazon-scraper.ts
+│   └── amazon-ai.ts
+
+extension/
+└── src/
+    ├── content/
+    └── background/
+```
+
+---
+
+## Local Development
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Run web app:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Environment Variables
 
-## Learn More
+Set required variables in your environment (for example `.env.local`):
 
-To learn more about Next.js, take a look at the following resources:
+- `BYTEZ_API_KEY`
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- `OPENAI_API_KEY`
+- `RESEND_API_KEY`
+- `CONTACT_EMAIL`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Extension Development
 
-## Deploy on Vercel
+The browser extension lives in `extension/` and supports Amazon-page signal capture.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Typical commands:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+cd extension
+npm install
+npm run dev
+```
+
+Load the built/dev output in your browser’s extension manager for testing.
+
+---
+
+## Documentation Index
+
+- `TECHNICAL.md` — active technical architecture
+- `FEATURES.md` — product capability summary
+- `docs/amazon-prd.md` — product requirements and acceptance criteria
+- `docs/migration-plan.md` — migration phases and cleanup plan
+- `public/llms.txt` — compact AI-agent discoverability context
+- `docs/AGENT_CONTEXT.md` — canonical agent instructions for terminology + positioning
