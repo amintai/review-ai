@@ -17,7 +17,7 @@ export default function LoginPage() {
     const searchParams = useSearchParams();
     const next = searchParams.get('next') || '/dashboard';
     const isReportAccess = next.includes('/report/');
-    const redirectUrl = `${location.origin}/auth/callback?next=${encodeURIComponent(next)}`;
+    const redirectUrl = `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}`;
 
     const handleGoogleLogin = async () => {
         setGoogleLoading(true);
@@ -88,8 +88,8 @@ export default function LoginPage() {
                             {isReportAccess ? 'Sign in to continue' : 'Welcome back'}
                         </h2>
                         <p className="text-gray-500">
-                            {isReportAccess 
-                                ? 'Access your report and save it to your dashboard' 
+                            {isReportAccess
+                                ? 'Access your report and save it to your dashboard'
                                 : 'Sign in to manage your reviews securely'}
                         </p>
                     </div>

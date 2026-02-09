@@ -1,12 +1,10 @@
-import { createServerClient } from '@supabase/ssr'
-import { NextResponse, type NextRequest } from 'next/server'
+import { createServerClient } from '@supabase/ssr';
+import { NextResponse, type NextRequest } from 'next/server';
 
 export async function proxy(request: NextRequest) {
-    let response = NextResponse.next({
-        request: {
-            headers: request.headers,
-        },
-    })
+    let supabaseResponse = NextResponse.next({
+        request,
+    });
 
     const supabase = createServerClient(
         process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -14,37 +12,66 @@ export async function proxy(request: NextRequest) {
         {
             cookies: {
                 getAll() {
-                    return request.cookies.getAll()
+                    return request.cookies.getAll();
                 },
                 setAll(cookiesToSet) {
-                    cookiesToSet.forEach(({ name, value, options }) => request.cookies.set(name, value))
-                    response = NextResponse.next({
-                        request: {
-                            headers: request.headers,
-                        },
-                    })
                     cookiesToSet.forEach(({ name, value, options }) =>
-                        response.cookies.set(name, value, options)
-                    )
+                        request.cookies.set(name, value)
+                    );
+                    supabaseResponse = NextResponse.next({
+                        request,
+                    });
+                    cookiesToSet.forEach(({ name, value, options }) =>
+                        supabaseResponse.cookies.set(name, value, options)
+                    );
                 },
             },
         }
-    )
+    );
 
-    const { data: { user } } = await supabase.auth.getUser()
+    // IMPORTANT: Avoid writing any logic between createServerClient and
+    // supabase.auth.getUser(). A simple mistake could make it very hard to debug
+    // issues with users being randomly logged out.
 
-    // Protection logic:
-    // If the user is not logged in and trying to access dashboard, redirect to login
-    if (!user && request.nextUrl.pathname.startsWith('/dashboard')) {
-        return NextResponse.redirect(new URL('/login', request.url))
+    const {
+        data: { user },
+    } = await supabase.auth.getUser();
+
+    // Protected routes that require authentication
+    const protectedPaths = ['/report/', '/dashboard'];
+    const isProtectedPath = protectedPaths.some(path =>
+        request.nextUrl.pathname.startsWith(path)
+    );
+
+    // If accessing a protected route without authentication, redirect to login
+    if (isProtectedPath && !user) {
+        const url = request.nextUrl.clone();
+        url.pathname = '/login';
+        url.searchParams.set('next', request.nextUrl.pathname);
+        return NextResponse.redirect(url);
     }
 
-    // If the user is logged in and trying to access login page, redirect to dashboard
+    // If accessing login page while already authenticated, redirect to dashboard
     if (user && request.nextUrl.pathname === '/login') {
-        return NextResponse.redirect(new URL('/dashboard', request.url))
+        const url = request.nextUrl.clone();
+        url.pathname = '/dashboard';
+        return NextResponse.redirect(url);
     }
 
-    return response
+    // IMPORTANT: You *must* return the supabaseResponse object as it is. If you're
+    // creating a new response object with NextResponse.next() make sure to:
+    // 1. Pass the request in it, like so:
+    //    const myNewResponse = NextResponse.next({ request })
+    // 2. Copy over the cookies, like so:
+    //    myNewResponse.cookies.setAll(supabaseResponse.cookies.getAll())
+    // 3. Change the myNewResponse object to fit your needs, but avoid changing
+    //    the cookies!
+    // 4. Finally:
+    //    return myNewResponse
+    // If this is not done, you may be causing the browser and server to go out
+    // of sync and terminate the user's session prematurely!
+
+    return supabaseResponse;
 }
 
 export const config = {
@@ -54,9 +81,8 @@ export const config = {
          * - _next/static (static files)
          * - _next/image (image optimization files)
          * - favicon.ico (favicon file)
-         * - public/ (public files)
-         * - api/ (api routes handle their own auth usually, but we could protect them here too)
+         * - public files (public folder)
          */
-        '/((?!_next/static|_next/image|favicon.ico|api|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+        '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
     ],
-}
+};
