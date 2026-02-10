@@ -5,6 +5,7 @@ import "@radix-ui/themes/styles.css";
 import "./styles/animate.css";
 import "./styles/dashboard-theme.css";
 import { Copy } from 'lucide-react';
+import { Suspense } from 'react';
 // import { BackgroundRippleEffect } from "@/components/ui/background-ripple-effect";
 
 // Dynamic imports for heavy or below-the-fold components
@@ -105,18 +106,20 @@ const content = [
 
 export default function LandingPage() {
     return (
-        <main className="min-h-screen bg-white font-sans selection:bg-blue-100">
-            <Navbar />
-            <div className="relative overflow-hidden">
-                <BackgroundRippleEffect />
-                <header className="relative z-10">
-                    <HeroSection />
-                </header>
-            </div>
+        <Suspense fallback={<div>Loading....</div>}>
+            <main className="min-h-screen bg-white font-sans selection:bg-blue-100">
+                <Navbar />
+                <div className="relative overflow-hidden">
+                    <BackgroundRippleEffect />
+                    <header className="relative z-10">
+                        <HeroSection />
+                    </header>
+                </div>
 
-            {/* <LiveDemo /> */}
+                {/* <LiveDemo /> */}
 
-            <Footer />
-        </main>
+                <Footer />
+            </main>
+        </Suspense>
     );
 }
