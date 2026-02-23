@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { HeroHighlight } from "@/components/ui/hero-highlight";
 import { trackEvent } from "@/lib/analytics";
 import { useRouter } from "next/navigation";
+import { WaitlistForm } from "@/components/landing/WaitlistForm";
 
 export default function HeroSection() {
     const [url, setUrl] = useState("");
@@ -89,35 +90,17 @@ export default function HeroSection() {
                     >
                         <Download className="h-6 w-6" /> Add to Chrome — It's Free
                     </Button>
-                    <p className="text-sm text-gray-400">Compatible with classic Amazon pages & mobile web.</p>
-
-                    <div className="w-full max-w-lg border-t border-gray-100 my-4 relative">
-                        <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-4 text-gray-400 text-sm font-medium">OR TRY A LIVE DEMO</span>
+                    <p className="text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-orange-600 to-amber-500">Compatible with classic Amazon pages & mobile web.</p>
+                    
+                    {/* Waitlist Section */}
+                    <div className="w-full max-w-lg border-t border-gray-200 my-6 relative">
+                        <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-4 text-gray-400 text-xs font-medium uppercase tracking-wider">OR JOIN THE WAITLIST</span>
                     </div>
-
-                    {/* Secondary Web Demo Input */}
-                    <form onSubmit={handleAnalyze} className="w-full max-w-2xl">
-                        <div className="relative group">
-                            <div className="absolute inset-0 bg-gradient-to-r from-orange-400 to-amber-400 rounded-2xl blur opacity-25 group-hover:opacity-40 transition duration-500"></div>
-                            <div className="relative flex items-center bg-white rounded-2xl p-2 shadow-xl border border-gray-100">
-                                <Search className="ml-4 h-6 w-6 text-gray-400 shrink-0" />
-                                <Input
-                                    type="url"
-                                    placeholder="Paste an Amazon product link here..."
-                                    className="border-0 shadow-none focus-visible:ring-0 text-lg h-14 bg-transparent text-gray-800 placeholder:text-gray-400"
-                                    value={url}
-                                    onChange={(e) => setUrl(e.target.value)}
-                                />
-                                <Button
-                                    type="submit"
-                                    disabled={loading || !url}
-                                    className="w-full sm:w-auto bg-orange-100 text-orange-700 hover:bg-orange-200 h-12 px-6 text-base rounded-xl font-bold transition-all ml-2"
-                                >
-                                    {loading ? "Analyzing..." : "Analyze"} <ArrowRight className="ml-2 h-4 w-4" />
-                                </Button>
-                            </div>
-                        </div>
-                    </form>
+                    
+                    <div className="w-full max-w-lg">
+                        <p className="text-sm text-gray-500 mb-4 text-center">Get notified when we launch new features and updates</p>
+                        <WaitlistForm source="homepage-hero" />
+                    </div>
                 </motion.div>
 
 

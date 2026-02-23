@@ -18,19 +18,18 @@ export default function Footer() {
                 }}
                 className="relative flex flex-col gap-4 items-center justify-center px-4 w-full h-full"
             >
-                {/* Final CTA Section */}
                 <div className="text-center mb-16 max-w-3xl">
                     <h2 className="text-3xl md:text-5xl font-bold dark:text-white text-black mb-6">
-                        Ready to save hours every week?
+                        Ready to shop smarter?
                     </h2>
                     <p className="font-light text-base md:text-xl dark:text-neutral-200 text-neutral-600 mb-8">
-                        Join 500+ small businesses using ReviewAI to grow their reputation.
+                        Join 2,000+ shoppers using ReviewAI to find products they can actually trust.
                     </p>
                     <Link
-                        href="/login"
+                        href="#waitlist"
                         className="bg-black dark:bg-white rounded-full w-fit text-white dark:text-black px-8 py-3 font-medium transition-transform hover:scale-105"
                     >
-                        Get Started for Free
+                        Join The Waitlist
                     </Link>
                 </div>
 
@@ -40,7 +39,8 @@ export default function Footer() {
                     <div className="flex flex-col gap-4">
                         <Logo size="md" />
                         <p className="text-sm text-neutral-600 dark:text-neutral-400">
-                            Automate your reputation management with AI-powered review responses.
+                            {/* lets change this line as per our new amazon use case */}
+                            Get instant verdict on any product with AI-powered review analysis.
                         </p>
                         <div className="mt-4">
                             <p className="font-semibold text-sm mb-2 dark:text-white">

@@ -50,6 +50,7 @@ export async function GET(req: Request) {
             .order('created_at', { ascending: false })
             .range(offset, offset + limit - 1);
 
+
         if (search) {
             query = query.or(`product_name.ilike.%${search}%,asin.ilike.%${search}%`);
         }

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabaseClient';
-import { ShieldCheck, CreditCard, User, Mail, Globe, CheckCircle2, Clock } from 'lucide-react';
+import { ShieldCheck, CreditCard, User, Mail, Globe, CheckCircle2, Clock, Zap } from 'lucide-react';
 
 export default function SettingsPage() {
     const [profile, setProfile] = useState<any>(null);
@@ -65,28 +65,26 @@ export default function SettingsPage() {
                     <section className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
                         <div className="p-6 border-b border-gray-50 bg-gray-50/50">
                             <h2 className="text-lg font-bold text-gray-900 flex items-center">
-                                <Globe className="h-5 w-5 mr-2 text-blue-600" />
-                                Integrations
+                                <Globe className="h-5 w-5 mr-2 text-orange-600" />
+                                Browser Extension
                             </h2>
                         </div>
                         <div className="p-6">
-                            <div className="flex items-center justify-between p-4 rounded-xl border border-gray-100 hover:border-blue-100 transition-colors">
+                            <div className="flex items-center justify-between p-4 rounded-xl border border-gray-100 hover:border-orange-100 transition-colors">
                                 <div className="flex items-center space-x-4">
-                                    <img src="https://www.google.com/favicon.ico" alt="Google" className="h-8 w-8" />
+                                    <div className="h-10 w-10 bg-orange-100 rounded-xl flex items-center justify-center">
+                                        <Zap className="h-6 w-6 text-orange-600" />
+                                    </div>
                                     <div>
-                                        <div className="font-bold text-gray-900">Google Business Profile</div>
+                                        <div className="font-bold text-gray-900">ReviewAI Extension</div>
                                         <div className="text-xs text-gray-500">
-                                            {profile?.google_location_id ? `Connected to ${profile.google_location_name}` : 'Not connected'}
+                                            Status: Connected & Active
                                         </div>
                                     </div>
                                 </div>
-                                {profile?.google_location_id ? (
-                                    <div className="px-3 py-1 bg-green-50 text-green-700 text-xs font-bold rounded-full border border-green-100 flex items-center">
-                                        <CheckCircle2 className="h-3 w-3 mr-1" /> Active
-                                    </div>
-                                ) : (
-                                    <button className="text-sm font-bold text-blue-600 hover:text-blue-700">Connect</button>
-                                )}
+                                <div className="px-3 py-1 bg-green-50 text-green-700 text-xs font-bold rounded-full border border-green-100 flex items-center">
+                                    <CheckCircle2 className="h-3 w-3 mr-1" /> Linked
+                                </div>
                             </div>
                         </div>
                     </section>
@@ -94,27 +92,27 @@ export default function SettingsPage() {
 
                 {/* Plan Card */}
                 <div className="space-y-6">
-                    <section className="bg-white rounded-2xl border border-blue-100 shadow-sm overflow-hidden ring-4 ring-blue-50/50">
-                        <div className="p-6 border-b border-blue-50 bg-blue-50/30">
+                    <section className="bg-white rounded-2xl border border-orange-100 shadow-sm overflow-hidden ring-4 ring-orange-50/50">
+                        <div className="p-6 border-b border-orange-50 bg-orange-50/30">
                             <h2 className="text-lg font-bold text-gray-900 flex items-center">
-                                <ShieldCheck className="h-5 w-5 mr-2 text-blue-600" />
+                                <ShieldCheck className="h-5 w-5 mr-2 text-orange-600" />
                                 Current Plan
                             </h2>
                         </div>
                         <div className="p-6 space-y-6">
                             <div>
                                 <div className="text-3xl font-black text-gray-900">{profile?.is_pro ? 'Pro' : 'Starter'}</div>
-                                <div className="text-sm text-gray-500 mt-1">{profile?.is_pro ? '$29/month' : 'Free tier'}</div>
+                                <div className="text-sm text-gray-500 mt-1">{profile?.is_pro ? '$9/month' : 'Free tier'}</div>
                             </div>
 
                             <ul className="space-y-3">
                                 <li className="flex items-center text-sm text-gray-600">
                                     <CheckCircle2 className="h-4 w-4 text-green-500 mr-2 shrink-0" />
-                                    {profile?.is_pro ? 'Unlimited AI Responses' : '10 AI Responses / month'}
+                                    {profile?.is_pro ? 'Unlimited AI Analysis' : '10 AI Analysis / month'}
                                 </li>
                                 <li className="flex items-center text-sm text-gray-600">
                                     <CheckCircle2 className="h-4 w-4 text-green-500 mr-2 shrink-0" />
-                                    {profile?.is_pro ? 'Unlimited Locations' : '1 Business Location'}
+                                    {profile?.is_pro ? 'Priority Processing' : 'Standard Speed'}
                                 </li>
                                 <li className="flex items-center text-sm text-gray-600">
                                     <CheckCircle2 className="h-4 w-4 text-green-500 mr-2 shrink-0" />

@@ -92,6 +92,25 @@ const AmazonOverlay: React.FC = () => {
         );
     }, [extractVisiblePageData]);
 
+    // Listen for trigger_analysis message sent from the extension popup
+    useEffect(() => {
+        if (!isSupportedPage) return;
+
+        const handleMessage = (
+            message: { action: string },
+            _sender: chrome.runtime.MessageSender,
+            sendResponse: (r: unknown) => void
+        ) => {
+            if (message.action === 'trigger_analysis') {
+                analyzeProduct();
+                sendResponse({ ok: true });
+            }
+        };
+
+        chrome.runtime.onMessage.addListener(handleMessage);
+        return () => chrome.runtime.onMessage.removeListener(handleMessage);
+    }, [analyzeProduct, isSupportedPage]);
+
     useEffect(() => {
         if (!isSupportedPage) return;
 

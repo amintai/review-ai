@@ -5,8 +5,6 @@ export const REVIEWAI_BASE_URL =
     import.meta.env.VITE_REVIEWAI_BASE_URL?.trim() ||
     (import.meta.env.DEV ? DEFAULT_LOCAL_URL : DEFAULT_PROD_URL);
 
-console.log("HERE", REVIEWAI_BASE_URL)
-
 export const AMAZON_PRODUCT_PATH_REGEX = /\/(dp|gp\/product)\/[A-Z0-9]{10}/i;
 
 export const isAmazonDomain = (url: string): boolean => {

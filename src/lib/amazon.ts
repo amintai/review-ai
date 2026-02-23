@@ -26,6 +26,23 @@ export function extractAsin(url: string): string | null {
 }
 
 /**
+ * Extracts the marketplace domain from an Amazon URL.
+ * @param url The Amazon product URL
+ * @returns The marketplace domain (e.g., "amazon.com", "amazon.co.uk") or null if not found
+ */
+export function extractMarketplace(url: string): string | null {
+    if (!url) return null;
+
+    try {
+        const parsedUrl = new URL(url);
+        // Return the hostname (e.g., "www.amazon.com", "amazon.co.uk")
+        return parsedUrl.hostname;
+    } catch {
+        return null;
+    }
+}
+
+/**
  * Validates if a string is a valid Amazon URL.
  * @param url The URL to validate
  * @returns boolean

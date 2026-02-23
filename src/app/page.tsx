@@ -110,7 +110,7 @@ export default function LandingPage() {
             <main className="min-h-screen bg-white font-sans selection:bg-blue-100">
                 <Navbar />
                 <div className="relative overflow-hidden">
-                    <BackgroundRippleEffect />
+                    {/* <BackgroundRippleEffect /> */}
                     <header className="relative z-10">
                         <HeroSection />
                     </header>

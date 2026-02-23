@@ -2,10 +2,10 @@ import { MapPin, MessageCircle, ThumbsUp, Star } from "lucide-react";
 
 export default function PlatformBadges() {
     const platforms = [
-        { name: "Google", icon: MapPin, color: "text-red-500", bg: "bg-red-50" },
-        { name: "Yelp", icon: Star, color: "text-red-600", bg: "bg-red-50" },
-        { name: "Facebook", icon: ThumbsUp, color: "text-blue-600", bg: "bg-blue-50" },
-        { name: "TripAdvisor", icon: MessageCircle, color: "text-green-600", bg: "bg-green-50" },
+        { name: "Amazon", icon: ShoppingCart, color: "text-orange-500", bg: "bg-orange-50" },
+        { name: "eBay", icon: Search, color: "text-blue-600", bg: "bg-blue-50" },
+        { name: "Walmart", icon: ShieldCheck, color: "text-blue-500", bg: "bg-blue-50" },
+        { name: "BestBuy", icon: Star, color: "text-yellow-600", bg: "bg-yellow-50" },
     ];
 
     return (

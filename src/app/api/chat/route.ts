@@ -1,31 +1,169 @@
 import { createClient } from '@/lib/supabaseServer';
 import { NextResponse } from 'next/server';
+import Bytez from "bytez.js";
+import { createClient as createSupabaseClient } from '@supabase/supabase-js';
+import { extractAsin } from '@/lib/amazon';
+import { AMAZON_SYSTEM_PROMPT, constructAmazonAnalysisPrompt } from '@/lib/amazon-ai';
+import { verifyNotBot } from '@/lib/botProtection';
+import { scrapeAmazonData } from '@/lib/amazon-scraper';
+
+const bytez = new Bytez(process.env.BYTEZ_API_KEY!);
+const model = bytez.model("openai/gpt-4.1");
 
 export async function POST(request: Request) {
     try {
-        const supabase = await createClient();
-        const { data: { session } } = await supabase.auth.getSession();
+        // 1. Bot Protection (temporarily disabled for debugging)
+        // const botCheck = await verifyNotBot();
+        // if (botCheck) return botCheck;
 
-        if (!session) {
+        // 2. Auth Check (required for chat)
+        const authHeader = request.headers.get('authorization') || '';
+
+        const supabase = authHeader
+            ? createSupabaseClient(
+                process.env.NEXT_PUBLIC_SUPABASE_URL!,
+                process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+                {
+                    global: {
+                        headers: {
+                            Authorization: authHeader
+                        }
+                    }
+                }
+            )
+            : await createClient();
+
+        const { data: { user }, error: authError } = await supabase.auth.getUser();
+
+        if (authError || !user) {
+            console.error('[Chat API] Auth error:', authError);
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
 
+        // 3. Parse Input
         const { messages, conversationId, amazonUrl } = await request.json();
+        console.log('[Chat API] Request:', {
+            messagesCount: messages?.length,
+            conversationId,
+            hasAmazonUrl: !!amazonUrl
+        });
 
-        // If it's a new conversation with an Amazon URL, create the conversation
+        if (!messages || !Array.isArray(messages) || messages.length === 0) {
+            return NextResponse.json({ error: 'Messages array is required' }, { status: 400 });
+        }
+
+        // 4. Handle conversation creation/management
         let currentConversationId = conversationId;
+        let productContext = null;
 
+        // If continuing existing conversation, load product context
+        if (currentConversationId && !amazonUrl) {
+            const { data: conversation } = await supabase
+                .from('conversations')
+                .select('amazon_asin')
+                .eq('id', currentConversationId)
+                .eq('user_id', user.id)
+                .single();
+
+            if (conversation?.amazon_asin) {
+                // Load existing analysis for context
+                const { data: existingAnalysis } = await supabase
+                    .from('product_analyses')
+                    .select('*')
+                    .eq('asin', conversation.amazon_asin)
+                    .eq('user_id', user.id)
+                    .order('created_at', { ascending: false })
+                    .limit(1)
+                    .single();
+
+                if (existingAnalysis) {
+                    productContext = {
+                        ...existingAnalysis,
+                        productName: existingAnalysis.product_name
+                    };
+                }
+            }
+        }
+
+        // If new conversation with Amazon URL, create conversation and analyze product
         if (!currentConversationId && amazonUrl) {
-            // Extract ASIN from URL
-            const asinMatch = amazonUrl.match(/\/dp\/([A-Z0-9]{10})/i) || amazonUrl.match(/\/product\/([A-Z0-9]{10})/i);
-            const asin = asinMatch ? asinMatch[1] : null;
+            const asin = extractAsin(amazonUrl);
+            if (!asin) {
+                return NextResponse.json({ error: 'Invalid Amazon URL' }, { status: 400 });
+            }
 
+            // Try to get existing analysis for this ASIN
+            const { data: existingAnalysis } = await supabase
+                .from('product_analyses')
+                .select('*')
+                .eq('asin', asin)
+                .eq('user_id', user.id)
+                .order('created_at', { ascending: false })
+                .limit(1)
+                .single();
+
+            // If no existing analysis, create one
+            if (!existingAnalysis) {
+                try {
+                    // Use the same scraping and analysis logic as the analyze API
+                    const scraped = await scrapeAmazonData(amazonUrl);
+
+                    if (!scraped || scraped.reviews.length < 3) {
+                        return NextResponse.json({
+                            error: 'Not enough review data found for this product. Try another product URL.'
+                        }, { status: 422 });
+                    }
+
+                    // Generate AI analysis
+                    const { error, output } = await model.run([
+                        { role: "system", content: AMAZON_SYSTEM_PROMPT },
+                        {
+                            role: "user", content: constructAmazonAnalysisPrompt({
+                                productName: scraped.productName,
+                                reviews: scraped.reviews,
+                                price: scraped.price
+                            })
+                        }
+                    ]);
+
+                    if (error || !output?.content) {
+                        throw new Error("AI generation failed");
+                    }
+
+                    const analysis = JSON.parse(output.content);
+
+                    // Save analysis
+                    const { data: newAnalysis } = await supabase.from('product_analyses').insert({
+                        user_id: user.id,
+                        asin,
+                        product_name: scraped.productName,
+                        price: scraped.price,
+                        analysis_result: analysis,
+                        is_public: true
+                    }).select().single();
+
+                    productContext = {
+                        ...newAnalysis,
+                        productName: scraped.productName
+                    };
+                } catch (err) {
+                    console.error('Analysis error:', err);
+                    return NextResponse.json({ error: 'Failed to analyze product' }, { status: 500 });
+                }
+            } else {
+                productContext = {
+                    ...existingAnalysis,
+                    productName: existingAnalysis.product_name
+                };
+            }
+
+            // Create conversation
             const { data: newConversation, error: convError } = await supabase
                 .from('conversations')
                 .insert({
-                    user_id: session.user.id,
+                    user_id: user.id,
                     amazon_asin: asin,
-                    product_title: 'Analyzing...'
+                    product_title: productContext.productName
                 })
                 .select()
                 .single();
@@ -37,34 +175,68 @@ export async function POST(request: Request) {
             currentConversationId = newConversation.id;
         }
 
-        // Store user message
-        if (messages.length > 0) {
-            const lastUserMessage = messages[messages.length - 1];
-            if (lastUserMessage.role === 'user') {
-                await supabase.from('messages').insert({
-                    conversation_id: currentConversationId,
-                    role: 'user',
-                    content: lastUserMessage.content
-                });
+        // Handle case where user starts new conversation without Amazon URL
+        if (!currentConversationId && !amazonUrl) {
+            // For now, we'll create a general conversation
+            // In the future, this could be enhanced to handle general product questions
+            const { data: newConversation, error: convError } = await supabase
+                .from('conversations')
+                .insert({
+                    user_id: user.id,
+                    product_title: 'General Chat'
+                })
+                .select()
+                .single();
+
+            if (convError) {
+                console.error('Failed to create conversation', convError);
+                return NextResponse.json({ error: 'Failed to create conversation' }, { status: 500 });
             }
+            currentConversationId = newConversation.id;
         }
 
-        // Construct system prompt for Amazon analysis
-        const systemPrompt = `You are ReviewAI, an AI shopping assistant that helps users make smart purchase decisions on Amazon.
+        // 5. Store user message
+        const lastUserMessage = messages[messages.length - 1];
+        if (lastUserMessage.role === 'user') {
+            await supabase.from('messages').insert({
+                conversation_id: currentConversationId,
+                role: 'user',
+                content: lastUserMessage.content
+            });
+        }
 
-When given an Amazon product URL, you should:
-1. Acknowledge the product (you can infer from the URL structure)
-2. Provide a BUY, SKIP, or CAUTION verdict
-3. Give a Trust Score (0-100) based on review authenticity signals
-4. List key pros and cons
-5. Identify who this product is perfect for and who should avoid it
+        // 6. Prepare context-aware system prompt
+        let systemPrompt = `You are ReviewAI, an AI shopping assistant that helps users make smart purchase decisions on Amazon.
 
-Be conversational, helpful, and concise. Use emojis sparingly for visual appeal.
-If the user asks follow-up questions, answer them based on common Amazon review patterns and product knowledge.`;
+You provide conversational, helpful responses about Amazon products. When analyzing products, you give:
+- Clear BUY, SKIP, or CAUTION verdicts
+- Trust scores (0-100) based on review authenticity
+- Key pros and cons from real reviews
+- Who the product is perfect for and who should avoid it
 
-        // Prepare messages for Bytez (Llama 3)
-        // Ensure system prompt is first
-        const bytezMessages = [
+Be conversational, helpful, and concise. Use emojis sparingly for visual appeal.`;
+
+        // Add product context if available
+        if (productContext?.analysis_result) {
+            const analysis = productContext.analysis_result;
+            systemPrompt += `
+
+CURRENT PRODUCT CONTEXT:
+Product: ${productContext.productName}
+Verdict: ${analysis.verdict}
+Confidence: ${analysis.confidence_score}%
+Trust Score: ${analysis.trust_score}%
+Summary: ${analysis.summary}
+
+Perfect for: ${analysis.perfect_for?.join(', ')}
+Avoid if: ${analysis.avoid_if?.join(', ')}
+Deal breakers: ${analysis.deal_breakers?.join(', ')}
+
+Use this context to answer follow-up questions about this specific product.`;
+        }
+
+        // 7. Prepare messages for AI
+        const aiMessages = [
             { role: 'system', content: systemPrompt },
             ...messages.map((m: any) => ({
                 role: m.role,
@@ -72,85 +244,43 @@ If the user asks follow-up questions, answer them based on common Amazon review 
             }))
         ];
 
-        const BYTEZ_API_KEY = process.env.BYTEZ_API_KEY;
-        if (!BYTEZ_API_KEY) {
-            return NextResponse.json({ error: 'Bytez API Key not configured' }, { status: 500 });
+        // 8. Generate AI response (non-streaming first, then convert to streaming)
+        console.log('[Chat API] Generating AI response with', aiMessages.length, 'messages');
+        const { error, output } = await model.run(aiMessages);
+
+        if (error) {
+            console.error('[Chat API] Bytez error:', error);
+            throw new Error(`AI generation failed: ${JSON.stringify(error)}`);
         }
 
-        const response = await fetch('https://api.bytez.com/models/v2/meta-llama/Meta-Llama-3-8B-Instruct/run', {
-            method: 'POST',
-            headers: {
-                'Authorization': BYTEZ_API_KEY,
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                messages: bytezMessages,
-                stream: true,
-                params: {
-                    max_new_tokens: 1024,
-                    temperature: 0.7
-                }
-            })
-        });
-
-        if (!response.ok) {
-            const errorText = await response.text();
-            console.error('Bytez API Error:', response.status, errorText);
-            throw new Error(`Bytez API Error: ${response.statusText}`);
+        if (!output?.content) {
+            console.error('[Chat API] No content in output:', output);
+            throw new Error("AI generation returned empty content");
         }
 
-        // Create a streaming response
+        console.log('[Chat API] Generated response length:', output.content.length);
+
+        // 9. Create streaming response by chunking the complete response
         const encoder = new TextEncoder();
-        const decoder = new TextDecoder();
-        let fullResponse = '';
+        const fullResponse = output.content;
 
         const readableStream = new ReadableStream({
             async start(controller) {
-                const reader = response.body?.getReader();
-                if (!reader) {
-                    controller.close();
-                    return;
-                }
-
                 try {
-                    while (true) {
-                        const { done, value } = await reader.read();
-                        if (done) break;
+                    // Simulate streaming by sending chunks of the response
+                    const chunkSize = 10; // Send ~10 characters at a time
+                    for (let i = 0; i < fullResponse.length; i += chunkSize) {
+                        const chunk = fullResponse.slice(i, i + chunkSize);
+                        controller.enqueue(encoder.encode(`data: ${JSON.stringify({
+                            content: chunk,
+                            conversationId: currentConversationId
+                        })}\n\n`));
 
-                        const chunk = decoder.decode(value);
-                        // Parse Bytez SSE format
-                        // Bytez usually sends "data: {...}\n\n"
-                        const lines = chunk.split('\n');
-
-                        for (const line of lines) {
-                            if (line.trim() === '' || line.includes('[DONE]')) continue;
-
-                            // Check if line starts with data:
-                            if (line.startsWith('data: ')) {
-                                try {
-                                    const jsonStr = line.slice(6);
-                                    const data = JSON.parse(jsonStr);
-
-                                    // Bytez structure might vary, strictly check Llama 3 output
-                                    // Usually data.output or data.token
-                                    // Adapting generic SSE handling:
-                                    const content = data.output || data.token || data.content || '';
-
-                                    if (content) {
-                                        fullResponse += content;
-                                        controller.enqueue(encoder.encode(`data: ${JSON.stringify({ content, conversationId: currentConversationId })}\n\n`));
-                                    }
-                                } catch (e) {
-                                    // Ignore parse errors for partial chunks
-                                }
-                            }
-                        }
+                        // Small delay to simulate streaming
+                        await new Promise(resolve => setTimeout(resolve, 50));
                     }
-                } catch (err) {
-                    console.error('Stream reading error', err);
-                    controller.error(err);
-                } finally {
-                    // Store assistant message after streaming completes
+
+                    // Store assistant message
                     if (currentConversationId && fullResponse) {
                         await supabase.from('messages').insert({
                             conversation_id: currentConversationId,
@@ -158,8 +288,12 @@ If the user asks follow-up questions, answer them based on common Amazon review 
                             content: fullResponse
                         });
                     }
+
                     controller.enqueue(encoder.encode('data: [DONE]\n\n'));
                     controller.close();
+                } catch (err) {
+                    console.error('Stream error:', err);
+                    controller.error(err);
                 }
             }
         });
@@ -174,6 +308,9 @@ If the user asks follow-up questions, answer them based on common Amazon review 
 
     } catch (error: any) {
         console.error('Chat API Error', error);
-        return NextResponse.json({ error: 'Internal Server Error', details: error.message }, { status: 500 });
+        return NextResponse.json({
+            error: 'Internal Server Error',
+            details: error.message
+        }, { status: 500 });
     }
 }

@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import Bytez from "bytez.js";
 import { z } from 'zod';
 import { createClient as createSupabaseClient } from '@supabase/supabase-js';
-import { extractAsin } from '@/lib/amazon';
+import { extractAsin, extractMarketplace } from '@/lib/amazon';
 import { AMAZON_SYSTEM_PROMPT, constructAmazonAnalysisPrompt } from '@/lib/amazon-ai';
 import { verifyNotBot } from '@/lib/botProtection';
 import { createClient } from '@/lib/supabaseServer';
@@ -54,6 +54,7 @@ export async function POST(req: Request) {
 
         const { url, product_title, price, reviews: incomingReviews } = validation.data;
         const asin = extractAsin(url);
+        const marketplace = extractMarketplace(url);
 
         if (!asin) {
             return withCors(
@@ -63,6 +64,7 @@ export async function POST(req: Request) {
 
         // 3. Auth Check
         const authHeader = req.headers.get('authorization') || '';
+
         const supabase = authHeader
             ? createSupabaseClient(
                 process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -122,14 +124,15 @@ export async function POST(req: Request) {
 
         const analysis = JSON.parse(output.content);
 
-        // 6. Save to Supabase (using new table product_analyses)
+        // 6. Save to Supabase (using product_analyses table as per schema)
         const { data: generation, error: dbError } = await supabase.from('product_analyses').insert({
             user_id: user?.id || null,
             asin,
             product_name: productName,
             price: effectivePrice,
             analysis_result: analysis,
-            is_public: true
+            is_public: true,
+            marketplace: marketplace
         }).select('id').single();
 
         if (dbError) {

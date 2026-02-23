@@ -1,7 +1,7 @@
 export interface AmazonAnalysisParams {
-    productName: string;
-    reviews: string[];
-    price?: string;
+  productName: string;
+  reviews: string[];
+  price?: string;
 }
 
 export const AMAZON_SYSTEM_PROMPT = `

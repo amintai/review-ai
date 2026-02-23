@@ -12,66 +12,54 @@ const faqs = [
         questions: [
             {
                 q: "What is ReviewAI?",
-                a: "ReviewAI is an AI-powered platform that helps businesses manage their online reputation by automatically generating professional, empathetic responses to customer reviews. It integrates with Google Business Profile to streamline your review management workflow."
+                a: "ReviewAI is a browser extension that uses AI to analyze Amazon product reviews. It helps you identify fake reviews, understand real consumer sentiment, and gives you a clear 'Buy' or 'Skip' verdict instantly."
             },
             {
-                q: "How do I get started?",
-                a: "Simply sign in with your Google account, connect your Google Business Profile, and you're ready to go! You can start generating AI responses to your reviews immediately."
+                q: "How do I install the extension?",
+                a: "You can add ReviewAI to Chrome via the Web Store. Once installed, simply visit any Amazon product page, and the ReviewAI overlay will appear automatically."
             },
             {
-                q: "Is there a free trial?",
-                a: "Yes! We offer a free tier that includes a limited number of AI-generated responses per month. You can upgrade anytime to unlock unlimited responses and premium features."
+                q: "Is it free to use?",
+                a: "Yes! We offer a free version that provides basic Trust Scores and sentiment analysis. Our Creator Pro plan includes advanced affiliate-ready summaries and deep-dive reports."
             }
         ]
     },
     {
-        category: "Google Integration",
+        category: "Trust Scores & Verdicts",
         questions: [
             {
-                q: "How does the Google Business Profile integration work?",
-                a: "When you connect your Google account, we securely access your business reviews through Google's official APIs. You can view all your reviews in one dashboard and post AI-generated replies directly."
+                q: "How is the Trust Score calculated?",
+                a: "Our AI analyzes review patterns, account age of reviewers, and linguistic markers to detect bot activity and incentivized posts. A higher score means the reviews are more likely to be genuine."
             },
             {
-                q: "Is my Google data secure?",
-                a: "Absolutely. We use OAuth 2.0 for authentication and only request the minimum permissions needed. Your credentials are never stored on our servers. You can revoke access at any time from your Google account settings."
-            },
-            {
-                q: "Can I manage multiple business locations?",
-                a: "Yes! If your Google Business Profile has multiple locations, you can manage reviews for all of them from a single ReviewAI dashboard."
+                q: "What does the 'Verdict' mean?",
+                a: "The Verdict (Buy or Skip) is based on a combination of product quality sentiment and review authenticity. It's designed to give you a quick recommendation based on thousands of analyzed data points."
             }
         ]
     },
     {
-        category: "AI Responses",
+        category: "Creator Features",
         questions: [
             {
-                q: "How accurate are the AI-generated responses?",
-                a: "Our AI is trained on thousands of professional business responses and achieves high accuracy. However, we always recommend reviewing responses before posting to ensure they match your brand voice and address specific customer concerns."
+                q: "What are 'Affiliate-Ready Summaries'?",
+                a: "For content creators and affiliates, we provide 1-click 'Pros vs Cons' summaries and persuasive angles that you can use in your social media posts or blog content to drive conversions."
             },
             {
-                q: "Can I customize the tone of responses?",
-                a: "Yes! You can choose between Professional, Friendly, Empathetic, or Witty tones. Each style is designed to match different brand personalities and customer situations."
-            },
-            {
-                q: "What languages are supported?",
-                a: "Currently, ReviewAI primarily supports English. We're working on adding support for Spanish, French, German, and other major languages in upcoming releases."
+                q: "How can I access deep-dive reports?",
+                a: "Full reports with historical price tracking and detailed competitor comparisons are available in the ReviewAI Dashboard for logged-in users."
             }
         ]
     },
     {
-        category: "Billing & Account",
+        category: "Privacy & Data",
         questions: [
             {
-                q: "How does billing work?",
-                a: "We offer monthly and annual subscription plans. You can view our pricing page for detailed information. Annual plans come with a 20% discount."
+                q: "Does ReviewAI track my browsing history?",
+                a: "No. ReviewAI only activates when you are on supported e-commerce domains like Amazon. We do not track your activity on other websites."
             },
             {
-                q: "Can I cancel my subscription?",
-                a: "Yes, you can cancel anytime from your account settings. Your access will continue until the end of your current billing period."
-            },
-            {
-                q: "How do I delete my account?",
-                a: "You can request account deletion from your account settings or by contacting our support team. We'll remove all your data within 30 days."
+                q: "Is my data secure?",
+                a: "We use enterprise-grade encryption for all account data. Your browsing data is processed in real-time and never sold to third parties."
             }
         ]
     }

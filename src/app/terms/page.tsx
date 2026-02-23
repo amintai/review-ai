@@ -19,52 +19,52 @@ export default function TermsPage() {
                     <section className="mb-10">
                         <h2 className="text-2xl font-semibold text-gray-800 mb-4">1. Acceptance of Terms</h2>
                         <p className="text-gray-600 leading-relaxed">
-                            By accessing or using ReviewAI ("Service"), you agree to be bound by these Terms of Service. If you do not agree to all terms, you may not use the Service. We reserve the right to modify these terms at any time, and your continued use of the Service constitutes acceptance of those changes.
+                            By installing the ReviewAI Browser Extension or using the ReviewAI platform ("Service"), you agree to be bound by these Terms of Service. If you do not agree to all terms, you may not use the Service. We reserve the right to modify these terms at any time, and your continued use of the Service constitutes acceptance of those changes.
                         </p>
                     </section>
 
                     <section className="mb-10">
                         <h2 className="text-2xl font-semibold text-gray-800 mb-4">2. Description of Service</h2>
                         <p className="text-gray-600 leading-relaxed">
-                            ReviewAI is an AI-powered platform that helps businesses manage their online reputation by generating professional responses to customer reviews. The Service integrates with Google Business Profile to fetch reviews and allows users to post AI-generated replies directly.
+                            ReviewAI provides a browser extension and platform designed to analyze e-commerce product reviews (primarily on Amazon) using artificial intelligence. The Service provides trust scores, sentiment analysis, and creator-focused summaries to help users "Shop Smarter."
                         </p>
                     </section>
 
                     <section className="mb-10">
                         <h2 className="text-2xl font-semibold text-gray-800 mb-4">3. User Responsibilities</h2>
                         <ul className="list-disc list-inside text-gray-600 space-y-2">
-                            <li>You must provide accurate and complete information when creating an account.</li>
+                            <li>You must use the browser extension in accordance with the policies of the e-commerce platforms you visit.</li>
                             <li>You are responsible for maintaining the confidentiality of your account credentials.</li>
-                            <li>You agree to use the Service only for lawful purposes and in accordance with these Terms.</li>
-                            <li>You are solely responsible for reviewing and approving AI-generated content before posting.</li>
+                            <li>You agree not to use the Service for any automated data scraping beyond the intended use through the official browser extension interface.</li>
+                            <li>AI-generated insights are for informational purposes; we do not guarantee the absolute accuracy of sentiment or trust scores.</li>
                         </ul>
                     </section>
 
                     <section className="mb-10">
-                        <h2 className="text-2xl font-semibold text-gray-800 mb-4">4. Google Integration</h2>
+                        <h2 className="text-2xl font-semibold text-gray-800 mb-4">4. Browser Extension & E-commerce Integration</h2>
                         <p className="text-gray-600 leading-relaxed">
-                            By connecting your Google Business Profile, you authorize ReviewAI to access your business reviews, respond to reviews on your behalf, and perform related actions. You may revoke this access at any time through your Google account settings.
+                            ReviewAI interacts with product pages to summarize reviews and provide data-driven insights. While we strive for accuracy, our service depends on the data provided by third-party platforms. We are not affiliated with, endorsed by, or sponsored by Amazon.com or any other e-commerce platform.
                         </p>
                     </section>
 
                     <section className="mb-10">
                         <h2 className="text-2xl font-semibold text-gray-800 mb-4">5. Intellectual Property</h2>
                         <p className="text-gray-600 leading-relaxed">
-                            All content, features, and functionality of the Service are owned by ReviewAI and are protected by international copyright, trademark, and other intellectual property laws. AI-generated responses created for your use become your property once generated.
+                            All algorithms, design elements, and functionality of the Service are owned by ReviewAI. The "Trust Score" and "Buy/Skip Verdict" methodologies are proprietary. You may use generated creator summaries for your own content creation purposes.
                         </p>
                     </section>
 
                     <section className="mb-10">
                         <h2 className="text-2xl font-semibold text-gray-800 mb-4">6. Limitation of Liability</h2>
                         <p className="text-gray-600 leading-relaxed">
-                            ReviewAI shall not be liable for any indirect, incidental, special, consequential, or punitive damages resulting from your use of the Service. We do not guarantee the accuracy, appropriateness, or effectiveness of AI-generated content. You agree to review all content before posting.
+                            ReviewAI shall not be liable for any purchasing decisions made based on the AI analysis. The service is provided "as is" and "as available." We do not guarantee that the extension will always be compatible with changes made by third-party e-commerce sites.
                         </p>
                     </section>
 
                     <section className="mb-10">
                         <h2 className="text-2xl font-semibold text-gray-800 mb-4">7. Termination</h2>
                         <p className="text-gray-600 leading-relaxed">
-                            We may terminate or suspend your account and access to the Service immediately, without prior notice, for conduct that we believe violates these Terms or is harmful to other users, us, or third parties.
+                            We may terminate or suspend your access to the Service immediately for conduct that we believe violates these Terms or is harmful to our systems or reputation.
                         </p>
                     </section>
 
