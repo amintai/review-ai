@@ -91,12 +91,12 @@ export default function HeroSection() {
                         <Download className="h-6 w-6" /> Add to Chrome — It's Free
                     </Button>
                     <p className="text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-orange-600 to-amber-500">Compatible with classic Amazon pages & mobile web.</p>
-                    
+
                     {/* Waitlist Section */}
                     <div className="w-full max-w-lg border-t border-gray-200 my-6 relative">
                         <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-4 text-gray-400 text-xs font-medium uppercase tracking-wider">OR JOIN THE WAITLIST</span>
                     </div>
-                    
+
                     <div className="w-full max-w-lg">
                         <p className="text-sm text-gray-500 mb-4 text-center">Get notified when we launch new features and updates</p>
                         <WaitlistForm source="homepage-hero" />
