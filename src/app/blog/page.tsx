@@ -5,8 +5,8 @@ import Footer from '@/components/landing/Footer';
 import BlogList from '@/components/blog/BlogList';
 
 export const metadata = {
-    title: 'Review Management Blog | SEO & Reputation Tips - ReviewAI',
-    description: 'Expert insights on review management, local SEO, reputation marketing, and response automation strategies.'
+    title: 'AI Shopping Insights & Amazon Product Verdicts | ReviewAI Blog',
+    description: 'Expert guides on using AI for Amazon review analysis, product research, and smart shopping strategies.'
 };
 
 export default function BlogIndex() {
@@ -20,14 +20,14 @@ export default function BlogIndex() {
                 {/* Header */}
                 <div className="text-center mb-12">
                     <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600 mb-6 pb-2">
-                        Review Management Insights
+                        Shop Smarter with AI - Writing Soon
                     </h1>
                     <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-                        Guides, tips, and strategies to master your online reputation and boost your local SEO.
+                        Deep dives into product sentiment, AI verdicts, and strategies to master your Amazon shopping experience.
                     </p>
                 </div>
 
-                <BlogList posts={blogPosts} categories={categories} />
+                {/* <BlogList posts={blogPosts} categories={categories} /> */}
             </div>
             <Footer />
         </main>
