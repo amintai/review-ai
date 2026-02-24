@@ -7,6 +7,7 @@ import { RootState } from '@/store/store';
 import { toggleSidebar, toggleCollapsed, setFeedbackModalOpen } from '@/store/slices/uiSlice';
 import { LayoutDashboard, FileText, Settings, X, Zap, ChevronLeft, ChevronRight, Check, Menu, PanelLeftClose, PanelLeftOpen, MessageSquareHeart } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import Logo from '../ui/Logo';
 
 const navItems = [
     { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
@@ -44,21 +45,9 @@ export default function Sidebar() {
                 </div>
 
                 {/* Brand Area */}
-                <div className="h-16 flex items-center px-4 border-b border-border shrink-0">
-                    <Link href="/" className={`flex items-center gap-2.5 group overflow-hidden ${isSidebarCollapsed ? 'lg:justify-center lg:w-full' : 'px-2'}`}>
-                        <div className="w-8 h-8 rounded-lg bg-orange-50 flex items-center justify-center text-primary group-hover:bg-orange-100 transition-colors shrink-0">
-                            <Zap size={18} fill="currentColor" />
-                        </div>
-                        {!isSidebarCollapsed && (
-                            <motion.span
-                                initial={{ opacity: 0, x: -10 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                className="font-syne font-bold text-[17px] text-foreground tracking-tight whitespace-nowrap"
-                            >
-                                Review<span className="text-primary">AI</span>
-                            </motion.span>
-                        )}
-                    </Link>
+
+                <div className={`h-16 flex items-center  border-b border-border shrink-0 ${isSidebarCollapsed ? 'px-6' : 'px-4'}`}>
+                    <Logo showWordmark={!isSidebarCollapsed} />
                 </div>
 
                 <div className="flex-1 overflow-y-auto py-6 px-3 flex flex-col gap-6 no-scrollbar transition-all duration-300">

@@ -8,6 +8,7 @@ import { HeroHighlight } from "@/components/ui/hero-highlight";
 import { trackEvent } from "@/lib/analytics";
 import { useRouter } from "next/navigation";
 import { WaitlistForm } from "@/components/landing/WaitlistForm";
+import Link from "next/link";
 
 export default function HeroSection() {
     const [url, setUrl] = useState("");
@@ -49,10 +50,10 @@ export default function HeroSection() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5 }}
-                    className="inline-flex items-center rounded-full border border-orange-200 bg-orange-50 px-3 py-1 text-sm text-orange-800 mb-8"
+                    className="inline-flex items-center rounded-full border border-orange-200 bg-orange-50/50 backdrop-blur-sm px-3 py-1.5 text-sm font-medium text-orange-800 mb-8 shadow-sm"
                 >
-                    <span className="flex h-2 w-2 rounded-full bg-orange-600 mr-2"></span>
-                    Viral Amazon Review Intelligence
+                    <span className="flex h-2 w-2 rounded-full bg-orange-600 mr-2 animate-pulse"></span>
+                    Next-Gen Amazon Product Intelligence
                 </motion.div>
 
                 <motion.h1
@@ -62,7 +63,7 @@ export default function HeroSection() {
                     className="text-5xl md:text-7xl font-bold tracking-tight text-gray-900 mb-6"
                 >
                     Shop Smarter. Get the <br />
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-600 to-amber-500">
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-600 via-amber-500 to-orange-400 drop-shadow-sm">
                         Real Amazon Verdict.
                     </span>
                 </motion.h1>
@@ -80,26 +81,25 @@ export default function HeroSection() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: 0.3 }}
-                    className="mt-10 flex flex-col items-center justify-center gap-6"
+                    className="mt-12 flex flex-col items-center justify-center gap-8"
                 >
-                    {/* Primary Extension CTA */}
-                    <Button
-                        size="lg"
-                        className="bg-gray-900 text-white hover:bg-black h-16 px-10 text-xl rounded-2xl shadow-xl hover:shadow-2xl transition-all cursor-pointer flex items-center gap-3"
-                        onClick={() => trackEvent('hero_cta_clicked', { type: 'add_to_chrome' })}
-                    >
-                        <Download className="h-6 w-6" /> Add to Chrome — It's Free
-                    </Button>
-                    <p className="text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-orange-600 to-amber-500">Compatible with classic Amazon pages & mobile web.</p>
+                    {/* Primary Dashboard CTA */}
+                    <Link href="/dashboard" className="w-full max-w-sm">
+                        <Button
+                            size="lg"
+                            className="w-full bg-gray-900 text-white hover:bg-black h-16 px-10 text-xl rounded-2xl shadow-xl hover:shadow-2xl transition-all cursor-pointer flex items-center justify-center gap-3 active:scale-95"
+                            onClick={() => trackEvent('hero_cta_clicked', { type: 'go_to_dashboard' })}
+                        >
+                            Analyze Now — Go to Dashboard <ArrowRight className="h-6 w-6" />
+                        </Button>
+                    </Link>
 
-                    {/* Waitlist Section */}
-                    <div className="w-full max-w-lg border-t border-gray-200 my-6 relative">
-                        <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-4 text-gray-400 text-xs font-medium uppercase tracking-wider">OR JOIN THE WAITLIST</span>
-                    </div>
-
-                    <div className="w-full max-w-lg">
-                        <p className="text-sm text-gray-500 mb-4 text-center">Get notified when we launch new features and updates</p>
-                        <WaitlistForm source="homepage-hero" />
+                    {/* Extension Status Badge */}
+                    <div className="flex flex-col items-center gap-3">
+                        <div className="flex items-center gap-2 px-4 py-2 bg-zinc-100 rounded-full border border-zinc-200 text-zinc-500 text-sm font-medium">
+                            <Download size={16} /> Extension — Coming Soon to Chrome Store
+                        </div>
+                        <p className="text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-orange-600 via-amber-500 to-orange-400">Compatible with classic Amazon pages & mobile web.</p>
                     </div>
                 </motion.div>
 

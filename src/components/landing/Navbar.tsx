@@ -19,8 +19,8 @@ export default function Navbar() {
                     >
                         Sign in
                     </Link>
-                    <Link href="/login" onClick={() => trackEvent('navbar_clicked', { type: 'get_started' })}>
-                        <Button className='cursor-pointer bg-orange-600 hover:bg-orange-700 text-white'>Add to Chrome</Button>
+                    <Link href="/dashboard" onClick={() => trackEvent('navbar_clicked', { type: 'go_to_dashboard' })}>
+                        <Button className='cursor-pointer bg-orange-600 hover:bg-orange-700 text-white font-bold px-6'>Go to Dashboard</Button>
                     </Link>
                 </div>
             </div>

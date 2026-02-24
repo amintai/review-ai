@@ -1,4 +1,4 @@
-import { MapPin, MessageCircle, ThumbsUp, Star } from "lucide-react";
+import { MapPin, MessageCircle, ThumbsUp, Star, ShoppingCart, Search, ShieldCheck } from "lucide-react";
 
 export default function PlatformBadges() {
     const platforms = [

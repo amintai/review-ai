@@ -58,7 +58,7 @@ export default function Logo({
                         fontWeight="900"
                         fontFamily="system-ui, -apple-system, sans-serif"
                     >
-                        A
+                        R
                     </text>
 
                     {/* Gradient definition */}
