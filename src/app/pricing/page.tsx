@@ -1,11 +1,12 @@
 import Navbar from '@/components/landing/Navbar';
 import Footer from '@/components/landing/Footer';
-import { Check, X } from 'lucide-react';
+import { Check, X, ShieldCheck, Zap, Sparkles } from 'lucide-react';
 import Link from 'next/link';
+import { Button } from '@/components/ui/button';
 
 export const metadata = {
-    title: 'Pricing | ReviewAI',
-    description: 'Simple, transparent pricing for ReviewAI. Start free, upgrade when you need more.',
+    title: 'Pricing | ReviewAI - Choose Your Shopping Intelligence Plan',
+    description: 'Start for free with 10 AI analyses per month. Upgrade to Pro for unlimited shopping verdicts, priority processing, and advanced creator features.',
 };
 
 const plans = [
@@ -13,51 +14,51 @@ const plans = [
         name: "Starter",
         price: "Free",
         period: "",
-        description: "Perfect for trying out ReviewAI",
+        description: "Perfect for occasional shoppers",
         features: [
-            { text: "10 AI responses per month", included: true },
-            { text: "1 Google Business location", included: true },
-            { text: "Basic tone selection", included: true },
-            { text: "Email support", included: true },
-            { text: "Analytics dashboard", included: false },
-            { text: "Priority support", included: false },
-            { text: "Custom tone training", included: false },
+            { text: "10 AI Analysis per month", included: true },
+            { text: "Chrome Extension access", included: true },
+            { text: "Smart Pros & Cons", included: true },
+            { text: "Standard processing speed", included: true },
+            { text: "Review Trust Scoring", included: false },
+            { text: "Creator Affiliate Insights", included: false },
+            { text: "Analysis History (30 days)", included: false },
         ],
-        cta: "Get Started",
+        cta: "Add to Chrome",
         highlighted: false
     },
     {
         name: "Pro",
-        price: "$29",
+        price: "$9",
         period: "/month",
-        description: "For growing businesses",
+        description: "For power shoppers & creators",
         features: [
-            { text: "Unlimited AI responses", included: true },
-            { text: "Up to 5 locations", included: true },
-            { text: "All tone options", included: true },
-            { text: "Priority email support", included: true },
-            { text: "Full analytics dashboard", included: true },
-            { text: "Response scheduling", included: true },
-            { text: "Custom tone training", included: false },
+            { text: "Unlimited AI Analysis", included: true },
+            { text: "Chrome Extension access", included: true },
+            { text: "Instant VIP processing", included: true },
+            { text: "Advanced Trust Scoring", included: true },
+            { text: "Creator Affiliate Insights", included: true },
+            { text: "Forever Analysis History", included: true },
+            { text: "Priority Email Support", included: true },
         ],
-        cta: "Start Free Trial",
+        cta: "Go Pro Now",
         highlighted: true
     },
     {
-        name: "Enterprise",
-        price: "Custom",
-        period: "",
-        description: "For large organizations",
+        name: "Creator",
+        price: "$19",
+        period: "/month",
+        description: "For professional reviewers",
         features: [
-            { text: "Unlimited everything", included: true },
-            { text: "Unlimited locations", included: true },
-            { text: "Custom AI training", included: true },
-            { text: "Dedicated account manager", included: true },
-            { text: "Advanced analytics & API", included: true },
-            { text: "SSO & team management", included: true },
-            { text: "Custom integrations", included: true },
+            { text: "Unlimited AI Analysis", included: true },
+            { text: "Custom Report Branding", included: true },
+            { text: "API Access (Early Access)", included: true },
+            { text: "Bulk ASIN Analysis", included: true },
+            { text: "Advanced Comparison Tools", included: true },
+            { text: "Dedicated Success Manager", included: true },
+            { text: "Export to CSV / PDF", included: true },
         ],
-        cta: "Contact Sales",
+        cta: "Join as Creator",
         highlighted: false
     }
 ];
@@ -68,13 +69,14 @@ export default function PricingPage() {
             <Navbar />
 
             {/* Hero */}
-            <section className="pt-24 pb-16 px-6">
+            <section className="pt-32 pb-16 px-6">
                 <div className="max-w-4xl mx-auto text-center">
-                    <h1 className="text-5xl font-bold text-gray-900 mb-6">
-                        Simple, Transparent Pricing
+                    <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 tracking-tight">
+                        Simple Plans for <br />
+                        <span className="text-orange-600">Smarter Shopping</span>
                     </h1>
-                    <p className="text-xl text-gray-500 max-w-2xl mx-auto">
-                        Start for free, upgrade when your business grows. No hidden fees, cancel anytime.
+                    <p className="text-xl text-gray-500 max-w-2xl mx-auto leading-relaxed">
+                        Start for free, upgrade when you need more power. Stop wasting money on bad products.
                     </p>
                 </div>
             </section>
@@ -85,34 +87,38 @@ export default function PricingPage() {
                     {plans.map((plan, idx) => (
                         <div
                             key={idx}
-                            className={`rounded-2xl p-8 border ${plan.highlighted
-                                ? 'border-blue-500 ring-2 ring-blue-100 shadow-xl'
-                                : 'border-gray-200'
+                            className={`rounded-3xl p-8 border hover:shadow-2xl transition-all duration-300 flex flex-col ${plan.highlighted
+                                ? 'border-orange-500 ring-4 ring-orange-50 shadow-xl bg-white scale-105 z-10'
+                                : 'border-gray-200 bg-gray-50/50'
                                 }`}
                         >
                             {plan.highlighted && (
-                                <div className="text-center mb-4">
-                                    <span className="bg-blue-600 text-white text-xs font-semibold px-3 py-1 rounded-full">
-                                        Most Popular
+                                <div className="text-center mb-6">
+                                    <span className="bg-orange-600 text-white text-xs font-black uppercase tracking-widest px-4 py-1.5 rounded-full">
+                                        Best Value
                                     </span>
                                 </div>
                             )}
                             <h3 className="text-2xl font-bold text-gray-900 mb-2">{plan.name}</h3>
                             <div className="mb-4">
-                                <span className="text-4xl font-bold text-gray-900">{plan.price}</span>
-                                <span className="text-gray-500">{plan.period}</span>
+                                <span className="text-5xl font-black text-gray-900">{plan.price}</span>
+                                <span className="text-gray-500 font-medium">{plan.period}</span>
                             </div>
-                            <p className="text-gray-500 mb-6">{plan.description}</p>
+                            <p className="text-gray-500 mb-8 font-medium">{plan.description}</p>
 
-                            <ul className="space-y-3 mb-8">
+                            <ul className="space-y-4 mb-10 flex-grow">
                                 {plan.features.map((feature, fidx) => (
-                                    <li key={fidx} className="flex items-center gap-3">
+                                    <li key={fidx} className="flex items-start gap-3">
                                         {feature.included ? (
-                                            <Check className="h-5 w-5 text-green-500 flex-shrink-0" />
+                                            <div className="mt-1 bg-green-100 rounded-full p-0.5">
+                                                <Check className="h-3.5 w-3.5 text-green-600" />
+                                            </div>
                                         ) : (
-                                            <X className="h-5 w-5 text-gray-300 flex-shrink-0" />
+                                            <div className="mt-1 bg-gray-100 rounded-full p-0.5">
+                                                <X className="h-3.5 w-3.5 text-gray-400" />
+                                            </div>
                                         )}
-                                        <span className={feature.included ? 'text-gray-700' : 'text-gray-400'}>
+                                        <span className={`text-sm ${feature.included ? 'text-gray-700 font-medium' : 'text-gray-400'}`}>
                                             {feature.text}
                                         </span>
                                     </li>
@@ -120,10 +126,10 @@ export default function PricingPage() {
                             </ul>
 
                             <Link
-                                href={plan.name === "Enterprise" ? "mailto:sales@reviewai.com" : "/login"}
-                                className={`block w-full text-center py-3 px-6 rounded-xl font-medium transition-colors ${plan.highlighted
-                                    ? 'bg-blue-600 text-white hover:bg-blue-700'
-                                    : 'bg-gray-100 text-gray-900 hover:bg-gray-200'
+                                href="/login"
+                                className={`block w-full text-center py-4 px-6 rounded-2xl font-bold transition-all ${plan.highlighted
+                                    ? 'bg-orange-600 text-white hover:bg-orange-700 shadow-lg shadow-orange-200'
+                                    : 'bg-white border border-gray-200 text-gray-900 hover:bg-gray-50'
                                     }`}
                             >
                                 {plan.cta}
@@ -133,24 +139,23 @@ export default function PricingPage() {
                 </div>
             </section>
 
-            {/* FAQ Link */}
+            {/* Trust Badges */}
             <section className="pb-24 px-6">
-                <div className="max-w-4xl mx-auto text-center bg-gray-50 rounded-2xl p-10">
-                    <h3 className="text-2xl font-semibold text-gray-900 mb-4">Have questions about pricing?</h3>
-                    <p className="text-gray-600 mb-6">Check out our FAQ or reach out to our team.</p>
-                    <div className="flex justify-center gap-4">
-                        <Link
-                            href="/faq"
-                            className="px-6 py-3 border border-gray-300 text-gray-700 font-medium rounded-xl hover:bg-gray-100 transition-colors"
-                        >
-                            View FAQ
-                        </Link>
-                        <a
-                            href="mailto:amin.tai.work@gmail.com"
-                            className="px-6 py-3 bg-blue-600 text-white font-medium rounded-xl hover:bg-blue-700 transition-colors"
-                        >
-                            Contact Sales
-                        </a>
+                <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-center border-t border-gray-100 pt-16">
+                    <div className="flex flex-col items-center gap-3">
+                        <ShieldCheck className="h-8 w-8 text-orange-600" />
+                        <h4 className="font-bold text-gray-900">Secure Payments</h4>
+                        <p className="text-sm text-gray-500">Stripe-powered security</p>
+                    </div>
+                    <div className="flex flex-col items-center gap-3">
+                        <Zap className="h-8 w-8 text-orange-600" />
+                        <h4 className="font-bold text-gray-900">Instant Access</h4>
+                        <p className="text-sm text-gray-500">Upgrade took seconds</p>
+                    </div>
+                    <div className="flex flex-col items-center gap-3">
+                        <Sparkles className="h-8 w-8 text-orange-600" />
+                        <h4 className="font-bold text-gray-900">Cancel Anytime</h4>
+                        <p className="text-sm text-gray-500">No long-term contracts</p>
                     </div>
                 </div>
             </section>

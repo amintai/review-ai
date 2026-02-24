@@ -48,14 +48,14 @@ export default function Logo({
                         fillOpacity="0.3"
                     />
 
-                    {/* Letter R */}
+                    {/* Letter R -> A */}
                     <text
                         x="20"
                         y="27"
                         textAnchor="middle"
                         fill="white"
                         fontSize="18"
-                        fontWeight="bold"
+                        fontWeight="900"
                         fontFamily="system-ui, -apple-system, sans-serif"
                     >
                         R
@@ -71,8 +71,8 @@ export default function Logo({
                             y2="38"
                             gradientUnits="userSpaceOnUse"
                         >
-                            <stop stopColor="#2563eb" />
-                            <stop offset="1" stopColor="#0891b2" />
+                            <stop stopColor="#ea580c" />
+                            <stop offset="1" stopColor="#f59e0b" />
                         </linearGradient>
                     </defs>
                 </svg>
@@ -81,10 +81,10 @@ export default function Logo({
             {/* Wordmark */}
             {showWordmark && (
                 <span className={cn(
-                    "font-bold text-gray-900 dark:text-white",
+                    "font-black tracking-tighter text-gray-900 dark:text-white",
                     config.text
                 )}>
-                    Review<span className="text-blue-600">AI</span>
+                    Review<span className="text-orange-600">AI</span>.pro
                 </span>
             )}
         </div>

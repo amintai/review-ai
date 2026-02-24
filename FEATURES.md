@@ -1,6 +1,7 @@
-# ReviewAI - Features & Product Overview
+# ReviewAI - Features & Product Overview (Amazon Intelligence)
 
-**ReviewAI** is an AI-powered review management platform designed for small businesses to effortlessly manage their online reputation. It transforms the tedious task of responding to customer reviews into a 30-second workflow.
+**ReviewAI** is an AI-powered **Amazon Product Review Intelligence** platform.  
+It helps users decide **BUY / SKIP / CAUTION** in seconds using real review signals, structured reasoning, and clear confidence scoring.
 
 Website: [https://reviewai.pro](https://reviewai.pro)
 
@@ -8,48 +9,75 @@ Website: [https://reviewai.pro](https://reviewai.pro)
 
 ## Core Features
 
-### 1. ⚡ Instant AI Replies
-Paste any review and receive 3 polished, human-like responses in seconds. No more writer's block or awkward phrasing.
+### 1. 🧠 AI Verdict Engine (BUY / SKIP / CAUTION)
+Paste an Amazon product URL and get a decisive verdict with rationale—not generic summary text.
 
-### 2. 🔗 Google Business Profile Integration
-Connect your Google Account to automatically fetch reviews and post replies directly—without leaving the dashboard.
+### 2. 📊 Confidence + Trust Scores
+Each report includes:
+- **Confidence score** (how certain the model is)
+- **Trust score** (signal quality and review consistency)
 
-### 3. 🎭 Tone Customization
-Choose the voice that fits your brand:
-- **Professional** – Formal, business-appropriate.
-- **Friendly** – Warm and approachable.
-- **Empathetic** – Understanding, ideal for negative reviews.
-- **Witty** – A touch of humor for casual brands.
+### 3. 🔍 Real Review Pattern Extraction
+ReviewAI identifies recurring themes such as:
+- Quality consistency
+- Durability complaints
+- Value-for-money perception
+- Hidden deal-breakers buyers frequently mention
 
-### 4. 📊 Response History
-All your generated responses are logged. Refer back to them anytime.
+### 4. ✅ Fit Analysis: Perfect For / Avoid If
+Reports explicitly answer:
+- Who should buy this product
+- Who should avoid it
+- Which complaints are likely deal-breakers
 
-### 5. 🌐 Multi-Platform Support
-The copy-paste generator works for any platform: Google, Yelp, Facebook, TripAdvisor, and more.
+### 5. 🧩 Buyer Psychology Insights
+Structured analysis explains:
+- Why people still buy despite objections
+- What almost stops conversions
+- Honest objections to keep decisions trustworthy
+
+### 6. 🔗 Shareable Public Report Links
+Analyses are persisted and can be viewed via report URLs for quick sharing.
+
+### 7. 🧪 Browser Extension Signal Assist
+Extension flow can extract live Amazon page context and send higher-quality input to backend analysis.
+
+### 8. 🚧 Next: Similar Product Recommendations
+Planned phase includes better alternatives with rationale and affiliate-ready linking support.
 
 ---
 
 ## Who Is It For?
 
 ReviewAI is built for:
-- **Restaurant Owners** – Manage diner feedback at scale.
-- **Dental Clinics** – Respond professionally to patient reviews.
-- **Café & Coffee Shop Owners** – Build a loyal community.
-- **Mobile & Tech Repair Shops** – Stand out in a competitive local market.
+- **Everyday Amazon shoppers** who want fast, evidence-based purchase decisions
+- **Creators and affiliates** who need product due diligence at scale
+- **Price-conscious buyers** comparing options before checkout
 
 ---
 
-## Pricing
+## Product Output Snapshot
 
-| Plan      | Price               | Features                                      |
-|-----------|---------------------|-----------------------------------------------|
-| **Free**  | ₹0 / month          | 15 AI generations/month                       |
-| **Pro**   | ₹999 / month (~$12) | Unlimited generations, priority support       |
+Every analysis centers around a structured JSON/report contract including:
+
+- `verdict`
+- `confidence_score`
+- `trust_score`
+- `summary`
+- `perfect_for[]`
+- `avoid_if[]`
+- `deal_breakers[]`
+- `buyer_psychology`
+- `theme_clustering[]`
 
 ---
 
-## Getting Started
+## Migration Context
 
-1. Visit [reviewai.pro/login](https://reviewai.pro/login).
-2. Sign up with Google (one-click).
-3. Start generating your first reply for free.
+ReviewAI previously focused on business review-reply generation.  
+Current and active direction is Amazon product intelligence.
+
+See:
+- `docs/amazon-prd.md`
+- `docs/migration-plan.md`
+- `docs/AGENT_CONTEXT.md` (canonical context for AI assistants)

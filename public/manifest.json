@@ -1,12 +1,12 @@
 {
-    "name": "ReviewAI - AI Review Response Generator",
+    "name": "ReviewAI – Amazon Product Review Intelligence",
     "short_name": "ReviewAI",
-    "description": "Generate professional, human-sounding responses to customer reviews in seconds. AI-powered review management for Google Business Profile, Yelp, Facebook & TripAdvisor.",
-    "start_url": "/",
+    "description": "Get an instant BUY, SKIP, or CAUTION verdict on any Amazon product. AI-powered review analysis with trust scoring and evidence-backed reasoning — in seconds.",
+    "start_url": "/dashboard",
     "scope": "/",
     "display": "standalone",
-    "background_color": "#ffffff",
-    "theme_color": "#2563eb",
+    "background_color": "#F7F6F3",
+    "theme_color": "#FF6B35",
     "orientation": "portrait-primary",
     "icons": [
         {
@@ -23,9 +23,43 @@
         }
     ],
     "categories": [
-        "business",
+        "shopping",
         "productivity",
         "utilities"
+    ],
+    "screenshots": [
+        {
+            "src": "/og-image.png",
+            "sizes": "1200x630",
+            "type": "image/png",
+            "label": "ReviewAI Dashboard — BUY, SKIP, or CAUTION verdict for Amazon products"
+        }
+    ],
+    "shortcuts": [
+        {
+            "name": "New Analysis",
+            "short_name": "Analyze",
+            "description": "Paste an Amazon URL and get an instant verdict",
+            "url": "/dashboard",
+            "icons": [
+                {
+                    "src": "/favicon.png",
+                    "sizes": "256x256"
+                }
+            ]
+        },
+        {
+            "name": "My Reports",
+            "short_name": "Reports",
+            "description": "View your past product analyses",
+            "url": "/dashboard/history",
+            "icons": [
+                {
+                    "src": "/favicon.png",
+                    "sizes": "256x256"
+                }
+            ]
+        }
     ],
     "lang": "en",
     "dir": "ltr",

@@ -14,7 +14,6 @@ import { NextResponse } from 'next/server';
 export async function verifyNotBot(): Promise<NextResponse | null> {
     try {
         const verification = await checkBotId();
-
         if (verification.isBot) {
             console.warn('[BotID] Bot traffic detected and blocked');
             return NextResponse.json(

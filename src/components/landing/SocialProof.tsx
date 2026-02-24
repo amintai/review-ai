@@ -17,21 +17,21 @@ export default function SocialProof() {
                 <div className="grid md:grid-cols-3 gap-8 mb-20">
                     {[
                         {
-                            text: "I used to spend 2 hours a week on reviews. Now it takes 5 minutes, and the replies actually sound like ME.",
+                            text: "I was about to buy a wireless charger with 4.5 stars, but ReviewAI flagged it as suspicious. Saved me $40!",
                             author: "Sarah J.",
-                            role: "Cafe Owner",
+                            role: "Smart Shopper",
                             image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah"
                         },
                         {
-                            text: "The 'friendly' tone is perfect for our bakery. Customers have actually complimented our responses!",
+                            text: "The 'Creator Summary' is a game changer for my reviews. I can get straight to the pros and cons in seconds.",
                             author: "Mike T.",
-                            role: "Bakery Manager",
+                            role: "UGC Creator",
                             image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Mike"
                         },
                         {
-                            text: "Finally an AI tool that doesn't sound like a robot. The professional tone is spot on for my law firm.",
+                            text: "Finally, I can tell which reviews are actually real. The extension works seamlessly while I'm browsing Amazon.",
                             author: "Elena R.",
-                            role: "Attorney",
+                            role: "Tech Enthusiast",
                             image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Elena"
                         }
                     ].map((t, i) => (

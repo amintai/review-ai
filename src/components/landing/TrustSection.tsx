@@ -17,32 +17,32 @@ const companies = [
 
 const certifications = [
     {
-        title: "GDPR Compliant",
-        description: "Fully compliant with EU data protection regulations.",
+        title: "Privacy First",
+        description: "We never track your personal browsing history.",
         icon: ShieldCheck,
         color: "text-blue-600",
         bg: "bg-blue-50"
     },
     {
-        title: "SOC 2 Ready",
-        description: "Enterprise-grade security controls and monitoring.",
+        title: "Secure Analytics",
+        description: "Real-time AI processing with bank-level encryption.",
         icon: Lock,
         color: "text-emerald-600",
         bg: "bg-emerald-50"
     },
     {
-        title: "AES-256 Encrypted",
-        description: "Bank-level encryption for all stored data.",
+        title: "Data Sovereignty",
+        description: "Your account data is encrypted and never sold.",
         icon: Server,
         color: "text-purple-600",
         bg: "bg-purple-50"
     },
     {
-        title: "Google Verified",
-        description: "Official Google Business Profile API Partner.",
+        title: "Verified Intelligence",
+        description: "Used by 2,000+ smart shoppers every day.",
         icon: CheckCircle2,
-        color: "text-amber-600",
-        bg: "bg-amber-50"
+        color: "text-orange-600",
+        bg: "bg-orange-50"
     }
 ];
 
@@ -53,16 +53,16 @@ export default function TrustSection() {
 
                 {/* 1. Trusted By Marquee */}
                 <div className="text-center mb-24">
-                    <p className="text-[10px] font-black text-blue-600 uppercase tracking-[0.2em] mb-10">
-                        Empowering 1,000+ businesses worldwide
+                    <p className="text-[10px] font-black text-orange-600 uppercase tracking-[0.2em] mb-10">
+                        Empowering 2,000+ shoppers daily
                     </p>
 
                     <div className="relative group overflow-hidden [mask-image:linear-gradient(to_right,transparent,white_20%,white_80%,transparent)]">
                         <div className="flex w-fit animate-marquee gap-16 py-4">
                             {[...companies, ...companies, ...companies].map((company, i) => (
                                 <div key={i} className="flex items-center gap-4 group/logo shrink-0">
-                                    <div className="h-12 w-12 rounded-xl bg-gray-50 flex items-center justify-center border border-gray-100 group-hover/logo:border-blue-200 group-hover/logo:bg-blue-50 transition-all duration-300">
-                                        <span className="text-sm font-black text-gray-400 group-hover/logo:text-blue-600 tracking-tighter">
+                                    <div className="h-12 w-12 rounded-xl bg-gray-50 flex items-center justify-center border border-gray-100 group-hover/logo:border-orange-200 group-hover/logo:bg-orange-50 transition-all duration-300">
+                                        <span className="text-sm font-black text-gray-400 group-hover/logo:text-orange-600 tracking-tighter">
                                             {company.logo}
                                         </span>
                                     </div>
@@ -78,9 +78,9 @@ export default function TrustSection() {
                 {/* 2. Certifications & Authority Grid */}
                 <div className="relative">
                     <div className="text-center mb-16">
-                        <h2 className="text-4xl font-black text-gray-900 mb-4 tracking-tight">Enterprise Safety & Compliance</h2>
+                        <h2 className="text-4xl font-black text-gray-900 mb-4 tracking-tight">Shop with Confidence</h2>
                         <p className="text-gray-500 text-lg max-w-2xl mx-auto">
-                            Your reputation is safe with us. We maintain the highest standards of data sovereignty and privacy.
+                            Stop guessing. We analyze thousands of reviews instantly so you can make informed shopping decisions.
                         </p>
                     </div>
 

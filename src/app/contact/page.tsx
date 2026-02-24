@@ -4,8 +4,8 @@ import Footer from "@/components/landing/Footer";
 import BackgroundRippleEffect from "@/components/ui/background-ripple-effect";
 
 export const metadata = {
-    title: "Contact Us | ReviewAI",
-    description: "Get in touch with the ReviewAI team. We're here to help you automate your reviews and grow your business.",
+    title: "Contact Us | ReviewAI - Amazon Intelligence Support",
+    description: "Get in touch with the ReviewAI team. We're here to help you shop smarter and get the most out of our Amazon review analyzer.",
 };
 
 export default function ContactPage() {

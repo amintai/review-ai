@@ -44,18 +44,19 @@ export async function GET(req: Request) {
         }
 
         let query = supabase
-            .from('generations')
+            .from('product_analyses')
             .select('*', { count: 'exact' })
             .eq('user_id', user.id)
             .order('created_at', { ascending: false })
             .range(offset, offset + limit - 1);
 
+
         if (search) {
-            query = query.or(`review_content.ilike.%${search}%,response_content.ilike.%${search}%`);
+            query = query.or(`product_name.ilike.%${search}%,asin.ilike.%${search}%`);
         }
 
         if (tone && tone !== 'all') {
-            query = query.eq('tone_used', tone);
+            query = query.eq('analysis_result->>verdict', tone.toUpperCase());
         }
 
         const { data, count, error } = await query;

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Syne, DM_Sans, JetBrains_Mono } from "next/font/google";
 import "./globals.css"
 import CookieConsentBanner from "@/components/ui/CookieConsentBanner";
 import { Analytics } from "@vercel/analytics/react"
@@ -9,71 +9,83 @@ import GoogleAnalytics from "@/components/analytics/GoogleAnalytics";
 import FacebookPixel from "@/components/analytics/FacebookPixel";
 import Script from "next/script";
 
-const inter = Inter({ subsets: ["latin"], display: 'swap' });
+const syne = Syne({
+    subsets: ["latin"],
+    display: 'swap',
+    variable: '--font-syne',
+});
+
+const dmSans = DM_Sans({
+    subsets: ["latin"],
+    display: 'swap',
+    variable: '--font-dm-sans',
+});
+
+const jetbrainsMono = JetBrains_Mono({
+    subsets: ["latin"],
+    display: 'swap',
+    variable: '--font-jetbrains-mono',
+});
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://reviewai.pro';
 
 export const metadata: Metadata = {
-    // Basic SEO - Optimized title length (58 chars)
     title: {
-        default: "ReviewAI – AI Review Response Generator for Google & Yelp",
+        default: "ReviewAI – Amazon Product Review Intelligence | BUY or SKIP?",
         template: "%s | ReviewAI"
     },
-    description: "AI-Powered Review Response Generator: Automated replies for Google, Yelp, Facebook and TripAdvisor. Create human-sounding responses in seconds to boost ratings and save time.",
+    description: "Stop guessing on Amazon. ReviewAI analyzes thousands of product reviews in seconds and gives you an instant BUY, SKIP, or CAUTION verdict — with trust scoring and evidence-backed reasoning.",
     keywords: [
-        "AI review response generator",
-        "Google Business Profile review management",
-        "automated review responses",
-        "reputation management software",
-        "reply to Google reviews",
-        "AI customer review response",
-        "review management for small business",
-        "Google My Business review assistant",
-        "professional review responses",
-        "Yelp review management AI",
-        "respond to negative reviews",
-        "customer feedback management",
-        "online reputation management",
-        "review response automation"
+        "Amazon product review analyzer",
+        "should I buy this Amazon product",
+        "AI Amazon review summary",
+        "Amazon product verdict",
+        "fake Amazon review detector",
+        "Amazon review trust score",
+        "best Amazon product checker",
+        "Amazon review intelligence",
+        "AI shopping assistant",
+        "Amazon ASIN analyzer",
+        "product review analysis tool",
+        "Amazon purchase decision tool",
+        "Chrome extension Amazon reviews",
+        "Amazon review sentiment analysis",
+        "avoid bad Amazon products"
     ],
     authors: [{ name: "ReviewAI Team" }],
     creator: "ReviewAI",
     publisher: "ReviewAI",
 
-    // Canonical & Base
     metadataBase: new URL(siteUrl),
     alternates: {
         canonical: '/',
     },
 
-    // Open Graph (Facebook, LinkedIn, etc.)
     openGraph: {
         type: 'website',
         locale: 'en_US',
         url: siteUrl,
         siteName: 'ReviewAI',
-        title: 'ReviewAI - AI Review Response Generator | Manage Reviews Instantly',
-        description: 'Generate professional, human-sounding responses to customer reviews in seconds. Works across Google, Yelp, Facebook & TripAdvisor.',
+        title: 'ReviewAI – Know if an Amazon Product is Worth It Before You Buy',
+        description: 'AI-powered Amazon review analysis. Get an instant BUY, SKIP, or CAUTION verdict with trust scoring — in seconds, on any product.',
         images: [
             {
                 url: '/og-image.png',
                 width: 1200,
                 height: 630,
-                alt: 'ReviewAI - AI-Powered Review Response Generator',
+                alt: 'ReviewAI – Amazon Product Review Intelligence',
             },
         ],
     },
 
-    // Twitter/X Card
     twitter: {
         card: 'summary_large_image',
-        title: 'ReviewAI - AI Review Response Generator',
-        description: 'Generate professional responses to customer reviews in seconds. Save 10+ hours weekly with AI-powered review management.',
+        title: 'ReviewAI – AI Amazon Review Analyzer',
+        description: 'Paste any Amazon URL. Get an instant BUY, SKIP, or CAUTION verdict. Never waste money on a bad product again.',
         images: ['/og-image.png'],
         creator: '@reviewai_pro',
     },
 
-    // App & Icons
     applicationName: 'ReviewAI',
     icons: {
         icon: '/favicon.ico',
@@ -82,9 +94,8 @@ export const metadata: Metadata = {
     },
     manifest: '/manifest.json',
 
-    // Additional SEO
-    category: 'Business Software',
-    classification: 'Review Management Software',
+    category: 'Shopping & Consumer Tools',
+    classification: 'Amazon Product Intelligence Software',
     robots: {
         index: true,
         follow: true,
@@ -97,12 +108,11 @@ export const metadata: Metadata = {
         },
     },
 
-    // Verification - Add your actual codes after registering with each console
     verification: {
-        google: 'your-google-site-verification-code', // Get from Google Search Console
-        yandex: 'your-yandex-verification-code', // Get from Yandex Webmaster
+        google: 'your-google-site-verification-code',
+        yandex: 'your-yandex-verification-code',
         other: {
-            'msvalidate.01': 'your-bing-verification-code', // Get from Bing Webmaster Tools
+            'msvalidate.01': 'your-bing-verification-code',
         },
     },
 };
@@ -112,21 +122,21 @@ const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'SoftwareApplication',
     name: 'ReviewAI',
-    applicationCategory: 'BusinessApplication',
+    applicationCategory: 'ShoppingApplication',
     operatingSystem: 'All',
-    description: 'AI-powered review response generator for Google Business Profile, Yelp, Facebook, and TripAdvisor. Generate professional, human-sounding responses to customer reviews in seconds.',
+    description: 'ReviewAI analyzes Amazon product reviews using AI and returns an evidence-based BUY, SKIP, or CAUTION verdict with confidence and trust scoring. Available as a web app and Chrome extension.',
     url: siteUrl,
     offers: {
         '@type': 'Offer',
         price: '0',
         priceCurrency: 'USD',
-        description: 'Free tier available (15 generations/month). Pro plan at $12/month (approx ₹999).',
+        description: 'Free tier available (10 analyses/month). Pro plan at $9/month.',
         availability: 'https://schema.org/OnlineOnly',
     },
     softwareRequirements: 'Modern Web Browser (Chrome, Safari, Firefox, Edge)',
     audience: {
-        '@type': 'BusinessAudience',
-        audienceType: 'Small Business Owners',
+        '@type': 'Audience',
+        audienceType: 'Online Shoppers, Amazon Buyers, Deal Hunters, Consumer Researchers',
         geographicArea: {
             '@type': 'GeoShape',
             region: 'Global'
@@ -140,12 +150,13 @@ const jsonLd = {
         worstRating: '1',
     },
     featureList: [
-        'AI-powered review response generation',
-        'Google Business Profile integration',
-        'Multi-platform support (Yelp, Facebook, TripAdvisor)',
-        'Tone customization (Professional, Friendly, Empathetic, Witty)',
-        'Instant response generation',
-        'Human-sounding AI responses',
+        'Instant BUY / SKIP / CAUTION verdict for any Amazon product',
+        'AI-powered review trust scoring',
+        'Confidence score based on review volume and quality',
+        'Evidence-backed reasoning (perfect_for, avoid_if, deal_breakers)',
+        'Chrome extension — works directly on Amazon product pages',
+        'Full analysis history dashboard',
+        'Shareable product intelligence reports',
     ],
     screenshot: `${siteUrl}/og-image.png`,
     mainEntity: {
@@ -170,47 +181,6 @@ const jsonLd = {
     }
 };
 
-const localBusinessSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'LocalBusiness',
-    name: 'ReviewAI',
-    image: `${siteUrl}/og-image.png`,
-    '@id': siteUrl,
-    url: siteUrl,
-    telephone: '+91 8141759119',
-    address: {
-        '@type': 'PostalAddress',
-        streetAddress: '',
-        addressLocality: 'Vadodara, Gujarat',
-        addressRegion: 'Gujarat',
-        postalCode: '390001',
-        addressCountry: 'India'
-    },
-    geo: {
-        '@type': 'GeoCoordinates',
-        latitude: 22.3039,
-        longitude: 72.8777
-    },
-    openingHoursSpecification: {
-        '@type': 'OpeningHoursSpecification',
-        dayOfWeek: [
-            "Monday",
-            "Tuesday",
-            "Wednesday",
-            "Thursday",
-            "Friday"
-        ],
-        opens: '09:00',
-        closes: '17:00'
-    },
-    sameAs: [
-        'https://x.com/reviewai_pro',
-        'https://facebook.com/reviewai_pro',
-        'https://instagram.com/reviewai_pro',
-        'https://linkedin.com/company/reviewai',
-        'https://youtube.com/@reviewai_pro'
-    ]
-};
 
 const faqSchema = {
     '@context': 'https://schema.org',
@@ -218,34 +188,34 @@ const faqSchema = {
     mainEntity: [
         {
             '@type': 'Question',
-            name: 'Will the responses sound robotic?',
+            name: 'How does ReviewAI analyze Amazon products?',
             acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'Not at all. ReviewAI is specifically tuned to mimic natural human conversation, using empathy and context awareness. Most customers cannot distinguish our AI replies from human-written ones.'
+                text: 'ReviewAI collects review signals from the Amazon product page — either through our Chrome extension (which reads the live page) or our server-side scraper — then runs them through an AI model trained to detect patterns, fake reviews, and sentiment clusters. The result is a BUY, SKIP, or CAUTION verdict with a trust score and confidence score.'
             }
         },
         {
             '@type': 'Question',
-            name: 'Which platforms do you support?',
+            name: 'What does the BUY / SKIP / CAUTION verdict mean?',
             acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'Our copy-paste generator works for ANY platform (Google, Yelp, Facebook, TripAdvisor, etc.). For direct integration (fetching & publishing), we currently support Google Business Profile, with Yelp coming soon.'
+                text: 'BUY means the product has strong, trustworthy reviews and is likely a good purchase. SKIP means the product has significant issues — fake reviews, quality complaints, or deal-breakers — and is not recommended. CAUTION means the product has mixed signals and may be worth researching further before buying.'
             }
         },
         {
             '@type': 'Question',
-            name: 'How secure is my Google Business account data?',
+            name: 'Does ReviewAI work on all Amazon products?',
             acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'We take an expert-level approach to security. We use OAuth 2.0 with restricted scopes, meaning we only access what is strictly necessary. Your tokens are encrypted using AES-256 and stored in an isolated Supabase environment with Row Level Security (RLS) enabled.'
+                text: 'ReviewAI works on any Amazon product with at least 3 reviews. For products with fewer reviews, we return a low-confidence result and flag that more data is needed. Simply paste any Amazon product URL or ASIN and get your verdict in seconds.'
             }
         },
         {
             '@type': 'Question',
-            name: 'Is my customer data safe?',
+            name: 'Is the Chrome extension required?',
             acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'Absolutely. We are GDPR compliant. Your review data is used in real-time to generate responses and is never stored permanently unless logged for your own history. We never sell or share your data with third parties.'
+                text: 'No. You can use ReviewAI entirely from the web app by pasting an Amazon URL. The Chrome extension is optional but enhances the experience — it injects a verdict overlay directly on Amazon product pages so you never have to leave Amazon to get your verdict.'
             }
         },
         {
@@ -253,7 +223,15 @@ const faqSchema = {
             name: 'Is there a free plan?',
             acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'Yes! You can generate up to 10 high-quality responses per month for free, forever. No credit card required to get started.'
+                text: 'Yes. The free Starter plan includes 10 AI product analyses per month with full report history and Chrome extension access — no credit card required.'
+            }
+        },
+        {
+            '@type': 'Question',
+            name: 'How is ReviewAI different from just reading Amazon reviews myself?',
+            acceptedAnswer: {
+                '@type': 'Answer',
+                text: 'Amazon has hundreds — sometimes thousands — of reviews per product, many of which are fake, incentivized, or irrelevant to your needs. ReviewAI reads all of them, weights them by authenticity signals, clusters them by theme, and gives you a distilled verdict in seconds. What takes you 20 minutes of scrolling takes ReviewAI under 10 seconds.'
             }
         }
     ]
@@ -277,10 +255,6 @@ export default function RootLayout({
                 <script
                     type="application/ld+json"
                     dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-                />
-                <script
-                    type="application/ld+json"
-                    dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
                 />
                 <script
                     type="application/ld+json"
@@ -319,12 +293,12 @@ export default function RootLayout({
                     `}
                 </Script>
             </head>
-            <body className={inter.className}>
+            <body className={`${dmSans.className} ${dmSans.variable} ${syne.variable} ${jetbrainsMono.variable}`}>
                 {children}
                 <CookieConsentBanner />
                 <Analytics />
                 <SpeedInsights />
-                <Toaster richColors position="top-center" />
+                <Toaster richColors position="bottom-right" />
 
                 <GoogleAnalytics />
             </body>

@@ -19,62 +19,61 @@ export default function PrivacyPage() {
                     <section className="mb-10">
                         <h2 className="text-2xl font-semibold text-gray-800 mb-4">1. Information We Collect</h2>
                         <p className="text-gray-600 leading-relaxed mb-4">
-                            We collect information you provide directly, including:
+                            We collect information necessary to provide e-commerce analysis, including:
                         </p>
                         <ul className="list-disc list-inside text-gray-600 space-y-2">
-                            <li><strong>Account Information:</strong> Email address, name, and business details when you register.</li>
-                            <li><strong>Google Business Data:</strong> Business reviews, location information, and responses when you connect your Google Business Profile.</li>
-                            <li><strong>Usage Data:</strong> How you interact with our Service, including features used and preferences.</li>
+                            <li><strong>Account Information:</strong> Email address and name when you register to save reports or access creator features.</li>
+                            <li><strong>Extension Usage Data:</strong> The URL of the product page you are viewing (e.g., Amazon product pages) to trigger analysis.</li>
+                            <li><strong>Public Review Data:</strong> We fetch and analyze publicly available reviews and product descriptions to generate scores.</li>
+                            <li><strong>Interaction Data:</strong> How you interact with the extension overlay and dashboard.</li>
                         </ul>
                     </section>
 
                     <section className="mb-10">
                         <h2 className="text-2xl font-semibold text-gray-800 mb-4">2. How We Use Your Information</h2>
                         <ul className="list-disc list-inside text-gray-600 space-y-2">
-                            <li>To provide and maintain the ReviewAI Service.</li>
-                            <li>To generate AI-powered responses to your customer reviews.</li>
-                            <li>To improve and personalize your experience.</li>
-                            <li>To communicate with you about updates, support, and promotional offers.</li>
-                            <li>To detect, prevent, and address technical issues or fraud.</li>
+                            <li>To provide real-time AI analysis of product quality and review authenticity.</li>
+                            <li>To generate "Trust Scores" and "Buy/Skip" verdicts.</li>
+                            <li>To create affiliate-ready summaries for content creators.</li>
+                            <li>To improve our AI models' understanding of consumer sentiment.</li>
+                            <li>To communicate with you about your account or new features.</li>
                         </ul>
                     </section>
 
                     <section className="mb-10">
                         <h2 className="text-2xl font-semibold text-gray-800 mb-4">3. Data Sharing</h2>
                         <p className="text-gray-600 leading-relaxed">
-                            We do not sell your personal information. We may share data with:
+                            We do not sell your personal browsing history. We may share data with:
                         </p>
                         <ul className="list-disc list-inside text-gray-600 space-y-2 mt-4">
-                            <li><strong>Service Providers:</strong> Third parties that help us operate our Service (e.g., hosting, analytics).</li>
-                            <li><strong>Google:</strong> To enable integration with Google Business Profile.</li>
-                            <li><strong>Legal Requirements:</strong> When required by law or to protect our rights.</li>
+                            <li><strong>Service Providers:</strong> Cloud hosting (e.g., Supabase, Vercel) and AI processing partners.</li>
+                            <li><strong>Legal Requirements:</strong> Only when required by law or to protect our legal rights.</li>
                         </ul>
                     </section>
 
                     <section className="mb-10">
                         <h2 className="text-2xl font-semibold text-gray-800 mb-4">4. Data Security</h2>
                         <p className="text-gray-600 leading-relaxed">
-                            We implement industry-standard security measures to protect your data, including encryption in transit and at rest. However, no method of transmission over the Internet is 100% secure, and we cannot guarantee absolute security.
+                            We implement industry-standard security measures to protect your account data. The browser extension only reads data when you are on supported e-commerce domains.
                         </p>
                     </section>
 
                     <section className="mb-10">
                         <h2 className="text-2xl font-semibold text-gray-800 mb-4">5. Your Rights</h2>
                         <p className="text-gray-600 leading-relaxed mb-4">
-                            Depending on your location, you may have the following rights:
+                            You have the right to:
                         </p>
                         <ul className="list-disc list-inside text-gray-600 space-y-2">
-                            <li><strong>Access:</strong> Request a copy of your personal data.</li>
-                            <li><strong>Correction:</strong> Request correction of inaccurate data.</li>
-                            <li><strong>Deletion:</strong> Request deletion of your data.</li>
-                            <li><strong>Portability:</strong> Request transfer of your data to another service.</li>
+                            <li><strong>Access & Export:</strong> Request a copy of your saved reports.</li>
+                            <li><strong>Deletion:</strong> Request deletion of your account and associated data.</li>
+                            <li><strong>Opt-out:</strong> Disable the extension at any time from your browser settings.</li>
                         </ul>
                     </section>
 
                     <section className="mb-10">
                         <h2 className="text-2xl font-semibold text-gray-800 mb-4">6. Cookies and Tracking</h2>
                         <p className="text-gray-600 leading-relaxed">
-                            We use cookies and similar technologies to enhance your experience, analyze usage, and personalize content. You can control cookies through your browser settings.
+                            We use minimal cookies for authentication and performance analytics. We do not use cookies to track you across unrelated third-party websites.
                         </p>
                     </section>
 
