@@ -1,18 +1,24 @@
 import { checkBotId } from 'botid/server';
 import { NextResponse } from 'next/server';
+import { createClient } from '@/lib/supabaseServer';
 
 /**
  * Verifies that the incoming request is not from a bot.
  * Returns a 403 error response if bot is detected, null otherwise.
  * 
- * Usage in API routes:
- * ```
- * const botCheck = await verifyNotBot();
- * if (botCheck) return botCheck;
- * ```
+ * Bypasses check if user is authenticated.
  */
 export async function verifyNotBot(): Promise<NextResponse | null> {
     try {
+        // Bypass for authenticated users
+        const supabase = await createClient();
+        const { data: { user } } = await supabase.auth.getUser();
+
+        if (user) {
+            console.log(`[BotID] Bypassing bot check for authenticated user: ${user.id}`);
+            return null;
+        }
+
         const verification = await checkBotId();
         if (verification.isBot) {
             console.warn('[BotID] Bot traffic detected and blocked');

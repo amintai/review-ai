@@ -37,13 +37,15 @@ export async function GET(request: Request) {
                     .eq('id', user.id);
             }
 
-            return NextResponse.redirect(`${origin}${next}`);
+            const appUrl = process.env.NEXT_PUBLIC_APP_URL || origin;
+            return NextResponse.redirect(`${appUrl}${next}`);
         }
 
         console.error('Auth Callback Error:', error);
     }
 
     // return the user to an error page with instructions
-    return NextResponse.redirect(`${origin}/login?error=auth_callback_failed`);
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL || origin;
+    return NextResponse.redirect(`${appUrl}/login?error=auth_callback_failed`);
 }
 
