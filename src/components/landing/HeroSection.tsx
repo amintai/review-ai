@@ -96,12 +96,12 @@ export default function HeroSection() {
                     {/* Right Column: Dashboard Mockup */}
                     <motion.div
                         initial={{ opacity: 0, x: 40, rotate: 0 }}
-                        animate={{ opacity: 1, x: 0, rotate: -1 }}
+                        animate={{ opacity: 1, x: 0, rotate: -2 }}
                         transition={{ duration: 0.8, delay: 0.4 }}
-                        className="relative hidden lg:block scale-110 origin-left"
+                        className="relative hidden lg:block scale-105 origin-center"
                     >
                         {/* Browser Frame */}
-                        <div className="bg-white rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.18)] border border-gray-100 overflow-hidden relative z-10">
+                        <div className="bg-white rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.18)] border border-gray-100 overflow-hidden relative z-10 transition-transform hover:scale-[1.02] duration-500">
                             {/* Browser Top Bar */}
                             <div className="bg-gray-50 border-b border-gray-100 px-4 py-3 flex items-center gap-2">
                                 <div className="flex gap-1.5">
@@ -115,22 +115,29 @@ export default function HeroSection() {
                             </div>
 
                             {/* Dashboard Image / Video */}
-                            <div className="relative aspect-[16/10] overflow-hidden bg-gray-50">
+                            <div className="relative aspect-[16/10] overflow-hidden bg-gray-50 group">
                                 <video
                                     autoPlay
                                     muted
                                     loop
                                     playsInline
                                     poster="/dashboard-mockup.png"
-                                    className="w-full h-full object-cover object-top"
+                                    className="w-full h-full object-cover object-center"
                                 >
                                     <source src="/demo.mp4" type="video/mp4" />
+                                    <source src="https://mzphncfgdkypwsacrfmt.supabase.co/storage/v1/object/public/reviewai-assets/demo-video.mp4" type="video/mp4" />
+                                    {/* Fallback to GIF or Image */}
                                     <img
                                         src="/dashboard-mockup.png"
                                         alt="ReviewAI Dashboard Mockup"
-                                        className="w-full h-full object-cover object-top"
+                                        className="w-full h-full object-cover object-center"
                                     />
                                 </video>
+
+                                {/* Tooltip or indicator that it's a demo */}
+                                <div className="absolute top-4 right-4 bg-black/50 backdrop-blur-md text-white text-[10px] px-2 py-1 rounded-md opacity-0 group-hover:opacity-100 transition-opacity">
+                                    Live Demo
+                                </div>
 
                                 {/* Overlay Shadow for depth */}
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/5 to-transparent pointer-events-none"></div>
