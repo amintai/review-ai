@@ -16,9 +16,9 @@ export default function Footer() {
                     duration: 0.8,
                     ease: "easeInOut",
                 }}
-                className="relative flex flex-col gap-4 items-center justify-center px-4 w-full h-full"
+                className="relative flex flex-col gap-4 items-center"
             >
-                <div className="text-center mb-16 max-w-3xl">
+                {/* <div className="text-center mb-16 max-w-3xl">
                     <h2 className="text-3xl md:text-5xl font-bold dark:text-white text-black mb-6">
                         Ready to shop smarter?
                     </h2>
@@ -31,7 +31,7 @@ export default function Footer() {
                     >
                         Join The Waitlist
                     </Link>
-                </div>
+                </div> */}
 
                 {/* Footer Grid */}
                 <div className="w-full max-w-7xl grid grid-cols-1 md:grid-cols-4 gap-8 px-6 pb-20 pt-10 border-t border-neutral-200 dark:border-neutral-700">

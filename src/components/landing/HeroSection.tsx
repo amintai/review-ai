@@ -1,135 +1,152 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, Search, Download, ShoppingCart, ShieldCheck } from 'lucide-react';
+import { ArrowRight, ShieldCheck, Sparkles } from 'lucide-react';
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { HeroHighlight } from "@/components/ui/hero-highlight";
 import { trackEvent } from "@/lib/analytics";
-import { useRouter } from "next/navigation";
-import { WaitlistForm } from "@/components/landing/WaitlistForm";
 import Link from "next/link";
+import { supabase } from "@/lib/supabaseClient";
 
 export default function HeroSection() {
-    const [url, setUrl] = useState("");
-    const [loading, setLoading] = useState(false);
-    const router = useRouter();
+    const [user, setUser] = useState<any>(null);
 
-    const handleAnalyze = async (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!url || loading) return;
+    useEffect(() => {
+        supabase.auth.getUser().then(({ data: { user } }) => {
+            setUser(user);
+        });
 
-        setLoading(true);
-        trackEvent('hero_analyze_clicked', { url });
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+            setUser(session?.user ?? null);
+        });
 
-        try {
-            const res = await fetch('/api/amazon/analyze', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ url })
-            });
-            const data = await res.json();
+        return () => subscription.unsubscribe();
+    }, []);
 
-            if (data.id) {
-                router.push(`/report/${data.id}`);
-            } else if (data.error) {
-                alert(data.error);
-            }
-        } catch (err) {
-            console.error(err);
-            alert("Something went wrong. Please try again.");
-        } finally {
-            setLoading(false);
-        }
-    };
+    const ctaLink = user ? "/dashboard" : "/login?next=/dashboard";
 
     return (
-        <HeroHighlight containerClassName="h-auto md:h-auto py-20 md:py-32">
-            <div className="max-w-7xl mx-auto px-6 text-center z-10 relative">
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5 }}
-                    className="inline-flex items-center rounded-full border border-orange-200 bg-orange-50/50 backdrop-blur-sm px-3 py-1.5 text-sm font-medium text-orange-800 mb-8 shadow-sm"
-                >
-                    <span className="flex h-2 w-2 rounded-full bg-orange-600 mr-2 animate-pulse"></span>
-                    Next-Gen Amazon Product Intelligence
-                </motion.div>
-
-                <motion.h1
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.1 }}
-                    className="text-5xl md:text-7xl font-bold tracking-tight text-gray-900 mb-6"
-                >
-                    Shop Smarter. Get the <br />
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-600 via-amber-500 to-orange-400 drop-shadow-sm">
-                        Real Amazon Verdict.
-                    </span>
-                </motion.h1>
-
-                <motion.p
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.2 }}
-                    className="mt-6 text-xl text-gray-500 max-w-2xl mx-auto leading-relaxed"
-                >
-                    The AI copilot that lives in your browser. Read thousands of reviews instantly and decide: <strong>Buy or Skip?</strong>
-                </motion.p>
-
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.3 }}
-                    className="mt-12 flex flex-col items-center justify-center gap-8"
-                >
-                    {/* Primary Dashboard CTA */}
-                    <Link href="/dashboard" className="w-full max-w-sm">
-                        <Button
-                            size="lg"
-                            className="w-full bg-gray-900 text-white hover:bg-black h-16 px-10 text-xl rounded-2xl shadow-xl hover:shadow-2xl transition-all cursor-pointer flex items-center justify-center gap-3 active:scale-95"
-                            onClick={() => trackEvent('hero_cta_clicked', { type: 'go_to_dashboard' })}
+        <HeroHighlight containerClassName="h-auto py-12 md:py-20 overflow-hidden">
+            <div className="max-w-7xl mx-auto px-6 z-10 relative">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center text-left">
+                    {/* Left Column: Content */}
+                    <div className="flex flex-col items-start space-y-6">
+                        {/* Banner Note - Plain Text, No Emojis */}
+                        <motion.div
+                            initial={{ opacity: 0, y: -20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5 }}
+                            className="inline-flex items-center gap-2 px-4 py-2 bg-orange-50 border border-orange-100 rounded-full text-orange-700 text-sm font-semibold backdrop-blur-sm"
                         >
-                            Analyze Now — Go to Dashboard <ArrowRight className="h-6 w-6" />
-                        </Button>
-                    </Link>
+                            Chrome Extension — launching soon. Use the web app free today.
+                        </motion.div>
 
-                    {/* Extension Status Badge */}
-                    <div className="flex flex-col items-center gap-3">
-                        <div className="flex items-center gap-2 px-4 py-2 bg-zinc-100 rounded-full border border-zinc-200 text-zinc-500 text-sm font-medium">
-                            <Download size={16} /> Extension — Coming Soon to Chrome Store
-                        </div>
-                        <p className="text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-orange-600 via-amber-500 to-orange-400">Compatible with classic Amazon pages & mobile web.</p>
-                    </div>
-                </motion.div>
+                        <motion.h1
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5, delay: 0.1 }}
+                            className="text-5xl md:text-6xl font-black tracking-tight text-gray-900 leading-[1.1]"
+                        >
+                            BUY or SKIP? <br />
+                            Get the AI Verdict on Any Amazon Product in <br />
+                            <span className="text-[#F97316]">
+                                10 Seconds.
+                            </span>
+                        </motion.h1>
 
+                        <motion.p
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5, delay: 0.2 }}
+                            className="text-xl text-gray-500 max-w-xl leading-relaxed"
+                        >
+                            Our AI scans thousands of reviews, strips out the fakes, and tells you exactly whether a product is worth your money — <strong>before you click purchase.</strong>
+                        </motion.p>
 
-                {/* Social Proof / Stats */}
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 1, delay: 0.5 }}
-                    className="mt-16 pt-8 border-t border-gray-100 flex flex-wrap justify-center gap-8 md:gap-16 text-gray-500"
-                >
-                    <div className="flex flex-col items-center">
-                        <div className="flex items-center gap-2 mb-1 text-gray-900 font-bold text-lg">
-                            <ShieldCheck className="text-green-500" /> 100% Unbiased
-                        </div>
-                        <span className="text-sm">Detects Fake Reviews</span>
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5, delay: 0.3 }}
+                            className="flex flex-col items-start gap-4 w-full"
+                        >
+                            <Link href={ctaLink} className="w-full max-w-sm">
+                                <Button
+                                    size="lg"
+                                    className="w-full bg-[#F97316] text-white hover:bg-[#EA580C] h-16 px-10 text-xl rounded-2xl shadow-xl hover:shadow-2xl transition-all cursor-pointer flex items-center justify-center gap-3 active:scale-95 group"
+                                    onClick={() => trackEvent('hero_cta_clicked', { type: user ? 'dashboard' : 'login' })}
+                                >
+                                    Analyze a Product Free <ArrowRight className="h-6 w-6 group-hover:translate-x-1 transition-transform" />
+                                </Button>
+                            </Link>
+
+                            <div className="flex flex-wrap items-center gap-4 text-sm font-medium text-gray-400">
+                                <div className="flex items-center gap-1.5">
+                                    <Sparkles size={16} className="text-orange-500" /> No account needed
+                                </div>
+                                <div className="flex items-center gap-1.5 border-l border-gray-200 pl-4">
+                                    <Sparkles size={16} className="text-orange-400" /> Works on any Amazon product
+                                </div>
+                                <div className="flex items-center gap-1.5 border-l border-gray-200 pl-4">
+                                    <ShieldCheck size={16} className="text-green-500" /> 100% unbiased
+                                </div>
+                            </div>
+                        </motion.div>
                     </div>
-                    <div className="flex flex-col items-center">
-                        <div className="flex items-center gap-2 mb-1 text-gray-900 font-bold text-lg">
-                            <ShoppingCart className="text-orange-500" /> Affiliate Friendly
+
+                    {/* Right Column: Dashboard Mockup */}
+                    <motion.div
+                        initial={{ opacity: 0, x: 40, rotate: 0 }}
+                        animate={{ opacity: 1, x: 0, rotate: -1 }}
+                        transition={{ duration: 0.8, delay: 0.4 }}
+                        className="relative hidden lg:block scale-110 origin-left"
+                    >
+                        {/* Browser Frame */}
+                        <div className="bg-white rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.18)] border border-gray-100 overflow-hidden relative z-10">
+                            {/* Browser Top Bar */}
+                            <div className="bg-gray-50 border-b border-gray-100 px-4 py-3 flex items-center gap-2">
+                                <div className="flex gap-1.5">
+                                    <div className="w-3 h-3 rounded-full bg-red-400"></div>
+                                    <div className="w-3 h-3 rounded-full bg-yellow-400"></div>
+                                    <div className="w-3 h-3 rounded-full bg-green-400"></div>
+                                </div>
+                                <div className="mx-auto bg-white border border-gray-200 rounded-md px-3 py-1 text-[10px] text-gray-400 w-1/2 text-center truncate">
+                                    reviewai.pro/dashboard
+                                </div>
+                            </div>
+
+                            {/* Dashboard Image / Video */}
+                            <div className="relative aspect-[16/10] overflow-hidden bg-gray-50">
+                                <video
+                                    autoPlay
+                                    muted
+                                    loop
+                                    playsInline
+                                    poster="/dashboard-mockup.png"
+                                    className="w-full h-full object-cover object-top"
+                                >
+                                    <source src="/demo.mp4" type="video/mp4" />
+                                    <img
+                                        src="/dashboard-mockup.png"
+                                        alt="ReviewAI Dashboard Mockup"
+                                        className="w-full h-full object-cover object-top"
+                                    />
+                                </video>
+
+                                {/* Overlay Shadow for depth */}
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/5 to-transparent pointer-events-none"></div>
+                            </div>
                         </div>
-                        <span className="text-sm">Conversion Optimised</span>
-                    </div>
-                    <div className="flex flex-col items-center">
-                        <div className="flex items-center gap-2 mb-1 text-gray-900 font-bold text-lg">
-                            <span className="text-2xl">98%</span>
+
+                        {/* Floating Decoration - Repositioned to overlap frame */}
+                        <div className="absolute -top-4 -right-4 z-20 bg-orange-600 text-white px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-3 animate-bounce-subtle">
+                            <Sparkles size={20} className="text-orange-200" />
+                            <div className="flex flex-col">
+                                <span className="font-black text-lg leading-none">98%</span>
+                                <span className="text-[10px] font-bold uppercase tracking-widest opacity-80">Accuracy</span>
+                            </div>
                         </div>
-                        <span className="text-sm">Verdict Accuracy</span>
-                    </div>
-                </motion.div>
+                    </motion.div>
+                </div>
             </div>
         </HeroHighlight>
     );
