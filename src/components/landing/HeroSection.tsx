@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { ArrowRight, ShieldCheck, Sparkles } from 'lucide-react';
 import { Button } from "@/components/ui/button";
@@ -10,8 +11,16 @@ import { supabase } from "@/lib/supabaseClient";
 
 export default function HeroSection() {
     const [user, setUser] = useState<any>(null);
+    const [isMobile, setIsMobile] = useState(false);
 
     useEffect(() => {
+        // Simple check for mobile/tablet
+        const checkMobile = () => {
+            setIsMobile(window.innerWidth < 1024);
+        };
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+
         supabase.auth.getUser().then(({ data: { user } }) => {
             setUser(user);
         });
@@ -20,7 +29,10 @@ export default function HeroSection() {
             setUser(session?.user ?? null);
         });
 
-        return () => subscription.unsubscribe();
+        return () => {
+            subscription.unsubscribe();
+            window.removeEventListener('resize', checkMobile);
+        };
     }, []);
 
     const ctaLink = user ? "/dashboard" : "/login?next=/dashboard";
@@ -33,7 +45,7 @@ export default function HeroSection() {
                     <div className="flex flex-col items-start space-y-6">
                         {/* Banner Note - Plain Text, No Emojis */}
                         <motion.div
-                            initial={{ opacity: 0, y: -20 }}
+                            initial={isMobile ? { opacity: 1 } : { opacity: 0, y: -20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5 }}
                             className="inline-flex items-center gap-2 px-4 py-2 bg-orange-50 border border-orange-100 rounded-full text-orange-700 text-sm font-semibold backdrop-blur-sm"
@@ -42,7 +54,7 @@ export default function HeroSection() {
                         </motion.div>
 
                         <motion.h1
-                            initial={{ opacity: 0, y: 20 }}
+                            initial={isMobile ? { opacity: 1 } : { opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5, delay: 0.1 }}
                             className="text-5xl md:text-6xl font-black tracking-tight text-gray-900 leading-[1.1]"
@@ -55,7 +67,7 @@ export default function HeroSection() {
                         </motion.h1>
 
                         <motion.p
-                            initial={{ opacity: 0, y: 20 }}
+                            initial={isMobile ? { opacity: 1 } : { opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5, delay: 0.2 }}
                             className="text-xl text-gray-500 max-w-xl leading-relaxed"
@@ -64,7 +76,7 @@ export default function HeroSection() {
                         </motion.p>
 
                         <motion.div
-                            initial={{ opacity: 0, y: 20 }}
+                            initial={isMobile ? { opacity: 1 } : { opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5, delay: 0.3 }}
                             className="flex flex-col items-start gap-4 w-full"
@@ -95,10 +107,10 @@ export default function HeroSection() {
 
                     {/* Right Column: Dashboard Mockup */}
                     <motion.div
-                        initial={{ opacity: 0, x: 40, rotate: 0 }}
-                        animate={{ opacity: 1, x: 0, rotate: -2 }}
+                        initial={isMobile ? { opacity: 0, y: 30 } : { opacity: 0, x: 40, rotate: 0 }}
+                        animate={{ opacity: 1, x: 0, y: 0, rotate: isMobile ? 0 : -2 }}
                         transition={{ duration: 0.8, delay: 0.4 }}
-                        className="relative hidden lg:block scale-105 origin-center"
+                        className="relative block lg:block scale-100 lg:scale-105 origin-center mt-12 lg:mt-0"
                     >
                         {/* Browser Frame */}
                         <div className="bg-white rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.18)] border border-gray-100 overflow-hidden relative z-10 transition-transform hover:scale-[1.02] duration-500">
@@ -116,23 +128,28 @@ export default function HeroSection() {
 
                             {/* Dashboard Image / Video */}
                             <div className="relative aspect-[16/10] overflow-hidden bg-gray-50 group">
-                                <video
-                                    autoPlay
-                                    muted
-                                    loop
-                                    playsInline
-                                    poster="/dashboard-mockup.png"
-                                    className="w-full h-full object-cover object-center"
-                                >
-                                    <source src="/demo.mp4" type="video/mp4" />
-                                    <source src="https://mzphncfgdkypwsacrfmt.supabase.co/storage/v1/object/public/reviewai-assets/demo-video.mp4" type="video/mp4" />
-                                    {/* Fallback to GIF or Image */}
-                                    <img
+                                {isMobile ? (
+                                    <Image
                                         src="/dashboard-mockup.png"
                                         alt="ReviewAI Dashboard Mockup"
-                                        className="w-full h-full object-cover object-center"
+                                        fill
+                                        priority
+                                        sizes="(max-width: 1024px) 100vw, 50vw"
+                                        className="object-cover object-center"
                                     />
-                                </video>
+                                ) : (
+                                    <video
+                                        autoPlay
+                                        muted
+                                        loop
+                                        playsInline
+                                        poster="/dashboard-mockup.png"
+                                        className="w-full h-full object-cover object-center"
+                                    >
+                                        <source src="/demo.mp4" type="video/mp4" />
+                                        <source src="https://mzphncfgdkypwsacrfmt.supabase.co/storage/v1/object/public/reviewai-assets/demo-video.mp4" type="video/mp4" />
+                                    </video>
+                                )}
 
                                 {/* Tooltip or indicator that it's a demo */}
                                 <div className="absolute top-4 right-4 bg-black/50 backdrop-blur-md text-white text-[10px] px-2 py-1 rounded-md opacity-0 group-hover:opacity-100 transition-opacity">
@@ -145,11 +162,11 @@ export default function HeroSection() {
                         </div>
 
                         {/* Floating Decoration - Repositioned to overlap frame */}
-                        <div className="absolute -top-4 -right-4 z-20 bg-orange-600 text-white px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-3 animate-bounce-subtle">
-                            <Sparkles size={20} className="text-orange-200" />
+                        <div className="absolute -top-4 -right-2 lg:-right-4 z-20 bg-orange-600 text-white px-4 lg:px-5 py-2 lg:py-3 rounded-xl lg:rounded-2xl shadow-2xl flex items-center gap-2 lg:gap-3 animate-bounce-subtle">
+                            <Sparkles size={isMobile ? 16 : 20} className="text-orange-200" />
                             <div className="flex flex-col">
-                                <span className="font-black text-lg leading-none">98%</span>
-                                <span className="text-[10px] font-bold uppercase tracking-widest opacity-80">Accuracy</span>
+                                <span className="font-black text-base lg:text-lg leading-none">98%</span>
+                                <span className="text-[8px] lg:text-[10px] font-bold uppercase tracking-widest opacity-80">Accuracy</span>
                             </div>
                         </div>
                     </motion.div>

@@ -33,6 +33,10 @@ export const HeroHighlight = ({
     clientY,
   }: React.MouseEvent<HTMLDivElement>) {
     if (!currentTarget) return;
+
+    // Skip motion updates if fine pointer is not available (mobile/touch)
+    if (window.matchMedia("(pointer: coarse)").matches) return;
+
     let { left, top } = currentTarget.getBoundingClientRect();
 
     mouseX.set(clientX - left);

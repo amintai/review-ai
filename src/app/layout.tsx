@@ -34,7 +34,7 @@ export const metadata: Metadata = {
         default: "ReviewAI – Amazon Product Review Intelligence | BUY or SKIP?",
         template: "%s | ReviewAI"
     },
-    description: "Stop guessing on Amazon. ReviewAI analyzes thousands of product reviews in seconds and gives you an instant BUY, SKIP, or CAUTION verdict — with trust scoring and evidence-backed reasoning.",
+    description: "Stop guessing on Amazon. ReviewAI analyzes thousands of product reviews in seconds and gives you an instant BUY, SKIP, or CAUTION verdict — with trust scorin...",
     keywords: [
         "Amazon product review analyzer",
         "should I buy this Amazon product",
@@ -253,6 +253,7 @@ export default function RootLayout({
                 <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
                 <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
                 <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+                <link rel="dns-prefetch" href="https://connect.facebook.net" />
 
                 {/* Structured Data */}
                 <script
@@ -265,7 +266,7 @@ export default function RootLayout({
                 />
 
                 <Script
-                    defer
+                    strategy="lazyOnload"
                     data-website-id="dfid_jl6tqx4c2gwgmNlrkI5a4"
                     data-domain="reviewai.pro"
                     src="https://datafa.st/js/script.js">
@@ -274,7 +275,7 @@ export default function RootLayout({
                 <FacebookPixel />
 
                 {/* Capture UTM Parameters */}
-                <Script id="capture-utm" strategy="afterInteractive">
+                <Script id="capture-utm" strategy="lazyOnload">
                     {`
                         (function() {
                             const urlParams = new URLSearchParams(window.location.search);
