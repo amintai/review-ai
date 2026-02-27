@@ -1,6 +1,8 @@
 "use client";
 
 import { track } from "@vercel/analytics";
+import posthog from "posthog-js";
+import { supabase } from "./supabaseClient";
 
 /**
  * Unified tracking utility for Google Analytics and Vercel Analytics.
@@ -15,6 +17,29 @@ export const trackEvent = (eventName: string, properties?: Record<string, any>) 
 
     // 2. Vercel Analytics
     track(eventName, properties);
+
+    // 3. PostHog
+    if (typeof window !== "undefined") {
+        posthog.capture(eventName, properties);
+    }
+
+    // 4. Supabase
+    if (typeof window !== "undefined") {
+        const logToSupabase = async () => {
+            try {
+                const { data: { session } } = await supabase.auth.getSession();
+                await supabase.from("user_events").insert({
+                    event_name: eventName,
+                    properties: properties || {},
+                    user_id: session?.user?.id || null,
+                    page_url: window.location.href,
+                });
+            } catch (err) {
+                console.error("Failed to log event to Supabase:", err);
+            }
+        };
+        logToSupabase();
+    }
 };
 
 /**

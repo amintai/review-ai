@@ -7,6 +7,8 @@ import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Toaster } from 'sonner';
 import GoogleAnalytics from "@/components/analytics/GoogleAnalytics";
 import FacebookPixel from "@/components/analytics/FacebookPixel";
+import { CSPostHogProvider } from "@/components/analytics/PostHogProvider";
+import PostHogPageView from "@/components/analytics/PostHogPageView";
 import Script from "next/script";
 
 const syne = Syne({
@@ -298,13 +300,16 @@ export default function RootLayout({
                 </Script>
             </head>
             <body className={`${dmSans.className} ${dmSans.variable} ${syne.variable} ${jetbrainsMono.variable}`}>
-                {children}
-                <CookieConsentBanner />
-                <Analytics />
-                <SpeedInsights />
-                <Toaster richColors position="bottom-right" />
+                <CSPostHogProvider>
+                    {children}
+                    <PostHogPageView />
+                    <CookieConsentBanner />
+                    <Analytics />
+                    <SpeedInsights />
+                    <Toaster richColors position="bottom-right" />
 
-                <GoogleAnalytics />
+                    <GoogleAnalytics />
+                </CSPostHogProvider>
             </body>
         </html>
     );

@@ -2,25 +2,29 @@
 
 import { useState } from 'react';
 import { supabase } from '@/lib/supabaseClient';
+import { trackEvent } from '@/lib/analytics';
 import { ArrowRight, Loader2, CheckCircle, Mail, Lock } from 'lucide-react';
 import SecurityBadge from '@/components/ui/SecurityBadge';
 import Logo from '@/components/ui/Logo';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
+import { usePostHog } from 'posthog-js/react';
 
 export default function LoginClient() {
     const [email, setEmail] = useState('');
     const [loading, setLoading] = useState(false);
     const [googleLoading, setGoogleLoading] = useState(false);
+    const posthog = usePostHog();
     const [sent, setSent] = useState(false);
     const [showEmailForm, setShowEmailForm] = useState(false);
     const searchParams = useSearchParams();
     const next = searchParams.get('next') || '/dashboard';
     const isReportAccess = next.includes('/report/');
-    const redirectUrl = `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}`;
+    const redirectUrl = `${process.env.NEXT_PUBLIC_APP_URL}/auth/callback?next=${encodeURIComponent(next)}`;
 
     const handleGoogleLogin = async () => {
         setGoogleLoading(true);
+        trackEvent('login_started', { method: 'google' });
         const { error } = await supabase.auth.signInWithOAuth({
             provider: 'google',
             options: {
@@ -37,6 +41,8 @@ export default function LoginClient() {
 
     const handleMagicLink = async (e: React.FormEvent) => {
         e.preventDefault();
+        trackEvent('login_started', { method: 'magic_link' });
+
         setLoading(true);
         const { error } = await supabase.auth.signInWithOtp({
             email,

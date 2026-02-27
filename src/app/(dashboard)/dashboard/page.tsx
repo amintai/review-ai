@@ -2,7 +2,9 @@
 
 import { useEffect, useState, FormEvent, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { usePostHog } from 'posthog-js/react';
 import { supabase } from '@/lib/supabaseClient';
+import { trackEvent } from '@/lib/analytics';
 import Link from 'next/link';
 import { Card } from '@/components/ui/card';
 import { AnimatedNumber } from '@/components/ui/animated-number';
@@ -64,6 +66,7 @@ function getVerdictStyle(verdict?: string) {
 function DashboardContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
+    const posthog = usePostHog();
 
     const [user, setUser] = useState<any>(null);
     const [loading, setLoading] = useState(true);
@@ -96,6 +99,11 @@ function DashboardContent() {
                 return;
             }
             setUser(session.user);
+            if (session.user) {
+                posthog.identify(session.user.id, {
+                    email: session.user.email,
+                });
+            }
 
             const incomingUrl = searchParams.get('url');
             if (incomingUrl) setUrl(incomingUrl);
@@ -141,6 +149,7 @@ function DashboardContent() {
 
         setAnalyzing(true);
         setAnalyzeError(null);
+        trackEvent('analysis_started', { url: url.trim() });
 
         try {
             const { data: { session } } = await supabase.auth.getSession();
@@ -158,6 +167,10 @@ function DashboardContent() {
             if (!res.ok) {
                 const message = data.error || 'Analysis failed. Please try again.';
                 toast.error(message);
+                trackEvent('analysis_failed', {
+                    error: message,
+                    url: url.trim()
+                });
                 setAnalyzeError(message);
                 setAnalyzing(false);
                 return;
@@ -165,10 +178,18 @@ function DashboardContent() {
 
             if (data.id) {
                 toast.success('Analysis complete. Opening report…');
+                trackEvent('analysis_success', {
+                    analysis_id: data.id,
+                    url: url.trim()
+                });
                 router.push(`/report/${data.id}`);
             } else {
                 const message = 'Unexpected response. Please try again.';
                 toast.error(message);
+                trackEvent('analysis_failed', {
+                    error: 'unexpected_response',
+                    url: url.trim()
+                });
                 setAnalyzeError(message);
                 setAnalyzing(false);
             }
