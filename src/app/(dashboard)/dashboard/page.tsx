@@ -100,9 +100,11 @@ function DashboardContent() {
             }
             setUser(session.user);
             if (session.user) {
-                posthog.identify(session.user.id, {
-                    email: session.user.email,
-                });
+                if (posthog.__loaded) {
+                    posthog.identify(session.user.id, {
+                        email: session.user.email,
+                    });
+                }
             }
 
             const incomingUrl = searchParams.get('url');
