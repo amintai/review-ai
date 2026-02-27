@@ -31,6 +31,11 @@ CONTACT_EMAIL=your_contact_email
 # Optional
 BYTEZ_API_KEY=your_bytez_key
 OPENAI_API_KEY=your_openai_key
+
+# Analytics
+NEXT_PUBLIC_POSTHOG_KEY=your_posthog_key
+NEXT_PUBLIC_POSTHOG_HOST=https://us.i.posthog.com
+NEXT_PUBLIC_APP_URL=https://reviewai.pro
 ```
 
 ### Supabase Configuration
@@ -202,6 +207,12 @@ ls -la extension/dist/
 - [ ] Check Auth logs for failed attempts
 - [ ] Monitor database query performance
 - [ ] Track RLS policy hits
+
+### PostHog Analytics
+- [ ] Verify events are arriving in Live Stream
+- [ ] Check Session Recording is capturing UI sessions
+- [ ] Confirm user identification (email property) is being set
+- [ ] Ensure local events are NOT showing up (environment filtering)
 
 ### Custom Metrics
 Track these in your analytics:

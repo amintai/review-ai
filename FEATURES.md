@@ -45,6 +45,13 @@ Extension flow can extract live Amazon page context and send higher-quality inpu
 ### 8. 🚧 Next: Similar Product Recommendations
 Planned phase includes better alternatives with rationale and affiliate-ready linking support.
 
+### 9. 📈 Advanced Analytics & Monitoring
+Comprehensive tracking system designed for growth and visibility:
+- **Unified Event Mirroring**: Every key interaction is synced to both PostHog and Supabase.
+- **Session Replay**: Visual playback of user journeys to optimize UX and conversion.
+- **Pageview Intelligence**: Automated path tracking across the App Router.
+- **Privacy-First Tracking**: Developer-friendly environment filtering to prevent local data noise.
+
 ---
 
 ## Who Is It For?

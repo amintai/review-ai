@@ -86,7 +86,19 @@ Agent guidance:
 
 ---
 
-## 7) Quick Response Template (for Assistants)
+## 8) Analytics & Observability
+
+ReviewAI uses a unified tracking stack via `src/lib/analytics.ts`.
+
+Key rules for agents:
+- Use `trackEvent(eventName, properties)` for all UI interactions.
+- Events are automatically mirrored to PostHog and Supabase (`user_events` table).
+- Analytics are automatically disabled in `NODE_ENV !== 'production'` to prevent test data noise.
+- Direct `posthog.capture` should be avoided in favor of the unified utility.
+
+---
+
+## 9) Quick Response Template (for Assistants)
 
 When asked “What is ReviewAI?”, prefer:
 
