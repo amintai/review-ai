@@ -277,7 +277,7 @@ export default function RootLayout({
                 <FacebookPixel />
 
                 {/* Capture UTM Parameters */}
-                <Script id="capture-utm" strategy="lazyOnload">
+                <Script id="capture-utm" strategy="afterInteractive">
                     {`
                         (function() {
                             const urlParams = new URLSearchParams(window.location.search);
