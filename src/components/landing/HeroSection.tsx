@@ -146,8 +146,7 @@ export default function HeroSection() {
                                         poster="/dashboard-mockup.png"
                                         className="w-full h-full object-cover object-center"
                                     >
-                                        <source src="/demo.mp4" type="video/mp4" />
-                                        <source src="https://mzphncfgdkypwsacrfmt.supabase.co/storage/v1/object/public/reviewai-assets/demo-video.mp4" type="video/mp4" />
+                                        <source src="https://mzphncfgdkypwsacrfmt.supabase.co/storage/v1/object/public/reviewai-assets/demo-video.mp4?v=2" type="video/mp4" />
                                     </video>
                                 )}
 

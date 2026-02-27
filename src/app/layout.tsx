@@ -70,7 +70,7 @@ export const metadata: Metadata = {
         description: 'AI-powered Amazon review analysis. Get an instant BUY, SKIP, or CAUTION verdict with trust scoring — in seconds, on any product.',
         images: [
             {
-                url: '/og-image.png',
+                url: `/og-image.png?v=2`,
                 width: 1200,
                 height: 630,
                 alt: 'ReviewAI – Amazon Product Review Intelligence',
@@ -82,7 +82,7 @@ export const metadata: Metadata = {
         card: 'summary_large_image',
         title: 'ReviewAI – AI Amazon Review Analyzer',
         description: 'Paste any Amazon URL. Get an instant BUY, SKIP, or CAUTION verdict. Never waste money on a bad product again.',
-        images: ['/og-image.png'],
+        images: [`/og-image.png?v=2`],
         creator: '@reviewai_pro',
     },
 
@@ -161,7 +161,7 @@ const jsonLd = {
         'Full analysis history dashboard',
         'Shareable product intelligence reports',
     ],
-    screenshot: `${siteUrl}/og-image.png`,
+    screenshot: `${siteUrl}/og-image.png?v=2`,
     mainEntity: {
         '@type': 'Organization',
         name: 'ReviewAI',
