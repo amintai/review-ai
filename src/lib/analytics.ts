@@ -10,6 +10,11 @@ import { supabase } from "./supabaseClient";
  * @param properties Optional properties to include with the event.
  */
 export const trackEvent = (eventName: string, properties?: Record<string, any>) => {
+    // Skip tracking in local development to avoid test data noise
+    if (process.env.NODE_ENV !== "production") {
+        return;
+    }
+
     // 1. Google Analytics
     if (typeof window !== "undefined" && (window as any).gtag) {
         (window as any).gtag("event", eventName, properties);

@@ -39,6 +39,7 @@ Primary endpoint: `POST /api/amazon/analyze`
 - TypeScript
 - Tailwind CSS
 - Supabase (Postgres + Auth)
+- PostHog (Analytics + Session Recording)
 - Bytez SDK + OpenAI model routing
 - Vercel deployment
 
@@ -96,6 +97,8 @@ Set required variables in your environment (for example `.env.local`):
 - `OPENAI_API_KEY`
 - `RESEND_API_KEY`
 - `CONTACT_EMAIL`
+- `NEXT_PUBLIC_POSTHOG_KEY`
+- `NEXT_PUBLIC_POSTHOG_HOST`
 
 ---
 

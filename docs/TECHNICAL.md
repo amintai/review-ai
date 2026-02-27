@@ -33,6 +33,8 @@ Migration reference: `docs/migration-plan.md`
 | AI Inference | Bytez SDK + OpenAI model routing (`openai/gpt-4.1`) |
 | Scraping | First-party extension + server-side HTML extraction fallback |
 | Bot Protection | Internal bot/rate checks (`verifyNotBot`) |
+| Analytics | PostHog (Events/Sessions), Vercel Analytics, Google Analytics |
+| Persistence | Supabase (PostgreSQL + Auth + Event Mirroring) |
 | Hosting | Vercel |
 
 ---
@@ -55,6 +57,12 @@ Migration reference: `docs/migration-plan.md`
 ### 4) Persistence + Sharing
 - Analysis is stored in Supabase (currently using `generations` as migration bridge).
 - Public report routes consume saved analysis records.
+- **Event Mirroring**: All UI interactions (clicks, pageviews, share events) are mirrored in Supabase `user_events` table for permanent audit logs and internal query-ability.
+
+### 5) Analytics & Observability
+- Unified tracking via `src/lib/analytics.ts`.
+- Pageview tracking in Next.js App Router via `PostHogPageView.tsx`.
+- User identification across sessions using Supabase/PostHog ID mapping.
 
 ---
 
@@ -71,7 +79,8 @@ src/
 ├── lib/
 │   ├── amazon.ts                      # ASIN + URL utilities
 │   ├── amazon-scraper.ts              # Amazon data extraction logic
-│   └── amazon-ai.ts                   # Prompt + output schema contract
+│   ├── amazon-ai.ts                   # Prompt + output schema contract
+│   └── analytics.ts                   # Unified multi-platform tracking utility
 
 extension/
 └── src/
@@ -157,6 +166,9 @@ Core variables used across current flows:
 - `OPENAI_API_KEY` (used in legacy/alternate routes)
 - `RESEND_API_KEY` (email flows)
 - `CONTACT_EMAIL`
+- `NEXT_PUBLIC_POSTHOG_KEY`
+- `NEXT_PUBLIC_POSTHOG_HOST`
+- `NEXT_PUBLIC_APP_URL` (for auth redirects)
 
 ---
 
