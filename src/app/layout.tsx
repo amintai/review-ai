@@ -7,6 +7,8 @@ import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Toaster } from 'sonner';
 import GoogleAnalytics from "@/components/analytics/GoogleAnalytics";
 import FacebookPixel from "@/components/analytics/FacebookPixel";
+import { CSPostHogProvider } from "@/components/analytics/PostHogProvider";
+import PostHogPageView from "@/components/analytics/PostHogPageView";
 import Script from "next/script";
 
 const syne = Syne({
@@ -34,7 +36,7 @@ export const metadata: Metadata = {
         default: "ReviewAI – Amazon Product Review Intelligence | BUY or SKIP?",
         template: "%s | ReviewAI"
     },
-    description: "Stop guessing on Amazon. ReviewAI analyzes thousands of product reviews in seconds and gives you an instant BUY, SKIP, or CAUTION verdict — with trust scoring and evidence-backed reasoning.",
+    description: "Stop guessing on Amazon. ReviewAI analyzes thousands of product reviews in seconds and gives you an instant BUY, SKIP, or CAUTION verdict — with trust scorin...",
     keywords: [
         "Amazon product review analyzer",
         "should I buy this Amazon product",
@@ -70,7 +72,7 @@ export const metadata: Metadata = {
         description: 'AI-powered Amazon review analysis. Get an instant BUY, SKIP, or CAUTION verdict with trust scoring — in seconds, on any product.',
         images: [
             {
-                url: '/og-image.png',
+                url: `/og-image.png?v=2`,
                 width: 1200,
                 height: 630,
                 alt: 'ReviewAI – Amazon Product Review Intelligence',
@@ -82,7 +84,7 @@ export const metadata: Metadata = {
         card: 'summary_large_image',
         title: 'ReviewAI – AI Amazon Review Analyzer',
         description: 'Paste any Amazon URL. Get an instant BUY, SKIP, or CAUTION verdict. Never waste money on a bad product again.',
-        images: ['/og-image.png'],
+        images: [`/og-image.png?v=2`],
         creator: '@reviewai_pro',
     },
 
@@ -161,7 +163,7 @@ const jsonLd = {
         'Full analysis history dashboard',
         'Shareable product intelligence reports',
     ],
-    screenshot: `${siteUrl}/og-image.png`,
+    screenshot: `${siteUrl}/og-image.png?v=2`,
     mainEntity: {
         '@type': 'Organization',
         name: 'ReviewAI',
@@ -253,6 +255,7 @@ export default function RootLayout({
                 <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
                 <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
                 <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+                <link rel="dns-prefetch" href="https://connect.facebook.net" />
 
                 {/* Structured Data */}
                 <script
@@ -265,7 +268,7 @@ export default function RootLayout({
                 />
 
                 <Script
-                    defer
+                    strategy="lazyOnload"
                     data-website-id="dfid_jl6tqx4c2gwgmNlrkI5a4"
                     data-domain="reviewai.pro"
                     src="https://datafa.st/js/script.js">
@@ -297,13 +300,16 @@ export default function RootLayout({
                 </Script>
             </head>
             <body className={`${dmSans.className} ${dmSans.variable} ${syne.variable} ${jetbrainsMono.variable}`}>
-                {children}
-                <CookieConsentBanner />
-                <Analytics />
-                <SpeedInsights />
-                <Toaster richColors position="bottom-right" />
+                <CSPostHogProvider>
+                    {children}
+                    <PostHogPageView />
+                    <CookieConsentBanner />
+                    <Analytics />
+                    <SpeedInsights />
+                    <Toaster richColors position="bottom-right" />
 
-                <GoogleAnalytics />
+                    <GoogleAnalytics />
+                </CSPostHogProvider>
             </body>
         </html>
     );

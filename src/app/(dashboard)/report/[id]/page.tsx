@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button';
 import { CardSpotlight } from '@/components/ui/card-spotlight'; // Aceternity
 import { BackgroundGradient } from '@/components/ui/background-gradient'; // Aceternity
 import { TextGenerateEffect } from '@/components/ui/text-generate-effect'; // Aceternity
+import ReportActions from '@/components/report/ReportActions';
 
 export const dynamic = 'force-dynamic';
 
@@ -183,29 +184,11 @@ export default async function ReportPage(props: { params: Promise<{ id: string }
                         <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
                         Back to Reports
                     </Link>
-                    <div className="flex items-center gap-2">
-                        <Button
-                            variant="outline"
-                            size="sm"
-                            className="gap-2 cursor-pointer text-xs font-medium border-[#EBEBF0] hover:border-[#FF6B35] hover:text-white transition-colors"
-                        >
-                            <Share2 className="w-3.5 h-3.5" />
-                            Share
-                        </Button>
-                        <a
-                            href={redirectUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            <Button
-                                size="sm"
-                                className="cursor-pointer gap-2 text-xs font-medium bg-gray-900 hover:bg-gray-800 text-white"
-                            >
-                                <ExternalLink className="w-3.5 h-3.5" />
-                                View on Amazon
-                            </Button>
-                        </a>
-                    </div>
+                    <ReportActions
+                        reportId={params.id}
+                        asin={report.asin}
+                        amazonUrl={redirectUrl}
+                    />
                 </div>
 
                 {isAuthenticated && user && (
