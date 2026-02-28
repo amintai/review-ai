@@ -145,6 +145,7 @@ export async function POST(req: Request) {
             asin,
             productName,
             reviews_used: reviews.length,
+            is_anonymous: !user?.id,
             ...analysis
         }));
 

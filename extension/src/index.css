@@ -1,17 +1,38 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 @import "tailwindcss";
+@plugin "tailwindcss-animate";
 
-:root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-  color: #213547;
-  background-color: #ffffff;
+@theme {
+  --color-background: hsl(240 25% 96%);
+  --color-foreground: hsl(240 28% 14%);
+  --color-card: hsl(0 0% 100%);
+  --color-card-foreground: hsl(240 28% 14%);
+  --color-popover: hsl(0 0% 100%);
+  --color-popover-foreground: hsl(240 28% 14%);
+  --color-primary: hsl(16 100% 60%);
+  --color-primary-foreground: hsl(0 0% 100%);
+  --color-secondary: hsl(240 9% 46%);
+  --color-secondary-foreground: hsl(0 0% 100%);
+  --color-muted: hsl(240 10% 66%);
+  --color-muted-foreground: hsl(240 28% 14%);
+  --color-accent: hsl(16 100% 60%);
+  --color-accent-foreground: hsl(0 0% 100%);
+  --color-destructive: hsl(0 84% 60%);
+  --color-destructive-foreground: hsl(0 0% 100%);
+  --color-border: hsl(240 10% 93%);
+  --color-input: hsl(240 15% 86%);
+  --color-ring: hsl(16 100% 60%);
+  --radius: 0.5rem;
 }
 
-body {
-  margin: 0;
-  min-width: 350px;
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased selection:bg-primary/20 selection:text-primary;
+    margin: 0;
+    min-width: 380px;
+    font-family: system-ui, -apple-system, sans-serif;
+  }
 }

@@ -46,6 +46,30 @@ export default function sitemap(): MetadataRoute.Sitemap {
             changeFrequency: 'weekly',
             priority: 0.8,
         },
+        {
+            url: `${baseUrl}/fakespot-alternative`,
+            lastModified: currentDate,
+            changeFrequency: 'weekly',
+            priority: 0.95,
+        },
+        {
+            url: `${baseUrl}/reviewmeta-alternative`,
+            lastModified: currentDate,
+            changeFrequency: 'weekly',
+            priority: 0.95,
+        },
+        {
+            url: `${baseUrl}/ratebud-alternative`,
+            lastModified: currentDate,
+            changeFrequency: 'weekly',
+            priority: 0.95,
+        },
+        {
+            url: `${baseUrl}/thereviewindex-alternative`,
+            lastModified: currentDate,
+            changeFrequency: 'weekly',
+            priority: 0.95,
+        },
         ...posts,
     ];
 }

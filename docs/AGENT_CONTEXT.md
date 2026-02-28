@@ -2,10 +2,6 @@
 
 This document is the **source-of-truth context for AI agents and LLM assistants** working with this repository.
 
-If any other file appears ambiguous, prefer this document plus:
-- `docs/amazon-prd.md`
-- `TECHNICAL.md`
-- `docs/migration-plan.md`
 
 ---
 
