@@ -13,6 +13,7 @@ import { CardSpotlight } from '@/components/ui/card-spotlight'; // Aceternity
 import { BackgroundGradient } from '@/components/ui/background-gradient'; // Aceternity
 import { TextGenerateEffect } from '@/components/ui/text-generate-effect'; // Aceternity
 import ReportActions from '@/components/report/ReportActions';
+import { getPersona } from '@/lib/personas';
 
 export const dynamic = 'force-dynamic';
 
@@ -171,6 +172,7 @@ export default async function ReportPage(props: { params: Promise<{ id: string }
     const verdict = result.verdict as 'BUY' | 'SKIP' | 'CAUTION';
     const vc = VERDICT_CONFIG[verdict] ?? VERDICT_CONFIG['CAUTION'];
     const VerdictIcon = vc.icon;
+    const persona = getPersona(report.persona_used ?? null);
 
     return (
         <div className="min-h-screen bg-[#F7F6F3]">
@@ -251,6 +253,19 @@ export default async function ReportPage(props: { params: Promise<{ id: string }
                                 month: 'short', day: 'numeric', year: 'numeric'
                             })}
                         </span>
+                        {/* Persona tag — shown only if this report was personalized */}
+                        {persona && (() => {
+                            const PersonaIcon = persona.icon;
+                            return (
+                                <span
+                                    className="inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full border"
+                                    style={{ color: persona.color, borderColor: `${persona.color}40`, backgroundColor: `${persona.color}0F` }}
+                                >
+                                    <PersonaIcon size={10} />
+                                    {persona.label}
+                                </span>
+                            );
+                        })()}
                     </div>
                 </div>
 

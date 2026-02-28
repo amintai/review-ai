@@ -2,11 +2,17 @@
 
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabaseClient';
-import { ShieldCheck, CreditCard, User, Mail, Globe, CheckCircle2, Clock, Zap } from 'lucide-react';
+import { ShieldCheck, CreditCard, User, Mail, Globe, CheckCircle2, Clock, Zap, UserCircle2 } from 'lucide-react';
+import PersonaSelector from '@/components/ui/PersonaSelector';
+import type { PersonaId } from '@/lib/personas';
+import { getPersona } from '@/lib/personas';
 
 export default function SettingsPage() {
     const [profile, setProfile] = useState<any>(null);
     const [loading, setLoading] = useState(true);
+    const [activePersona, setActivePersona] = useState<PersonaId | null>(null);
+    const [personaSaving, setPersonaSaving] = useState(false);
+    const [personaSaved, setPersonaSaved] = useState(false);
 
     useEffect(() => {
         const fetchProfile = async () => {
@@ -14,6 +20,13 @@ export default function SettingsPage() {
                 const { data: { user } } = await supabase.auth.getUser();
                 if (!user) return;
                 setProfile(user);
+
+                // Fetch persona from API
+                const res = await fetch('/api/user/persona');
+                if (res.ok) {
+                    const data = await res.json();
+                    setActivePersona(data.persona_id);
+                }
             } catch (e) {
                 console.error(e);
             } finally {
@@ -23,6 +36,23 @@ export default function SettingsPage() {
 
         fetchProfile();
     }, []);
+
+    const handlePersonaChange = async (id: PersonaId | null) => {
+        setActivePersona(id);
+        setPersonaSaving(true);
+        setPersonaSaved(false);
+        try {
+            await fetch('/api/user/persona', {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ persona_id: id }),
+            });
+            setPersonaSaved(true);
+            setTimeout(() => setPersonaSaved(false), 2500);
+        } finally {
+            setPersonaSaving(false);
+        }
+    };
 
     if (loading) return <div className="p-8 text-center text-gray-500">Loading settings...</div>;
 
@@ -59,6 +89,40 @@ export default function SettingsPage() {
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </section>
+
+                    <section className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+                        <div className="p-6 border-b border-gray-50 bg-gray-50/50">
+                            <h2 className="text-lg font-bold text-gray-900 flex items-center">
+                                <UserCircle2 className="h-5 w-5 mr-2 text-violet-600" />
+                                Buyer Profile
+                            </h2>
+                            <p className="text-xs text-gray-500 mt-1">Your verdicts will be personalized automatically on every product analysis.</p>
+                        </div>
+                        <div className="p-6 space-y-4">
+                            <PersonaSelector
+                                value={activePersona}
+                                isPro={profile?.app_metadata?.is_pro ?? false}
+                                onChange={handlePersonaChange}
+                                onUpgradeRequired={() => window.location.href = '/pricing'}
+                            />
+                            {activePersona && (() => {
+                                const p = getPersona(activePersona);
+                                const Icon = p?.icon;
+                                return p && Icon ? (
+                                    <div className="flex items-center gap-2 text-xs text-gray-500 bg-gray-50 rounded-lg p-2.5 border border-gray-100">
+                                        <Icon size={13} style={{ color: p.color }} />
+                                        <span><strong className="text-gray-700">{p.label}:</strong> {p.description}</span>
+                                    </div>
+                                ) : null;
+                            })()}
+                            {(personaSaving || personaSaved) && (
+                                <p className="text-xs text-green-600 flex items-center gap-1">
+                                    <CheckCircle2 size={12} />
+                                    {personaSaving ? 'Saving...' : 'Buyer profile saved!'}
+                                </p>
+                            )}
                         </div>
                     </section>
 

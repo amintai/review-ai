@@ -1,0 +1,27 @@
+<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3B82F6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#F97316;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#grad2)"/>
+  
+  <!-- Shopping cart icon -->
+  <rect x="350" y="220" width="120" height="100" rx="10" fill="none" stroke="white" stroke-width="10" opacity="0.9"/>
+  <circle cx="380" cy="350" r="20" fill="white" opacity="0.9"/>
+  <circle cx="440" cy="350" r="20" fill="white" opacity="0.9"/>
+  <line x1="350" y1="220" x2="320" y2="180" stroke="white" stroke-width="10" stroke-linecap="round" opacity="0.9"/>
+  
+  <!-- X mark over cart -->
+  <line x1="340" y1="210" x2="480" y2="330" stroke="#EF4444" stroke-width="14" stroke-linecap="round"/>
+  <line x1="480" y1="210" x2="340" y2="330" stroke="#EF4444" stroke-width="14" stroke-linecap="round"/>
+  
+  <!-- Money symbols -->
+  <text x="550" y="280" font-family="Arial, sans-serif" font-size="80" fill="white" opacity="0.8">💸</text>
+  <text x="700" y="240" font-family="Arial, sans-serif" font-size="60" fill="white" opacity="0.7">💰</text>
+  
+  <!-- Title -->
+  <text x="600" y="480" font-family="Arial, sans-serif" font-size="52" font-weight="bold" fill="white" text-anchor="middle">7 Shopping Mistakes</text>
+  <text x="600" y="540" font-family="Arial, sans-serif" font-size="32" fill="rgba(255,255,255,0.9)" text-anchor="middle">That Cost You Money</text>
+</svg>

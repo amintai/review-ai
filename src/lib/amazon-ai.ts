@@ -2,6 +2,7 @@ export interface AmazonAnalysisParams {
   productName: string;
   reviews: string[];
   price?: string;
+  personaModifier?: string;
 }
 
 export const AMAZON_SYSTEM_PROMPT = `
@@ -25,7 +26,10 @@ ${params.price ? `- **Price**: ${params.price}` : ''}
 
 ### Real Buyer Reviews:
 ${params.reviews.map((r, i) => `Review ${i + 1}: "${r}"`).join('\n\n')}
-
+${params.personaModifier ? `
+### Buyer Context (Apply This Filter to Your Analysis):
+${params.personaModifier}
+` : ''}
 ### Task:
 Analyze the reviews above and provide a definitive buying verdict.
 
