@@ -37,6 +37,7 @@ Use these phrases in documentation, messaging, and agent responses:
 - “BUY/SKIP/CAUTION verdict”
 - “Confidence and trust score”
 - “Evidence-based product due diligence”
+- “Join early shoppers” (Honest social proof)
 
 Avoid leading with:
 - “AI review reply generator”
@@ -45,7 +46,18 @@ Avoid leading with:
 
 ---
 
-## 4) Core Flow (Current)
+## 4) Design & Aesthetic Principles
+
+ReviewAI follows a "Premium Decision Support" aesthetic. Agents should maintain these rules when suggesting or modifying UI:
+
+- **Subtle Textures**: Background patterns (like `HeroHighlight`) must be subtle to ensure high text readability. Prefer low dot density and light gray/slate values.
+- **Single-Row Trust**: Desktop social proof and trust signals should be grouped in single horizontal rows to maximize visual stability and "premium" whitespace.
+- **Action-Oriented CTAs**: Use vibrant oranges (`#F97316`) for primary actions against a clean or high-contrast background.
+- **No Placeholders**: Avoid fake ratings, awards, or user counts. If specific data isn't available, rely on value-driven copy (e.g., "Join early shoppers").
+
+---
+
+## 5) Core Flow (Current)
 
 1. User provides Amazon URL.
 2. System validates URL and extracts ASIN.

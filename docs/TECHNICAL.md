@@ -73,6 +73,9 @@ src/
 ├── app/
 │   ├── api/
 │   │   ├── amazon/analyze/route.ts    # Primary Amazon intelligence endpoint
+│   │   ├── user/
+│   │   │   ├── profile/route.ts       # User profile API (auth + profile data)
+│   │   │   └── persona/route.ts       # Persona preference management
 │   │   └── analyze/route.ts           # Alternate/legacy analysis route (still present)
 │   ├── report/[id]/page.tsx           # Public report rendering
 │   └── dashboard/                     # User-facing history/settings flows
@@ -80,7 +83,10 @@ src/
 │   ├── amazon.ts                      # ASIN + URL utilities
 │   ├── amazon-scraper.ts              # Amazon data extraction logic
 │   ├── amazon-ai.ts                   # Prompt + output schema contract
-│   └── analytics.ts                   # Unified multi-platform tracking utility
+│   ├── analytics.ts                   # Unified multi-platform tracking utility
+│   └── supabaseServer.ts              # Server-side Supabase client
+├── types/
+│   └── user.ts                        # User profile TypeScript interfaces
 
 extension/
 └── src/
@@ -101,6 +107,23 @@ Current Amazon analysis writes are inserted into `generations` with fields such 
 - `analysis_result` (JSON)
 - `is_public`
 
+### User Profile Management
+User data is managed through a hybrid approach:
+- **Auth data**: Stored in Supabase `auth.users` (email, metadata, etc.)
+- **Profile data**: Stored in `profiles` table (business_name, default_persona, is_pro, etc.)
+- **API pattern**: `/api/user/profile` combines both sources for complete user context
+
+**Profiles Table Schema**:
+```sql
+CREATE TABLE profiles (
+  id uuid references auth.users not null primary key,
+  updated_at timestamp with time zone,
+  business_name text,
+  default_persona text, -- PersonaId enum
+  is_pro boolean default false
+);
+```
+
 ### Planned Migration Target
 As defined in `docs/migration-plan.md`, data should transition toward dedicated product-intelligence entities:
 
@@ -120,7 +143,8 @@ Request can include:
   "url": "https://www.amazon...",
   "product_title": "optional",
   "price": "optional",
-  "reviews": ["optional review text from extension"]
+  "reviews": ["optional review text from extension"],
+  "persona": "budget_buyer"
 }
 ```
 
@@ -128,11 +152,25 @@ Pipeline:
 1. Bot check
 2. URL + ASIN validation
 3. Optional auth context from bearer token
-4. Extension data normalization
-5. Scraping fallback when < 3 review snippets
-6. AI analysis generation
-7. DB persistence
-8. JSON response with analysis + metadata
+4. Persona resolution (request > user default > null)
+5. Extension data normalization
+6. Scraping fallback when < 3 review snippets
+7. AI analysis generation
+8. DB persistence
+9. JSON response with analysis + metadata
+
+### User Management APIs
+
+**`GET /api/user/profile`**: Fetch complete user profile (auth + profile table data)
+- Provides access to `is_pro` field from profiles table
+- Combines Supabase auth user with profile table data
+- Used by dashboard/settings components
+
+**`GET/PATCH /api/user/persona`**: Manage user's default persona preference
+- Stores persona choice in profiles.default_persona
+- Used by persona selector components
+
+> **API Documentation**: See `docs/API_DOCUMENTATION.md` for complete API reference
 
 ---
 
@@ -187,6 +225,8 @@ Core variables used across current flows:
 - ✅ Amazon analysis endpoint implemented (`/api/amazon/analyze`)
 - ✅ Extension scaffolding and Amazon overlay path present
 - ✅ Amazon prompt/schema contract established
+- ✅ User profile API pattern implemented (`/api/user/profile`)
+- ✅ Persona management system integrated
 - ⚠️ Legacy docs/endpoints still present in repo
 - ⚠️ Database naming still includes bridge-era tables (`generations`)
 - ⏭ Next step: complete doc/code cleanup per `docs/migration-plan.md`

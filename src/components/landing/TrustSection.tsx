@@ -39,7 +39,7 @@ const certifications = [
     },
     {
         title: "Verified Intelligence",
-        description: "Used by 2,000+ smart shoppers every day.",
+        description: "Join our community of early smart shoppers today.",
         icon: CheckCircle2,
         color: "text-orange-600",
         bg: "bg-orange-50"
@@ -54,7 +54,7 @@ export default function TrustSection() {
                 {/* 1. Trusted By Marquee */}
                 <div className="text-center mb-24">
                     <p className="text-[10px] font-black text-orange-600 uppercase tracking-[0.2em] mb-10">
-                        Empowering 2,000+ shoppers daily
+                        Helping shoppers build better habits
                     </p>
 
                     <div className="relative group overflow-hidden [mask-image:linear-gradient(to_right,transparent,white_20%,white_80%,transparent)]">
@@ -106,34 +106,7 @@ export default function TrustSection() {
                     </div>
                 </div>
 
-                {/* 3. Review Ratings Strip */}
-                <div className="mt-32 pt-20 border-t border-gray-50">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-4 items-center max-w-5xl mx-auto">
-                        <div className="text-center px-4">
-                            <div className="flex items-center justify-center gap-1 mb-4">
-                                {[1, 2, 3, 4, 5].map(s => <Star key={s} className="h-4 w-4 text-amber-400 fill-current" />)}
-                            </div>
-                            <p className="text-2xl font-black text-gray-900 mb-1">4.9/5</p>
-                            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Rated on Capterra</p>
-                        </div>
-
-                        <div className="text-center px-4 border-gray-100 md:border-x">
-                            <div className="flex items-center justify-center gap-1 mb-4">
-                                {[1, 2, 3, 4, 5].map(s => <Star key={s} className="h-4 w-4 text-emerald-500 fill-current" />)}
-                            </div>
-                            <p className="text-2xl font-black text-gray-900 mb-1">Excellent</p>
-                            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">on Trustpilot</p>
-                        </div>
-
-                        <div className="text-center px-4">
-                            <div className="flex items-center justify-center gap-2 mb-4">
-                                <Award className="h-8 w-8 text-blue-600" />
-                            </div>
-                            <p className="text-2xl font-black text-gray-900 mb-1">High Performer</p>
-                            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Winter 2025 Edition</p>
-                        </div>
-                    </div>
-                </div>
+                {/* 3. Review Ratings Strip - Removed fake signals */}
 
             </div>
         </section>

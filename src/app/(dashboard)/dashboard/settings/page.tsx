@@ -1,14 +1,14 @@
 "use client";
 
 import { useEffect, useState } from 'react';
-import { supabase } from '@/lib/supabaseClient';
 import { ShieldCheck, CreditCard, User, Mail, Globe, CheckCircle2, Clock, Zap, UserCircle2 } from 'lucide-react';
 import PersonaSelector from '@/components/ui/PersonaSelector';
 import type { PersonaId } from '@/lib/personas';
 import { getPersona } from '@/lib/personas';
+import type { UserProfile } from '@/types/user';
 
 export default function SettingsPage() {
-    const [profile, setProfile] = useState<any>(null);
+    const [profile, setProfile] = useState<UserProfile | null>(null);
     const [loading, setLoading] = useState(true);
     const [activePersona, setActivePersona] = useState<PersonaId | null>(null);
     const [personaSaving, setPersonaSaving] = useState(false);
@@ -17,18 +17,17 @@ export default function SettingsPage() {
     useEffect(() => {
         const fetchProfile = async () => {
             try {
-                const { data: { user } } = await supabase.auth.getUser();
-                if (!user) return;
-                setProfile(user);
-
-                // Fetch persona from API
-                const res = await fetch('/api/user/persona');
-                if (res.ok) {
-                    const data = await res.json();
-                    setActivePersona(data.persona_id);
+                // Fetch complete user profile from our API
+                const res = await fetch('/api/user/profile');
+                if (!res.ok) {
+                    throw new Error('Failed to fetch profile');
                 }
+                
+                const profileData = await res.json();
+                setProfile(profileData);
+                setActivePersona(profileData.default_persona);
             } catch (e) {
-                console.error(e);
+                console.error('Error fetching profile:', e);
             } finally {
                 setLoading(false);
             }
@@ -78,7 +77,7 @@ export default function SettingsPage() {
                                 <div>
                                     <label className="text-xs font-bold text-gray-400 uppercase tracking-wider block mb-2">Full Name</label>
                                     <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-xl border border-gray-100">
-                                        <div className="font-medium text-gray-900">{profile?.user_metadata?.full_name || 'Not set'}</div>
+                                        <div className="font-medium text-gray-900">{profile?.full_name || 'Not set'}</div>
                                     </div>
                                 </div>
                                 <div>
@@ -103,7 +102,7 @@ export default function SettingsPage() {
                         <div className="p-6 space-y-4">
                             <PersonaSelector
                                 value={activePersona}
-                                isPro={profile?.app_metadata?.is_pro ?? false}
+                                isPro={profile?.is_pro ?? false}
                                 onChange={handlePersonaChange}
                                 onUpgradeRequired={() => window.location.href = '/pricing'}
                             />

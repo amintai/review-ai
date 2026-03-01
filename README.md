@@ -1,6 +1,6 @@
 # ReviewAI
 
-ReviewAI is an **Amazon Product Review Intelligence** platform that helps users make faster purchase decisions with structured AI outputs:
+ReviewAI is an **Amazon Product Review Intelligence** platform that helps users make faster purchase decisions with structured AI outputs. Join 100+ early adopters using:
 
 - **BUY / SKIP / CAUTION** verdict
 - Confidence and trust scoring
@@ -121,6 +121,7 @@ Load the built/dev output in your browser’s extension manager for testing.
 ## Documentation Index
 
 - `TECHNICAL.md` — active technical architecture
+- `docs/API_DOCUMENTATION.md` — API endpoints and patterns reference
 - `FEATURES.md` — product capability summary
 - `docs/amazon-prd.md` — product requirements and acceptance criteria
 - `docs/migration-plan.md` — migration phases and cleanup plan

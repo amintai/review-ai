@@ -92,9 +92,9 @@ export default function HeroSection() {
                                 </Button>
                             </Link>
 
-                            <div className="flex flex-wrap items-center gap-4 text-sm font-medium text-gray-400">
+                            <div className="flex flex-wrap lg:flex-nowrap items-center gap-3 md:gap-4 text-[13px] md:text-sm font-medium text-gray-400 whitespace-nowrap">
                                 <div className="flex items-center gap-1.5">
-                                    <Sparkles size={16} className="text-orange-500" /> No account needed
+                                    <Sparkles size={16} className="text-orange-500" /> Join 100+ early adopters
                                 </div>
                                 <div className="flex items-center gap-1.5 border-l border-gray-200 pl-4">
                                     <Sparkles size={16} className="text-orange-400" /> Works on any Amazon product
