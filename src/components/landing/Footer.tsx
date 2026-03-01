@@ -47,7 +47,7 @@ export default function Footer() {
                     </div>
 
                     {/* Footer Main Grid */}
-                    <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-12 pb-20 border-t border-neutral-200 dark:border-neutral-800 pt-16">
+                    <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-12 pb-20 border-t border-neutral-200 dark:border-neutral-800 pt-16">
                         <div className="col-span-2 lg:col-span-2 flex flex-col justify-between">
                             <div className="flex flex-col gap-4">
                                 <h3 className="font-bold text-lg dark:text-white">ReviewAI</h3>
@@ -57,7 +57,7 @@ export default function Footer() {
                             </div>
 
                             <div className="mt-8 md:mt-0 pt-8 md:pt-0">
-                                <p className="font-medium text-xs uppercase tracking-widest text-neutral-500 mb-4">
+                                <p className="font-medium text-xs uppercase tracking-widest text-neutral-500 mb-4 mt-4">
                                     Socials
                                 </p>
                                 <div className="flex gap-4">
@@ -98,6 +98,16 @@ export default function Footer() {
                             <ul className="flex flex-col gap-2.5 text-sm text-neutral-600 dark:text-neutral-400">
                                 <li><Link href="/contact" className="hover:text-black dark:hover:text-white transition-colors">Contact</Link></li>
                                 <li><Link href="mailto:support@reviewai.pro" className="hover:text-black dark:hover:text-white transition-colors">Email Us</Link></li>
+                            </ul>
+                        </div>
+
+                        <div className="flex flex-col gap-4">
+                            <h4 className="font-semibold text-neutral-900 dark:text-neutral-100">Alternatives</h4>
+                            <ul className="flex flex-col gap-2.5 text-sm text-neutral-600 dark:text-neutral-400">
+                                <li><Link href="/fakespot-alternative" className="hover:text-black dark:hover:text-white transition-colors">Fakespot Alternative</Link></li>
+                                <li><Link href="/reviewmeta-alternative" className="hover:text-black dark:hover:text-white transition-colors">ReviewMeta Alternative</Link></li>
+                                <li><Link href="/ratebud-alternative" className="hover:text-black dark:hover:text-white transition-colors">RateBud Alternative</Link></li>
+                                <li><Link href="/thereviewindex-alternative" className="hover:text-black dark:hover:text-white transition-colors">TheReviewIndex Alternative</Link></li>
                             </ul>
                         </div>
                     </div>

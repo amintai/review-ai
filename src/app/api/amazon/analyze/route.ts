@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { createClient as createSupabaseClient } from '@supabase/supabase-js';
 import { extractAsin, extractMarketplace } from '@/lib/amazon';
 import { AMAZON_SYSTEM_PROMPT, constructAmazonAnalysisPrompt } from '@/lib/amazon-ai';
+import { PERSONAS, type PersonaId } from '@/lib/personas';
 import { verifyNotBot } from '@/lib/botProtection';
 import { createClient } from '@/lib/supabaseServer';
 import { scrapeAmazonData } from '@/lib/amazon-scraper';
@@ -15,7 +16,8 @@ const AnalysisRequestSchema = z.object({
     url: z.string().url(),
     product_title: z.string().optional(),
     price: z.string().optional(),
-    reviews: z.array(z.any()).optional()
+    reviews: z.array(z.any()).optional(),
+    persona: z.enum(['budget_buyer', 'durability_focused', 'risk_averse', 'tech_enthusiast', 'gift_buyer']).optional(),
 });
 
 const corsHeaders = {
@@ -52,7 +54,7 @@ export async function POST(req: Request) {
             }, { status: 400 }));
         }
 
-        const { url, product_title, price, reviews: incomingReviews } = validation.data;
+        const { url, product_title, price, reviews: incomingReviews, persona: bodyPersona } = validation.data;
         const asin = extractAsin(url);
         const marketplace = extractMarketplace(url);
 
@@ -80,6 +82,19 @@ export async function POST(req: Request) {
             : await createClient();
 
         const { data: { user } } = await supabase.auth.getUser();
+
+        // 3b. Resolve Active Persona
+        // Priority: request body persona > user's default_persona profile setting
+        let activePersonaId: PersonaId | null = bodyPersona ?? null;
+        if (!activePersonaId && user?.id) {
+            const { data: profile } = await supabase
+                .from('profiles')
+                .select('default_persona')
+                .eq('id', user.id)
+                .single();
+            activePersonaId = (profile?.default_persona as PersonaId) || null;
+        }
+        const activePersona = activePersonaId ? PERSONAS[activePersonaId] : null;
 
         // 4. Build Data Inputs (Extension-provided reviews first, then server scraping fallback)
         const normalizedIncomingReviews = Array.isArray(incomingReviews)
@@ -113,7 +128,8 @@ export async function POST(req: Request) {
                 role: "user", content: constructAmazonAnalysisPrompt({
                     productName,
                     reviews,
-                    price: effectivePrice || undefined
+                    price: effectivePrice || undefined,
+                    personaModifier: activePersona?.promptModifier,
                 })
             }
         ]);
@@ -124,7 +140,7 @@ export async function POST(req: Request) {
 
         const analysis = JSON.parse(output.content);
 
-        // 6. Save to Supabase (using product_analyses table as per schema)
+        // 6. Save to Supabase
         const { data: generation, error: dbError } = await supabase.from('product_analyses').insert({
             user_id: user?.id || null,
             asin,
@@ -132,7 +148,8 @@ export async function POST(req: Request) {
             price: effectivePrice,
             analysis_result: analysis,
             is_public: true,
-            marketplace: marketplace
+            marketplace: marketplace,
+            persona_used: activePersonaId || null,
         }).select('id').single();
 
         if (dbError) {
@@ -145,6 +162,8 @@ export async function POST(req: Request) {
             asin,
             productName,
             reviews_used: reviews.length,
+            is_anonymous: !user?.id,
+            persona_used: activePersonaId || null,
             ...analysis
         }));
 

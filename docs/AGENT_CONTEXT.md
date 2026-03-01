@@ -2,10 +2,6 @@
 
 This document is the **source-of-truth context for AI agents and LLM assistants** working with this repository.
 
-If any other file appears ambiguous, prefer this document plus:
-- `docs/amazon-prd.md`
-- `TECHNICAL.md`
-- `docs/migration-plan.md`
 
 ---
 
@@ -17,6 +13,7 @@ Its core purpose is to help users make faster, better purchase decisions using s
 
 - `BUY` / `SKIP` / `CAUTION` verdict
 - confidence and trust scoring
+- **Persona-Based Verdicts** (Budget, Durability, Risk-Averse, Tech, Gift)
 - evidence-backed review pattern extraction
 - fit guidance (`perfect_for`, `avoid_if`, `deal_breakers`)
 - shareable public reports
@@ -73,6 +70,8 @@ Expected fields include:
 - `deal_breakers[]`
 - `buyer_psychology`
 - `theme_clustering[]`
+- `persona_used` (ID of the persona used for the analysis)
+- `persona_fit_score` (logic-calculated score for that persona)
 
 ---
 

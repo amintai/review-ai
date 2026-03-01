@@ -27,7 +27,7 @@ export default function BlogIndex() {
                     </p>
                 </div>
 
-                {/* <BlogList posts={blogPosts} categories={categories} /> */}
+                <BlogList posts={blogPosts} categories={categories} />
             </div>
             <Footer />
         </main>

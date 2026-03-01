@@ -8,6 +8,7 @@ import { HeroHighlight } from "@/components/ui/hero-highlight";
 import { trackEvent } from "@/lib/analytics";
 import Link from "next/link";
 import { supabase } from "@/lib/supabaseClient";
+import ReportShowcase from "./ReportShowcase";
 
 export default function HeroSection() {
     const [user, setUser] = useState<any>(null);
@@ -126,37 +127,14 @@ export default function HeroSection() {
                                 </div>
                             </div>
 
-                            {/* Dashboard Image / Video */}
-                            <div className="relative aspect-[16/10] overflow-hidden bg-gray-50 group">
-                                {isMobile ? (
-                                    <Image
-                                        src="/dashboard-mockup.png"
-                                        alt="ReviewAI Dashboard Mockup"
-                                        fill
-                                        priority
-                                        sizes="(max-width: 1024px) 100vw, 50vw"
-                                        className="object-cover object-center"
-                                    />
-                                ) : (
-                                    <video
-                                        autoPlay
-                                        muted
-                                        loop
-                                        playsInline
-                                        poster="/dashboard-mockup.png"
-                                        className="w-full h-full object-cover object-center"
-                                    >
-                                        <source src="https://mzphncfgdkypwsacrfmt.supabase.co/storage/v1/object/public/reviewai-assets/demo-video.mp4?v=2" type="video/mp4" />
-                                    </video>
-                                )}
+                            {/* Dashboard Report Showcase Component */}
+                            <div className="relative h-[480px] bg-[#F7F6F3] overflow-hidden group">
+                                <ReportShowcase />
 
                                 {/* Tooltip or indicator that it's a demo */}
-                                <div className="absolute top-4 right-4 bg-black/50 backdrop-blur-md text-white text-[10px] px-2 py-1 rounded-md opacity-0 group-hover:opacity-100 transition-opacity">
-                                    Live Demo
+                                <div className="absolute top-4 right-4 bg-black/50 backdrop-blur-md text-white text-[10px] px-2 py-1 rounded-md opacity-0 group-hover:opacity-100 transition-opacity z-20">
+                                    Live Mockup
                                 </div>
-
-                                {/* Overlay Shadow for depth */}
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/5 to-transparent pointer-events-none"></div>
                             </div>
                         </div>
 
