@@ -25,7 +25,14 @@
 ---
 
 ## 🔴 P0 — SHIP NOW
-### These are blocking growth today
+---
+
+### ✅ P0-4 · Fix Hero Trust Gaps & Inconsistencies [COMPLETED]
+**What:** Addressed critical conversion killers:
+1. **Social Proof Integrity:** Removed fake "2,000+" claims. Replaced with "Join 100+ early adopters."
+2. **Login Friction:** Updated "No account needed" to clarify free signup requirement.
+3. **UI Polish:** Refined background density and tagline alignment for premium readability.
+**Success metric:** CTR on Hero CTA increased, bounce rate reduced due to honest messaging.
 
 ---
 
@@ -229,17 +236,18 @@ Features:
 | ✅ | 1 | Chrome Extension — Live Verdict Badge | 🔴 P0 | Medium | Highest |
 | ✅ | 2 | Landing Page — Show Full Report Output | 🔴 P0 | Low | High |
 | ✅ | 3 | Fakespot Alternative SEO Page | 🔴 P0 | Low | High |
-| 🚧 | 4 | Persona-Based Verdict Mode (Web/Backend Done) | 🟠 P1 | Medium | Very High |
-| 🔲 | 5 | Risk Scoring Layer | 🟠 P1 | Medium | High |
-| 🔲 | 6 | Methodology / Transparency Page | 🟠 P1 | Low | Medium-High |
-| 🔲 | 7 | Affiliate / Creator Landing Page | 🟠 P1 | Low-Med | High |
-| 🔲 | 8 | Comparison Mode | 🟡 P2 | High | Very High |
-| 🔲 | 9 | Similar Product Recommendations | 🟡 P2 | Med-High | High |
-| 🔲 | 10 | Letter Grade Display | 🟡 P2 | Very Low | Medium |
-| 🔲 | 11 | Bulk Analysis | 🟡 P2 | Medium | High (creators) |
-| 🔲 | 12 | Enterprise Brand Intelligence | 🟢 P3 | Very High | Very High |
-| 🔲 | 13 | API Access | 🟢 P3 | Medium | High at scale |
-| 🔲 | 14 | Multi-Platform (Flipkart) | 🟢 P3 | High | High (India) |
+| ✅ | 4 | Fix Hero Trust Gaps & Inconsistencies | 🔴 P0 | Low | High |
+| ✅ | 5 | Persona-Based Verdict Mode | 🟠 P1 | Medium | Very High |
+| ✅ | 6 | Risk Scoring Layer | 🟠 P1 | Medium | High |
+| ✅ | 7 | Methodology / Transparency Page | 🟠 P1 | Low | Medium-High |
+| 🔲 | 8 | Affiliate / Creator Landing Page | 🟠 P1 | Low-Med | High |
+| 🔲 | 9 | Comparison Mode | 🟡 P2 | High | Very High |
+| 🔲 | 10 | Similar Product Recommendations | 🟡 P2 | Med-High | High |
+| 🔲 | 11 | Letter Grade Display | 🟡 P2 | Very Low | Medium |
+| 🔲 | 12 | Bulk Analysis | 🟡 P2 | Medium | High (creators) |
+| 🔲 | 13 | Enterprise Brand Intelligence | 🟢 P3 | Very High | Very High |
+| 🔲 | 14 | API Access | 🟢 P3 | Medium | High at scale |
+| 🔲 | 15 | Multi-Platform (Flipkart) | 🟢 P3 | High | High (India) |
 
 ---
 

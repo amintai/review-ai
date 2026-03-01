@@ -10,6 +10,13 @@ export interface ScrapedAmazonData {
     asin: string;
     productName: string;
     price?: string;
+    currency?: string;
+    rating?: string;
+    reviewCount?: string;
+    imageUrl?: string;
+    brand?: string;
+    availability?: string;
+    category?: string;
     reviews: string[];
 }
 
@@ -98,6 +105,67 @@ export async function scrapeAmazonData(url: string): Promise<ScrapedAmazonData> 
         /"priceToPay"[\s\S]*?"displayPrice":"([^"]+)"/i
     ]);
 
+    const currency = matchFirst(productHtml, [
+        /<span[^>]*class="[^"]*a-price-symbol[^"]*"[^>]*>([\s\S]*?)<\/span>/i,
+        /"currencyCode":"([^"]+)"/i
+    ]);
+
+    const rating = matchFirst(productHtml, [
+        /<span[^>]*class="[^"]*a-icon-alt[^"]*"[^>]*>([^<]*out of [^<]*)<\/span>/i,
+        /<i[^>]*class="[^"]*a-icon[^"]*"[^>]*><span[^>]*class="[^"]*a-icon-alt[^"]*"[^>]*>([^<]*)<\/span>/i,
+        /"ratingValue":"([^"]+)"/i
+    ]);
+
+    const reviewCount = matchFirst(productHtml, [
+        /<span[^>]*id="acrCustomerReviewText"[^>]*>([^<]*)<\/span>/i,
+        /<a[^>]*href="[^"]*#customerReviews"[^>]*>([^<]*customer review[^<]*)<\/a>/i,
+        /"reviewCount":"([^"]+)"/i
+    ]);
+
+    const imageUrl = matchFirst(productHtml, [
+        /<img[^>]*id="landingImage"[^>]*src="([^"]+)"/i,
+        /<div[^>]*id="imgTagWrapperId"[^>]*>[\s\S]*?<img[^>]*src="([^"]+)"/i,
+        /"hiRes":"([^"]+)"/i,
+        /"large":"([^"]+)"/i
+    ]);
+
+    const brand = matchFirst(productHtml, [
+        /<span[^>]*class="[^"]*po-brand[^"]*"[^>]*>[\s\S]*?<span[^>]*class="[^"]*po-break-word[^"]*"[^>]*>([^<]*)<\/span>/i,
+        /<tr[^>]*class="[^"]*po-brand[^"]*"[^>]*>[\s\S]*?<span[^>]*class="[^"]*po-break-word[^"]*"[^>]*>([^<]*)<\/span>/i,
+        /"brand":"([^"]+)"/i
+    ]);
+
+    const availability = matchFirst(productHtml, [
+        /<div[^>]*id="availability"[^>]*>[\s\S]*?<span[^>]*>([^<]*)<\/span>/i,
+        /<div[^>]*class="[^"]*a-section[^"]*"[^>]*>[\s\S]*?<span[^>]*class="[^"]*a-size-medium[^"]*a-color-success[^"]*"[^>]*>([^<]*)<\/span>/i,
+        /"availability":"([^"]+)"/i
+    ]);
+
+    const category = matchFirst(productHtml, [
+        // Breadcrumb navigation - various patterns
+        /<nav[^>]*id="wayfinding-breadcrumbs_feature_div"[^>]*>[\s\S]*?<span[^>]*class="[^"]*a-list-item[^"]*"[^>]*>[\s\S]*?<a[^>]*>([^<]*)<\/a>/i,
+        /<div[^>]*id="wayfinding-breadcrumbs_container"[^>]*>[\s\S]*?<a[^>]*>([^<]*)<\/a>/i,
+        /<ol[^>]*class="[^"]*a-breadcrumb[^"]*"[^>]*>[\s\S]*?<li[^>]*>[\s\S]*?<a[^>]*>([^<]*)<\/a>/i,
+        
+        // Department/category from navigation
+        /<div[^>]*id="nav-subnav"[^>]*>[\s\S]*?<a[^>]*class="[^"]*nav-a[^"]*"[^>]*>([^<]*)<\/a>/i,
+        /<div[^>]*class="[^"]*nav-category-menu[^"]*"[^>]*>[\s\S]*?<a[^>]*>([^<]*)<\/a>/i,
+        
+        // Product details section
+        /<tr[^>]*>[\s\S]*?<td[^>]*class="[^"]*a-span3[^"]*"[^>]*>[\s\S]*?Department[\s\S]*?<\/td>[\s\S]*?<td[^>]*class="[^"]*a-span9[^"]*"[^>]*>[\s\S]*?<span[^>]*>([^<]*)<\/span>/i,
+        /<div[^>]*class="[^"]*feature[^"]*"[^>]*data-feature-name="detailBullets"[\s\S]*?Department[\s\S]*?<span[^>]*class="[^"]*a-list-item[^"]*"[^>]*>([^<]*)<\/span>/i,
+        
+        // JSON-LD structured data
+        /"category":"([^"]+)"/i,
+        /"productCategory":"([^"]+)"/i,
+        
+        // Meta tags
+        /<meta[^>]*name="keywords"[^>]*content="([^,"]*)/i,
+        
+        // Alternative breadcrumb patterns
+        /<span[^>]*class="[^"]*a-breadcrumb-divider[^"]*"[^>]*>[\s\S]*?<\/span>[\s\S]*?<a[^>]*>([^<]*)<\/a>/i
+    ]);
+
     const reviews = [
         ...extractReviewsFromHtml(reviewsHtml, 40),
         ...extractReviewsFromHtml(productHtml, 20)
@@ -109,6 +177,13 @@ export async function scrapeAmazonData(url: string): Promise<ScrapedAmazonData> 
         asin,
         productName,
         price: price || undefined,
+        currency: currency || undefined,
+        rating: rating || undefined,
+        reviewCount: reviewCount || undefined,
+        imageUrl: imageUrl || undefined,
+        brand: brand || undefined,
+        availability: availability || undefined,
+        category: category || undefined,
         reviews: dedupedReviews
     };
 }

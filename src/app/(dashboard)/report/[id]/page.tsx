@@ -12,6 +12,8 @@ import { Button } from '@/components/ui/button';
 import { CardSpotlight } from '@/components/ui/card-spotlight'; // Aceternity
 import { BackgroundGradient } from '@/components/ui/background-gradient'; // Aceternity
 import { TextGenerateEffect } from '@/components/ui/text-generate-effect'; // Aceternity
+import ProductMetadata from '@/components/product/ProductMetadata';
+import PersonaExplainer from '@/components/persona/PersonaExplainer';
 import ReportActions from '@/components/report/ReportActions';
 import { getPersona } from '@/lib/personas';
 
@@ -218,6 +220,30 @@ export default async function ReportPage(props: { params: Promise<{ id: string }
                             All Reports →
                         </Link>
                     </div>
+                )}
+
+                {/* Product Metadata Header */}
+                <ProductMetadata
+                    productName={report.product_name}
+                    brand={report.brand}
+                    rating={report.rating}
+                    reviewCount={report.review_count}
+                    price={report.price}
+                    currency={report.currency}
+                    category={report.category}
+                    imageUrl={report.image_url}
+                    availability={report.availability}
+                    asin={report.asin}
+                    amazonUrl={redirectUrl}
+                />
+
+                {/* Persona Explanation */}
+                {persona && (
+                    <PersonaExplainer
+                        activePersona={report.persona_used}
+                        verdict={verdict}
+                        productName={report.product_name}
+                    />
                 )}
 
                 <div

@@ -73,13 +73,13 @@ export default function FinalCTA() {
 
                             <div className="flex flex-wrap items-center justify-center gap-6 text-sm font-medium text-gray-400">
                                 <div className="flex items-center gap-1.5">
-                                    <Sparkles size={16} className="text-orange-500" /> Trusted by 2,000+ shoppers
+                                    <Sparkles size={16} className="text-orange-500" /> Join 100+ early adopters
                                 </div>
                                 <div className="flex items-center gap-1.5">
                                     <Sparkles size={16} className="text-orange-500" /> Free to start
                                 </div>
                                 <div className="flex items-center gap-1.5">
-                                    <Sparkles size={16} className="text-orange-500" /> No signup needed
+                                    <Sparkles size={16} className="text-orange-500" /> Get started free
                                 </div>
                             </div>
                         </motion.div>

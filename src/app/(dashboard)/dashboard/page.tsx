@@ -19,12 +19,23 @@ import {
     Loader2, Search, ArrowRight,
     Zap, Activity, Sparkles, Command, Check, X, AlertCircle, FileText
 } from 'lucide-react';
+import ProductCard from '@/components/product/ProductCard';
+import PersonaFilter from '@/components/persona/PersonaFilter';
 import { Input } from '@/components/ui/input';
 
 interface Analysis {
     id: string;
     asin: string;
     product_name: string | null;
+    brand?: string;
+    rating?: string;
+    review_count?: string;
+    price?: string;
+    currency?: string;
+    category?: string;
+    image_url?: string;
+    availability?: string;
+    persona_used?: string | null;
     created_at: string;
     analysis_result: {
         verdict?: string;
@@ -63,6 +74,21 @@ function getVerdictStyle(verdict?: string) {
     }
 }
 
+function getPersonaCounts(analyses: Analysis[]): Record<string, number> {
+    const counts: Record<string, number> = {};
+    analyses.forEach(analysis => {
+        if (analysis.persona_used) {
+            counts[analysis.persona_used] = (counts[analysis.persona_used] || 0) + 1;
+        }
+    });
+    return counts;
+}
+
+function getFilteredAnalyses(analyses: Analysis[], personaFilter: string | null): Analysis[] {
+    if (!personaFilter) return analyses;
+    return analyses.filter(analysis => analysis.persona_used === personaFilter);
+}
+
 function DashboardContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -72,6 +98,7 @@ function DashboardContent() {
     const [loading, setLoading] = useState(true);
     const [analyses, setAnalyses] = useState<Analysis[]>([]);
     const [historyLoading, setHistoryLoading] = useState(false);
+    const [personaFilter, setPersonaFilter] = useState<string | null>(null);
 
     const [url, setUrl] = useState('');
     const [analyzing, setAnalyzing] = useState(false);
@@ -351,9 +378,17 @@ function DashboardContent() {
             {/* Recent Reports Grid */}
             <div>
                 <div className="flex items-center justify-between mb-6">
-                    <h3 className="text-lg font-syne font-bold text-foreground">
-                        Recent Reports
-                    </h3>
+                    <div className="flex items-center gap-4">
+                        <h3 className="text-lg font-syne font-bold text-foreground">
+                            Recent Reports
+                        </h3>
+                        <PersonaFilter
+                            selectedPersona={personaFilter}
+                            onPersonaChange={setPersonaFilter}
+                            reportCounts={getPersonaCounts(analyses)}
+                            totalReports={analyses.length}
+                        />
+                    </div>
                     <Link
                         href="/dashboard/history"
                         className="text-sm font-semibold text-primary hover:text-[#E85A25] transition-colors flex items-center gap-1 group"
@@ -363,9 +398,9 @@ function DashboardContent() {
                 </div>
 
                 {historyLoading ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {[...Array(4)].map((_, i) => (
-                            <div key={i} className="bg-muted/10 border border-border rounded-2xl h-32 animate-pulse" />
+                    <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
+                        {[...Array(6)].map((_, i) => (
+                            <div key={i} className="bg-muted/10 border border-border rounded-2xl h-64 animate-pulse" />
                         ))}
                     </div>
                 ) : analyses.length === 0 ? (
@@ -385,91 +420,27 @@ function DashboardContent() {
                         </button>
                     </div>
                 ) : (
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        {analyses.map((item) => {
-                            const style = getVerdictStyle(item.analysis_result?.verdict);
-                            const trustScore = item.analysis_result?.trust_score ?? 85;
-                            const confScore = item.analysis_result?.confidence_score ?? 92;
-
-                            return (
-                                <Link key={item.id} href={`/report/${item.id}`}>
-                                    <CardHoverEffect className={style.leftBorder}>
-                                        <div className="p-5 flex flex-col gap-3">
-                                            <div className="flex justify-between items-start gap-3">
-                                                <div className="flex items-center gap-3 min-w-0">
-                                                    <Badge
-                                                        variant={style.badgeVariant}
-                                                        className="gap-1.5 px-2.5 py-1 text-[11px]"
-                                                    >
-                                                        {style.icon}
-                                                        <span className="uppercase">
-                                                            {item.analysis_result?.verdict || 'PENDING'}
-                                                        </span>
-                                                    </Badge>
-                                                    <span className="text-[11px] font-mono text-muted-foreground truncate">
-                                                        {item.asin}
-                                                    </span>
-                                                </div>
-                                                <div className="text-right space-y-0.5">
-                                                    <span className="block text-[11px] text-muted-foreground" suppressHydrationWarning>
-                                                        {new Date(item.created_at).toLocaleDateString('en-US', { month: 'short', day: '2-digit' })}
-                                                    </span>
-                                                    <span className="block text-[11px] font-medium text-muted-foreground/90">
-                                                        {style.mood}
-                                                    </span>
-                                                </div>
-                                            </div>
-
-                                            <div className="space-y-1">
-                                                <h4 className="text-sm font-medium text-foreground line-clamp-2 leading-snug">
-                                                    {item.product_name || 'Amazon Product Intelligence Report'}
-                                                </h4>
-                                                {item.analysis_result?.summary && (
-                                                    <p className="text-xs text-secondary line-clamp-2">
-                                                        {item.analysis_result.summary}
-                                                    </p>
-                                                )}
-                                            </div>
-
-                                            <div className="flex flex-wrap items-center gap-2 pt-1">
-                                                <Badge
-                                                    variant="trust"
-                                                    className="text-[11px] px-2.5 py-1"
-                                                >
-                                                    Trust {trustScore}/100
-                                                </Badge>
-                                                <Badge
-                                                    variant="confidence"
-                                                    className="text-[11px] px-2.5 py-1"
-                                                >
-                                                    Confidence {confScore}/100
-                                                </Badge>
-                                            </div>
-
-                                            <div className="flex items-center justify-between pt-1">
-                                                <span className="text-[11px] font-medium text-muted-foreground">
-                                                    Tap in to see the full story.
-                                                </span>
-                                                <Button
-                                                    asChild
-                                                    variant="ghost"
-                                                    size="sm"
-                                                    className="h-7 px-2 text-xs font-semibold text-primary"
-                                                >
-                                                    <span className="inline-flex items-center gap-1.5">
-                                                        Open report
-                                                        <ArrowRight
-                                                            size={14}
-                                                            className="ml-0.5"
-                                                        />
-                                                    </span>
-                                                </Button>
-                                            </div>
-                                        </div>
-                                    </CardHoverEffect>
-                                </Link>
-                            );
-                        })}
+                    <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
+                        {getFilteredAnalyses(analyses, personaFilter).map((item) => (
+                            <div key={item.id} className="h-full">
+                                <ProductCard
+                                    id={item.id}
+                                    asin={item.asin}
+                                    productName={item.product_name || 'Amazon Product Intelligence Report'}
+                                    brand={item.brand}
+                                    rating={item.rating}
+                                    reviewCount={item.review_count}
+                                    price={item.price}
+                                    currency={item.currency}
+                                    category={item.category}
+                                    imageUrl={item.image_url}
+                                    availability={item.availability}
+                                    createdAt={item.created_at}
+                                    analysisResult={item.analysis_result}
+                                    personaUsed={item.persona_used}
+                                />
+                            </div>
+                        ))}
                     </div>
                 )}
             </div>

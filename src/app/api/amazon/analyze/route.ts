@@ -110,6 +110,17 @@ export async function POST(req: Request) {
 
         const productName = (product_title || scraped?.productName || `Amazon Product (${asin})`).trim();
         const effectivePrice = (price || scraped?.price || '').trim();
+        const productData = {
+            name: productName,
+            price: effectivePrice,
+            currency: scraped?.currency,
+            rating: scraped?.rating,
+            reviewCount: scraped?.reviewCount,
+            imageUrl: scraped?.imageUrl,
+            brand: scraped?.brand,
+            availability: scraped?.availability,
+            category: scraped?.category
+        };
         const reviews = Array.from(
             new Set([...(normalizedIncomingReviews || []), ...(scraped?.reviews || [])])
         ).slice(0, 50);
@@ -146,6 +157,13 @@ export async function POST(req: Request) {
             asin,
             product_name: productName,
             price: effectivePrice,
+            currency: productData.currency,
+            rating: productData.rating,
+            review_count: productData.reviewCount,
+            image_url: productData.imageUrl,
+            brand: productData.brand,
+            availability: productData.availability,
+            category: productData.category,
             analysis_result: analysis,
             is_public: true,
             marketplace: marketplace,
@@ -161,6 +179,14 @@ export async function POST(req: Request) {
             id: generation?.id,
             asin,
             productName,
+            price: effectivePrice,
+            currency: productData.currency,
+            rating: productData.rating,
+            reviewCount: productData.reviewCount,
+            imageUrl: productData.imageUrl,
+            brand: productData.brand,
+            availability: productData.availability,
+            category: productData.category,
             reviews_used: reviews.length,
             is_anonymous: !user?.id,
             persona_used: activePersonaId || null,
