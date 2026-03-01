@@ -1,8 +1,9 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { TrendingUp, CheckCircle, AlertTriangle } from "lucide-react";
+import { TrendingUp, CheckCircle, AlertTriangle, Star, Tag, Zap, Package } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import Image from "next/image";
 
 const VERDICT_CONFIG = {
     BUY: {
@@ -15,6 +16,25 @@ const VERDICT_CONFIG = {
         tagline: 'Strong buy signal across review patterns',
     }
 };
+
+function StarRating({ rating, size = 12 }: { rating: number; size?: number }) {
+    return (
+        <div className="flex items-center gap-0.5">
+            {[1, 2, 3, 4, 5].map((star) => (
+                <Star
+                    key={star}
+                    size={size}
+                    className={`${star <= rating
+                        ? 'text-yellow-400 fill-yellow-400'
+                        : star - 0.5 <= rating
+                            ? 'text-yellow-400 fill-yellow-400/50'
+                            : 'text-gray-200'
+                        }`}
+                />
+            ))}
+        </div>
+    );
+}
 
 function ScoreRing({
     value,
@@ -105,20 +125,38 @@ export default function ReportShowcase() {
 
                 {/* Header Mockup */}
                 <motion.div variants={itemVariants} className="bg-white rounded-xl border border-gray-100 p-4 shadow-sm">
-                    <h2 className="font-[Syne] font-bold text-sm sm:text-base text-gray-900 leading-tight mb-2 line-clamp-2">
-                        Sony WH-1000XM5 Wireless Industry Leading Noise Canceling Headphones, Silver
-                    </h2>
-                    <div className="flex flex-wrap items-center gap-2">
-                        <Badge
-                            className="px-2 py-0.5 gap-1.5 text-[9px] sm:text-[10px] font-bold uppercase tracking-wider border font-[Syne]"
-                            style={{ backgroundColor: vc.bg, color: vc.color, borderColor: vc.border }}
-                        >
-                            <VerdictIcon className="w-3 h-3" />
-                            BUY
-                        </Badge>
-                        <span className="text-[10px] font-mono text-gray-400 bg-gray-50 px-1.5 py-0.5 rounded border border-gray-100">
-                            B09ZNXJFX1
-                        </span>
+                    <div className="flex gap-4">
+                        <div className="w-20 h-20 rounded-lg bg-gray-50 border border-gray-100 flex items-center justify-center shrink-0 overflow-hidden relative">
+                            <Image
+                                src="https://m.media-amazon.com/images/I/61JPsXJ9XSL._SY741_.jpg"
+                                alt="Sony WH-1000XM5"
+                                fill
+                                className="object-contain p-1"
+                                unoptimized
+                            />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-2 mb-1 flex-wrap">
+                                <Badge variant="outline" className="text-[8px] px-1.5 py-0 gap-1 bg-gray-50">
+                                    <Tag size={10} /> SONY
+                                </Badge>
+                                <span className="text-[10px] text-gray-400 font-mono">B09ZNXJFX1</span>
+                                <span className="inline-flex items-center gap-1 text-[9px] font-semibold px-1.5 py-0 rounded-full border border-purple-200 text-purple-600 bg-purple-50">
+                                    <Zap size={8} /> Tech Enthusiast
+                                </span>
+                            </div>
+                            <h2 className="font-[Syne] font-bold text-sm text-gray-900 leading-tight mb-2 line-clamp-2">
+                                Sony WH-1000XM5 Wireless Industry Leading Noise Canceling Headphones, Silver
+                            </h2>
+                            <div className="flex items-center gap-3">
+                                <div className="flex items-center gap-1.5">
+                                    <StarRating rating={4.5} />
+                                    <span className="text-[10px] font-bold text-gray-900">4.5</span>
+                                </div>
+                                <span className="text-[10px] text-gray-500">2,847 reviews</span>
+                                <span className="text-[10px] font-bold text-gray-900 ml-auto">$348.00</span>
+                            </div>
+                        </div>
                     </div>
                 </motion.div>
 

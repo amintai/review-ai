@@ -1,10 +1,14 @@
 # ReviewAI
 
-ReviewAI is an **Amazon Product Review Intelligence** platform that helps users make faster purchase decisions with structured AI outputs. Join 100+ early adopters using:
+ReviewAI is an **Amazon Product Review Intelligence** platform that helps users make faster purchase decisions with structured AI outputs:
 
 - **BUY / SKIP / CAUTION** verdict
+- **Persona-Based Verdicts** (Budget, Durability, Risk-Averse, etc.)
+- **Interactive Dashboard**: Persona selection, persistent settings, and history.
 - Confidence and trust scoring
 - Pattern-level evidence from review text
+- **Enhanced Metadata** (Brand, Category, Price, and Imagery)
+- **PostHog Analytics**: Integrated tracking for user behavior.
 - Shareable public report pages
 
 ---
@@ -122,8 +126,11 @@ Load the built/dev output in your browser’s extension manager for testing.
 
 - `TECHNICAL.md` — active technical architecture
 - `docs/API_DOCUMENTATION.md` — API endpoints and patterns reference
+- `docs/DEVELOPER_GUIDE.md` — quick reference for developers
 - `FEATURES.md` — product capability summary
 - `docs/amazon-prd.md` — product requirements and acceptance criteria
 - `docs/migration-plan.md` — migration phases and cleanup plan
 - `public/llms.txt` — compact AI-agent discoverability context
 - `docs/AGENT_CONTEXT.md` — canonical agent instructions for terminology + positioning
+- `docs/VERDICT_ENGINE.md` — methodology for BUY/SKIP/CAUTION predictions
+- `docs/PERSONA_TEST_SAMPLES.md` — benchmarks for persona-based analysis

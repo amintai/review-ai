@@ -6,17 +6,39 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
     Search, History, ChevronLeft, ChevronRight,
-    Calendar, ChevronRight as ArrowRight, Layers,
+    ChevronRight as ArrowRight, Layers,
     TrendingUp, TrendingDown, AlertTriangle, X
 } from 'lucide-react';
-import { format } from 'date-fns';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '@/lib/supabaseClient';
 import Link from 'next/link';
-import { CardSpotlight } from '@/components/ui/card-spotlight';
+import ProductCard from '@/components/product/ProductCard';
+import PersonaFilter from '@/components/persona/PersonaFilter';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 type VerdictType = 'BUY' | 'SKIP' | 'CAUTION' | 'PENDING';
+
+interface Analysis {
+    id: string;
+    asin: string;
+    product_name: string | null;
+    brand?: string;
+    rating?: string;
+    review_count?: string;
+    price?: string;
+    currency?: string;
+    category?: string;
+    image_url?: string;
+    availability?: string;
+    persona_used?: string | null;
+    created_at: string;
+    analysis_result: {
+        verdict?: string;
+        summary?: string;
+        trust_score?: number;
+        confidence_score?: number;
+    } | null;
+}
 
 const VERDICT_CONFIG: Record<string, {
     bg: string; text: string; border: string; dot: string;
@@ -39,63 +61,61 @@ const VERDICT_CONFIG: Record<string, {
     },
 };
 
-function VerdictBadge({ verdict }: { verdict?: string }) {
-    const v = (verdict?.toUpperCase() ?? 'PENDING') as VerdictType;
-    const cfg = VERDICT_CONFIG[v];
-
-    if (!cfg) {
-        return (
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md border text-[10px] font-bold uppercase tracking-widest bg-gray-50 text-gray-400 border-gray-200">
-                <span className="w-1.5 h-1.5 rounded-full bg-gray-300 animate-pulse" />
-                PENDING
-            </span>
-        );
-    }
-
-    const Icon = cfg.icon;
-    return (
-        <span
-            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md border text-[10px] font-bold uppercase tracking-widest font-[Syne]"
-            style={{ backgroundColor: cfg.bg, color: cfg.text, borderColor: cfg.border }}
-        >
-            <Icon className="w-3 h-3" />
-            {v}
-        </span>
-    );
+function getPersonaCounts(analyses: Analysis[]): Record<string, number> {
+    const counts: Record<string, number> = {};
+    analyses.forEach(analysis => {
+        if (analysis.persona_used) {
+            counts[analysis.persona_used] = (counts[analysis.persona_used] || 0) + 1;
+        }
+    });
+    return counts;
 }
 
-// ─── Score display ─────────────────────────────────────────────────────────────
-function TrustScore({ value }: { value?: number }) {
-    if (value == null) {
-        return (
-            <div className="text-right">
-                <div className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-0.5">Trust</div>
-                <div className="w-16 h-5 bg-gray-100 rounded animate-pulse" />
-            </div>
-        );
-    }
-    const color = value >= 70 ? '#10B981' : value >= 40 ? '#F59E0B' : '#EF4444';
-    return (
-        <div className="text-right">
-            <div className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-0.5">Trust</div>
-            <div className="font-[Syne] font-black text-xl leading-none" style={{ color }}>
-                {value}<span className="text-xs text-gray-400 font-medium">/100</span>
-            </div>
-        </div>
-    );
+function getFilteredAnalyses(analyses: Analysis[], personaFilter: string | null): Analysis[] {
+    if (!personaFilter) return analyses;
+    return analyses.filter(analysis => analysis.persona_used === personaFilter);
 }
 
 // ─── Skeleton row ──────────────────────────────────────────────────────────────
 function SkeletonRow() {
     return (
-        <div className="bg-white rounded-2xl border border-[#EBEBF0] p-5 flex flex-col gap-3 animate-pulse">
-            <div className="flex items-center gap-3">
-                <div className="w-16 h-5 bg-gray-100 rounded-md" />
-                <div className="w-24 h-5 bg-gray-100 rounded-md" />
-                <div className="w-32 h-4 bg-gray-100 rounded-md ml-auto" />
+        <div className="bg-white rounded-2xl border border-[#EBEBF0] p-4 space-y-3 animate-pulse h-full flex flex-col">
+            {/* Product header skeleton */}
+            <div className="flex gap-3 min-h-[80px]">
+                <div className="w-16 h-16 bg-gray-100 rounded-lg flex-shrink-0" />
+                <div className="flex-1 space-y-1.5">
+                    <div className="flex gap-2">
+                        <div className="w-12 h-4 bg-gray-100 rounded-md" />
+                        <div className="w-16 h-4 bg-gray-100 rounded-md" />
+                    </div>
+                    <div className="w-full h-8 bg-gray-100 rounded" />
+                    <div className="w-3/4 h-4 bg-gray-100 rounded" />
+                </div>
             </div>
-            <div className="w-3/4 h-4 bg-gray-100 rounded" />
-            <div className="w-full h-3 bg-gray-50 rounded" />
+            
+            {/* Verdict and scores skeleton */}
+            <div className="flex justify-between items-center min-h-[24px]">
+                <div className="flex gap-2">
+                    <div className="w-12 h-5 bg-gray-100 rounded-md" />
+                    <div className="w-16 h-5 bg-gray-100 rounded-md" />
+                </div>
+                <div className="w-8 h-3 bg-gray-100 rounded" />
+            </div>
+            
+            {/* Summary skeleton */}
+            <div className="flex-1 min-h-[32px]">
+                <div className="w-full h-3 bg-gray-50 rounded mb-1" />
+                <div className="w-2/3 h-3 bg-gray-50 rounded" />
+            </div>
+
+            {/* Bottom section skeleton */}
+            <div className="flex justify-between items-center pt-2 mt-auto border-t border-gray-100">
+                <div className="flex gap-2">
+                    <div className="w-12 h-5 bg-gray-100 rounded" />
+                    <div className="w-12 h-5 bg-gray-100 rounded" />
+                </div>
+                <div className="w-6 h-6 bg-gray-100 rounded-lg" />
+            </div>
         </div>
     );
 }
@@ -131,13 +151,14 @@ function EmptyState({ hasFilter }: { hasFilter: boolean }) {
 
 // ─── Main Page ─────────────────────────────────────────────────────────────────
 export default function HistoryPage() {
-    const [history, setHistory] = useState<any[]>([]);
+    const [history, setHistory] = useState<Analysis[]>([]);
     const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState('');
     const [verdictFilter, setVerdictFilter] = useState('all');
+    const [personaFilter, setPersonaFilter] = useState<string | null>(null);
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
-    const limit = 10;
+    const limit = 12; // Increased for better grid layout
 
     const fetchHistory = async () => {
         setLoading(true);
@@ -164,10 +185,11 @@ export default function HistoryPage() {
         }
     };
 
-    useEffect(() => { fetchHistory(); }, [page, search, verdictFilter]);
+    useEffect(() => { fetchHistory(); }, [page, search, verdictFilter, personaFilter]);
 
-    const hasFilter = search.trim().length > 0 || verdictFilter !== 'all';
+    const hasFilter = search.trim().length > 0 || verdictFilter !== 'all' || personaFilter !== null;
     const verdicts = ['BUY', 'CAUTION', 'SKIP'];
+    const filteredHistory = getFilteredAnalyses(history, personaFilter);
 
     return (
         // ── FIX: outer wrapper fills available space, inner splits into
@@ -178,43 +200,69 @@ export default function HistoryPage() {
             {/* ── FIXED TOP SECTION — never scrolls ──────────────────────── */}
             <div className="flex-none px-6 pt-6 pb-4">
 
-                {/* Page header row */}
-                <CardSpotlight className="flex items-start justify-between mb-5 p-6">
-                    <div>
-                        <h1 className="font-[Syne] font-bold text-xl text-gray-900 flex items-center gap-2.5">
-                            <History className="w-5 h-5 text-[#FF6B35]" />
-                            Analysis History
-                        </h1>
-                        <p className="text-sm text-gray-400 mt-0.5 ml-7">
-                            Your Amazon product intelligence reports
-                        </p>
+                {/* Compact Page header row */}
+                <div className="flex items-center justify-between mb-6">
+                    <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-2.5">
+                            <div className="w-8 h-8 rounded-lg bg-[#FF6B35]/10 flex items-center justify-center">
+                                <History className="w-4 h-4 text-[#FF6B35]" />
+                            </div>
+                            <div>
+                                <h1 className="font-[Syne] font-bold text-lg text-gray-900">
+                                    Analysis History
+                                </h1>
+                                <p className="text-xs text-gray-500 -mt-0.5">
+                                    Your product intelligence reports
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* Inline stats */}
+                        {!loading && (
+                            <div className="hidden sm:flex items-center gap-4 ml-6">
+                                <div className="flex items-center gap-1.5 text-xs">
+                                    <span className="w-1.5 h-1.5 rounded-full bg-[#FF6B35]" />
+                                    <span className="font-semibold text-gray-700">{history.length}</span>
+                                    <span className="text-gray-500">total</span>
+                                </div>
+                                <div className="flex items-center gap-1.5 text-xs">
+                                    <span className="w-1.5 h-1.5 rounded-full bg-green-500" />
+                                    <span className="font-semibold text-gray-700">
+                                        {history.filter(h => h.analysis_result?.verdict?.toUpperCase() === 'BUY').length}
+                                    </span>
+                                    <span className="text-gray-500">buy</span>
+                                </div>
+                                <div className="flex items-center gap-1.5 text-xs">
+                                    <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
+                                    <span className="font-semibold text-gray-700">
+                                        {history.filter(h => h.analysis_result?.verdict?.toUpperCase() === 'CAUTION').length}
+                                    </span>
+                                    <span className="text-gray-500">caution</span>
+                                </div>
+                            </div>
+                        )}
                     </div>
 
-                    {/* Live count badge */}
+                    {/* Mobile stats */}
                     {!loading && (
-                        <div className="flex items-center gap-2 bg-white border border-[#EBEBF0] px-3 py-1.5 rounded-xl shadow-sm">
-                            <span
-                                className="w-1.5 h-1.5 rounded-full bg-[#FF6B35]"
-                                style={{ boxShadow: '0 0 6px rgba(255,107,53,0.5)' }}
-                            />
-                            <span className="text-xs font-mono font-semibold text-gray-700">
-                                {history.length} report{history.length !== 1 ? 's' : ''}
-                            </span>
+                        <div className="sm:hidden flex items-center gap-2 bg-gray-50 px-3 py-1.5 rounded-lg">
+                            <span className="text-xs font-semibold text-gray-700">{history.length}</span>
+                            <span className="text-xs text-gray-500">reports</span>
                         </div>
                     )}
-                </CardSpotlight>
+                </div>
 
                 {/* ── SEARCH + FILTER BAR ──────────────────────────────────── */}
-                <div className="bg-white border border-[#EBEBF0] rounded-2xl p-1.5 shadow-sm flex flex-col sm:flex-row gap-1.5">
-
+                <div className="bg-white border border-[#EBEBF0] rounded-2xl p-4 shadow-sm space-y-4">
+                    
                     {/* Search input */}
-                    <div className="relative flex-1 group p-2">
-                        <Search className="absolute ml-2 left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-orange-500 group-focus-within:text-[#FF6B35] transition-colors pointer-events-none" />
+                    <div className="relative group">
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-orange-500 group-focus-within:text-[#FF6B35] transition-colors pointer-events-none" />
                         <Input
                             placeholder="Search product name or ASIN..."
                             value={search}
                             onChange={(e) => { setSearch(e.target.value); setPage(1); }}
-                            className="pl-10 h-10 bg-[#F9F8F6]  border-transparent focus:border-[#FF6B35]/30 focus:ring-0 focus:ring-offset-0 focus-visible:ring-0 focus-visible:ring-offset-0 rounded-xl text-sm text-gray-700 placeholder:text-gray-300 shadow-none hover:bg-[#F4F3F0] transition-colors"
+                            className="pl-10 h-12 bg-[#F9F8F6] border-transparent focus:border-[#FF6B35]/30 focus:ring-0 focus:ring-offset-0 focus-visible:ring-0 focus-visible:ring-offset-0 rounded-xl text-sm text-gray-700 placeholder:text-gray-400 shadow-none hover:bg-[#F4F3F0] transition-colors"
                         />
                         {/* Clear button */}
                         {search && (
@@ -227,62 +275,72 @@ export default function HistoryPage() {
                         )}
                     </div>
 
-                    {/* Divider on desktop */}
-                    <div className="hidden sm:block w-px bg-[#EBEBF0] self-stretch my-1" />
+                    {/* Filters Row */}
+                    <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+                        {/* Persona Filter */}
+                        <div className="flex-1">
+                            <PersonaFilter
+                                selectedPersona={personaFilter}
+                                onPersonaChange={setPersonaFilter}
+                                reportCounts={getPersonaCounts(history)}
+                                totalReports={history.length}
+                            />
+                        </div>
 
-                    {/* Filter pills */}
-                    <div className="flex p-2 items-center gap-1 p-1 bg-[#F9F8F6] rounded-xl">
-                        {/* All pill */}
-                        <button
-                            onClick={() => { setVerdictFilter('all'); setPage(1); }}
-                            className={`px-3 h-8 rounded-lg text-xs font-bold uppercase tracking-wider transition-all duration-150 ${verdictFilter === 'all'
-                                ? 'bg-white text-gray-900 shadow-sm border border-[#EBEBF0]'
-                                : 'text-gray-400 hover:text-gray-600 hover:bg-white/60'
-                                }`}
-                        >
-                            All
-                        </button>
+                        {/* Verdict Filter pills */}
+                        <div className="flex items-center gap-1 p-1 bg-[#F9F8F6] rounded-xl">
+                            {/* All pill */}
+                            <button
+                                onClick={() => { setVerdictFilter('all'); setPage(1); }}
+                                className={`px-3 h-8 rounded-lg text-xs font-bold uppercase tracking-wider transition-all duration-150 ${verdictFilter === 'all'
+                                    ? 'bg-white text-gray-900 shadow-sm border border-[#EBEBF0]'
+                                    : 'text-gray-400 hover:text-gray-600 hover:bg-white/60'
+                                    }`}
+                            >
+                                All
+                            </button>
 
-                        {verdicts.map((v) => {
-                            const cfg = VERDICT_CONFIG[v];
-                            const isActive = verdictFilter === v;
-                            return (
-                                <button
-                                    key={v}
-                                    onClick={() => { setVerdictFilter(isActive ? 'all' : v); setPage(1); }}
-                                    className="px-3 h-8 rounded-lg text-xs font-bold uppercase tracking-wider transition-all duration-150 border"
-                                    style={
-                                        isActive
-                                            ? {
-                                                backgroundColor: cfg.activeBg,
-                                                color: cfg.activeText,
-                                                borderColor: cfg.activeBg,
-                                            }
-                                            : {
-                                                backgroundColor: 'transparent',
-                                                color: '#9CA3AF',
-                                                borderColor: 'transparent',
-                                            }
-                                    }
-                                    onMouseEnter={(e) => {
-                                        if (!isActive) {
-                                            (e.target as HTMLElement).style.backgroundColor = cfg.bg;
-                                            (e.target as HTMLElement).style.color = cfg.text;
-                                            (e.target as HTMLElement).style.borderColor = cfg.border;
+                            {verdicts.map((v) => {
+                                const cfg = VERDICT_CONFIG[v];
+                                const isActive = verdictFilter === v;
+                                return (
+                                    <button
+                                        key={v}
+                                        onClick={() => { setVerdictFilter(isActive ? 'all' : v); setPage(1); }}
+                                        className="px-3 h-8 rounded-lg text-xs font-bold uppercase tracking-wider transition-all duration-150 border"
+                                        style={
+                                            isActive
+                                                ? {
+                                                    backgroundColor: cfg.activeBg,
+                                                    color: cfg.activeText,
+                                                    borderColor: cfg.activeBg,
+                                                }
+                                                : {
+                                                    backgroundColor: 'transparent',
+                                                    color: '#9CA3AF',
+                                                    borderColor: 'transparent',
+                                                }
                                         }
-                                    }}
-                                    onMouseLeave={(e) => {
-                                        if (!isActive) {
-                                            (e.target as HTMLElement).style.backgroundColor = 'transparent';
-                                            (e.target as HTMLElement).style.color = '#9CA3AF';
-                                            (e.target as HTMLElement).style.borderColor = 'transparent';
-                                        }
-                                    }}
-                                >
-                                    {v}
-                                </button>
-                            );
-                        })}
+                                        onMouseEnter={(e) => {
+                                            if (!isActive) {
+                                                (e.target as HTMLElement).style.backgroundColor = cfg.bg;
+                                                (e.target as HTMLElement).style.color = cfg.text;
+                                                (e.target as HTMLElement).style.borderColor = cfg.border;
+                                            }
+                                        }}
+                                        onMouseLeave={(e) => {
+                                            if (!isActive) {
+                                                (e.target as HTMLElement).style.backgroundColor = 'transparent';
+                                                (e.target as HTMLElement).style.color = '#9CA3AF';
+                                                (e.target as HTMLElement).style.borderColor = 'transparent';
+                                            }
+                                        }}
+                                    >
+                                        {v}
+                                    </button>
+                                );
+                            })}
+                        </div>
                     </div>
                 </div>
 
@@ -303,13 +361,18 @@ export default function HistoryPage() {
                             <Badge
                                 variant="outline"
                                 className="text-xs gap-1.5 cursor-pointer hover:border-red-200 hover:text-red-400 transition-colors"
-                                style={{
-                                    borderColor: VERDICT_CONFIG[verdictFilter]?.border,
-                                    color: VERDICT_CONFIG[verdictFilter]?.text,
-                                }}
                                 onClick={() => setVerdictFilter('all')}
                             >
                                 {verdictFilter} <X className="w-2.5 h-2.5" />
+                            </Badge>
+                        )}
+                        {personaFilter && (
+                            <Badge
+                                variant="outline"
+                                className="text-xs gap-1.5 cursor-pointer hover:border-red-200 hover:text-red-400 transition-colors"
+                                onClick={() => setPersonaFilter(null)}
+                            >
+                                {personaFilter.replace('_', ' ')} <X className="w-2.5 h-2.5" />
                             </Badge>
                         )}
                     </div>
@@ -319,86 +382,73 @@ export default function HistoryPage() {
             {/* ── SCROLLABLE CONTENT AREA ────────────────────────────────── */}
             <div className="flex-1 overflow-y-auto px-6 pb-8">
                 {loading ? (
-                    <div className="space-y-3 pt-1">
-                        {Array.from({ length: 5 }).map((_, i) => (
+                    <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 pt-1">
+                        {Array.from({ length: 6 }).map((_, i) => (
                             <SkeletonRow key={i} />
                         ))}
                     </div>
-                ) : history.length === 0 ? (
+                ) : filteredHistory.length === 0 ? (
                     <EmptyState hasFilter={hasFilter} />
                 ) : (
-                    <div className="space-y-3 pt-1">
-                        <AnimatePresence mode="popLayout">
-                            {history.map((item, idx) => {
-                                const verdict = item.analysis_result?.verdict?.toUpperCase();
-                                const cfg = VERDICT_CONFIG[verdict];
-                                const accentColor = cfg?.dot ?? '#D1D5DB';
+                    <div className="space-y-6 pt-1">
+                        {/* Results count */}
+                        <div className="flex items-center justify-between">
+                            <p className="text-sm text-gray-600">
+                                Showing <span className="font-semibold">{filteredHistory.length}</span> of{' '}
+                                <span className="font-semibold">{history.length}</span> reports
+                            </p>
+                            {hasFilter && (
+                                <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => {
+                                        setSearch('');
+                                        setVerdictFilter('all');
+                                        setPersonaFilter(null);
+                                        setPage(1);
+                                    }}
+                                    className="text-xs text-gray-500 hover:text-gray-700"
+                                >
+                                    Clear all filters
+                                </Button>
+                            )}
+                        </div>
 
-                                return (
+                        {/* Product Cards Grid - Consistent Heights */}
+                        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
+                            <AnimatePresence mode="popLayout">
+                                {filteredHistory.map((item, idx) => (
                                     <motion.div
                                         key={item.id}
                                         layout
                                         initial={{ opacity: 0, y: 8 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         exit={{ opacity: 0, y: -4 }}
-                                        transition={{ delay: idx * 0.04, duration: 0.2 }}
+                                        transition={{ delay: idx * 0.02, duration: 0.2 }}
+                                        className="h-full" // Ensure full height
                                     >
-                                        <Link href={`/report/${item.id}`} className="block group">
-                                            <div
-                                                className="bg-white border border-[#EBEBF0] rounded-2xl overflow-hidden relative transition-all duration-200 hover:shadow-md hover:border-transparent"
-                                                style={{
-                                                    borderLeft: `3px solid ${accentColor}`,
-                                                }}
-                                            // On hover, strengthen the left border via inline style isn't ideal —
-                                            // Tailwind group-hover handles the rest
-                                            >
-                                                <div className="p-5 flex flex-col sm:flex-row sm:items-center gap-4">
-
-                                                    {/* Left — product info */}
-                                                    <div className="flex-1 min-w-0 space-y-2">
-
-                                                        {/* Meta row */}
-                                                        <div className="flex items-center gap-2.5 flex-wrap">
-                                                            <VerdictBadge verdict={verdict} />
-                                                            <span className="text-[11px] font-mono text-gray-400 bg-gray-50 px-2 py-0.5 rounded border border-[#EBEBF0]">
-                                                                {item.asin}
-                                                            </span>
-                                                            <span className="hidden sm:flex items-center gap-1 text-[11px] text-gray-400">
-                                                                <Calendar className="w-3 h-3" />
-                                                                {format(new Date(item.created_at), 'MMM d, yyyy · h:mm a')}
-                                                            </span>
-                                                        </div>
-
-                                                        {/* Product name */}
-                                                        <h3 className="text-sm font-semibold text-gray-900 truncate group-hover:text-[#FF6B35] transition-colors leading-snug">
-                                                            {item.product_name || `Amazon Product · ${item.asin}`}
-                                                        </h3>
-
-                                                        {/* Summary snippet */}
-                                                        {item.analysis_result?.summary && (
-                                                            <p className="text-xs text-gray-400 line-clamp-1 italic leading-relaxed">
-                                                                "{item.analysis_result.summary}"
-                                                            </p>
-                                                        )}
-                                                    </div>
-
-                                                    {/* Right — score + chevron */}
-                                                    <div className="flex items-center gap-4 shrink-0 sm:pl-4">
-                                                        <TrustScore value={item.analysis_result?.trust_score} />
-
-                                                        {/* <Separator orientation="vertical" className="h-10 hidden sm:block" /> */}
-
-                                                        <div className="w-8 h-8 rounded-xl bg-[#F9F8F6] border border-[#EBEBF0] flex items-center justify-center text-gray-300 group-hover:bg-[#FFF2ED] group-hover:border-[#FF6B35]/30 group-hover:text-[#FF6B35] transition-all">
-                                                            <ArrowRight className="w-4 h-4" />
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </Link>
+                                        <div className="h-full flex flex-col"> {/* Consistent card container */}
+                                            <ProductCard
+                                                id={item.id}
+                                                asin={item.asin}
+                                                productName={item.product_name || 'Amazon Product Intelligence Report'}
+                                                brand={item.brand}
+                                                rating={item.rating}
+                                                reviewCount={item.review_count}
+                                                price={item.price}
+                                                currency={item.currency}
+                                                category={item.category}
+                                                imageUrl={item.image_url}
+                                                availability={item.availability}
+                                                createdAt={item.created_at}
+                                                analysisResult={item.analysis_result}
+                                                personaUsed={item.persona_used}
+                                            />
+                                        </div>
                                     </motion.div>
-                                );
-                            })}
-                        </AnimatePresence>
+                                ))}
+                            </AnimatePresence>
+                        </div>
 
                         {/* ── Pagination ──────────────────────────────────────── */}
                         {totalPages > 1 && (
